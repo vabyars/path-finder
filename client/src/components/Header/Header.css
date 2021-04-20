@@ -1,0 +1,24 @@
+.header{
+    display: flex;
+    flex-direction: row ;
+    border-bottom: 1px solid black;
+    align-items: center;
+    
+    /* height: 10vh; */
+}
+
+.flex-elem{
+    margin: 2vh;
+    width: 15vh;
+    
+}
+.algorithm{
+    width: 20vh;
+    
+}
+
+.logo{
+    
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+}

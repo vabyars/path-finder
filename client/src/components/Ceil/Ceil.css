@@ -1,0 +1,10 @@
+.box {
+    border: 1px solid #adb1e9;
+    box-sizing: border-box;
+    /* margin: 1px; */
+}
+.on {
+    background-color: #1269db;
+}
+
+
