@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.Json.Serialization;
 using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Domain
 {
+    [Serializable]
     public class Grid : IGrid
     {
         private readonly int[,] _cells;
 
+        [JsonIgnore]
         private readonly int _width;
 
+        [JsonIgnore]
         private readonly int _height;
 
         private static readonly Point[] Directions =

@@ -6,6 +6,7 @@ namespace PathFinder.Domain.Interfaces
         where T: IState
         where TP: IParameters
     {
+        string Name { get; }
         IEnumerable<T> Run(IGrid grid, TP parameters);
     }
 }

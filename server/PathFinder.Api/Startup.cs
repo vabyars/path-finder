@@ -9,6 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using PathFinder.DataAccess.Dictionary;
+using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models;
+using PathFinder.Domain.Services;
 
 namespace PathFinder.Api
 {
@@ -25,6 +29,11 @@ namespace PathFinder.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+            
+            services.AddSingleton<IMazeRepository, MazeRepository>();
+            services.AddSingleton<IMazeService, MazeService>();
+            services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryMock>();
             
             services.AddSwaggerGen(c =>
             {

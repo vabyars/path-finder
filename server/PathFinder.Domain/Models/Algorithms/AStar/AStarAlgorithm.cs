@@ -7,6 +7,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
 {
     public class AStarAlgorithm : IAlgorithm<AStarState, AStarParameters>
     {
+        public string Name => "A*";
         private readonly IPriorityQueue<Point> _queue;
         private readonly Dictionary<Point, Point> _cameFrom = new();
         private readonly Dictionary<Point, double> _cost = new();
