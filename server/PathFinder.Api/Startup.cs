@@ -12,6 +12,8 @@ using Microsoft.OpenApi.Models;
 using PathFinder.DataAccess.Dictionary;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
+using PathFinder.Domain.Models.Algorithms;
+using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Services;
 
 namespace PathFinder.Api
@@ -33,7 +35,9 @@ namespace PathFinder.Api
             
             services.AddSingleton<IMazeRepository, MazeRepository>();
             services.AddSingleton<IMazeService, MazeService>();
-            services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryMock>();
+            services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryTestRealization>();
+
+            services.AddSingleton<IAlgorithmsExecutor, AlgorithmsExecutor>();
             
             services.AddSwaggerGen(c =>
             {
