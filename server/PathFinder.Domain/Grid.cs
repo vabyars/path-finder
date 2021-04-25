@@ -22,7 +22,7 @@ namespace PathFinder.Domain
             new(0, 1),
         };
 
-        private static Point[] DirectionsWithDiagonal = Directions.Concat(new[]
+        private static readonly Point[] DirectionsWithDiagonal = Directions.Concat(new[]
         {
             new Point(1, 1),
             new(-1, 1),
