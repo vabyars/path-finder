@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinder.Api", "PathFinde
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinder.DataAccess.Dictionary", "PathFinder.DataAccess.Dictionary\PathFinder.DataAccess.Dictionary.csproj", "{B4AEE4BC-45D1-44FA-980C-775BBE0ADD0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFinder.Infrastructure", "PathFinder.Infrastructure\PathFinder.Infrastructure.csproj", "{6C51029C-36E7-42B1-9F9E-CCD65B7EFC53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{B4AEE4BC-45D1-44FA-980C-775BBE0ADD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4AEE4BC-45D1-44FA-980C-775BBE0ADD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4AEE4BC-45D1-44FA-980C-775BBE0ADD0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C51029C-36E7-42B1-9F9E-CCD65B7EFC53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C51029C-36E7-42B1-9F9E-CCD65B7EFC53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C51029C-36E7-42B1-9F9E-CCD65B7EFC53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C51029C-36E7-42B1-9F9E-CCD65B7EFC53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

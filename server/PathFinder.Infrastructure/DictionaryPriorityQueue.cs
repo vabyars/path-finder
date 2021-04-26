@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PathFinder.Domain.Interfaces;
+using PathFinder.Infrastructure.Interfaces;
 
-namespace PathFinder.Domain
+namespace PathFinder.Infrastructure
 {
     public class DictionaryPriorityQueue<TKey> : IPriorityQueue<TKey>
     {

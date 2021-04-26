@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.AStar
 {

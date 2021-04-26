@@ -16,6 +16,8 @@ using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Services;
+using PathFinder.Infrastructure;
+using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Api
 {
