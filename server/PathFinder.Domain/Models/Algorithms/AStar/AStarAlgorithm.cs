@@ -40,7 +40,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 var currentCost = _cost[current];
                 foreach (var point in grid.GetNeighbors(current, parameters.AllowDiagonal))
                 {
-                    var newCost = currentCost + grid[point]; //TODO add diagonal modifier
+                    var newCost = currentCost + grid.GetCost(current, point);
                     if (!_cost.TryGetValue(point, out var neighborCost) || newCost < neighborCost)
                     {
                         _cost[point] = newCost;

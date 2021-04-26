@@ -8,6 +8,7 @@ namespace PathFinder.Domain.Interfaces
         bool InBounds(Point point);
         bool IsPassable(Point point);
         IEnumerable<Point> GetNeighbors(Point point, bool allowDiagonal);
+        double GetCost(Point from, Point to);
         int this[Point point] { get; set; }
         int this[int x, int y] { get; set; }
     }
