@@ -35,7 +35,8 @@ namespace PathFinder.Api
         {
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
-
+            services.AddCors();
+            
             services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>(); // TODO Fix
             services.AddSingleton<IMazeRepository, MazeRepository>();
             services.AddSingleton<IMazeService, MazeService>();
@@ -76,6 +77,8 @@ namespace PathFinder.Api
             app.UseHttpsRedirection();
             
             app.UseRouting();
+            
+            app.UseCors(builder => builder.AllowAnyOrigin());
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

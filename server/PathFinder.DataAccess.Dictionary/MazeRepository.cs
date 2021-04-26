@@ -19,7 +19,7 @@ namespace PathFinder.DataAccess.Dictionary
             return _grids[name];
         }
 
-        public IEnumerable<string> GetMazesNames() => _grids.Keys.ToArray();
+        public IEnumerable<string> GetMazesNames() => _grids.Keys;
 
         public bool TryGetValue(string name, out int[,] value)
         {
