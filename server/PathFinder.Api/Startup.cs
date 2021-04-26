@@ -1,19 +1,20 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Drawing;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PathFinder.DataAccess.Dictionary;
+using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Services;
 
 namespace PathFinder.Api
@@ -26,18 +27,19 @@ namespace PathFinder.Api
         }
 
         public IConfiguration Configuration { get; }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public IContainer ApplicationContainer { get; private set; }
+        
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
-            
+
+            services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>(); // TODO Fix
             services.AddSingleton<IMazeRepository, MazeRepository>();
             services.AddSingleton<IMazeService, MazeService>();
             services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryTestRealization>();
 
-            services.AddSingleton<IAlgorithmsExecutor, AlgorithmsExecutor>();
+            services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
             
             services.AddSwaggerGen(c =>
             {
@@ -48,9 +50,18 @@ namespace PathFinder.Api
                     Version = "v1",
                 });
             });
+
+            #region Autofac injection
+
+            var builder = new ContainerBuilder(); //done to allow sequence injection
+            builder.Populate(services);
+            builder.RegisterType<AlgorithmsExecutor>().As<IAlgorithmsExecutor>();
+            ApplicationContainer = builder.Build();
+            return new AutofacServiceProvider(ApplicationContainer);
+
+            #endregion
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

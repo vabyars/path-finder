@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Models.Algorithms
 {
     public class AlgorithmsExecutor : IAlgorithmsExecutor
     {
-        private readonly IAlgorithm<IState, IParameters>[] _algorithms;
+        private readonly IAlgorithm<State>[] _algorithms;
 
-        public AlgorithmsExecutor(IAlgorithm<IState, IParameters>[] algorithms)
+        public AlgorithmsExecutor(IAlgorithm<State>[] algorithms) 
         {
             _algorithms = algorithms;
         }
@@ -20,7 +20,7 @@ namespace PathFinder.Domain.Models.Algorithms
             return _algorithms.Select(x => x.Name);
         }
 
-        public List<IState> Execute(string name, IGrid grid, IParameters parameters)
+        public List<State> Execute(string name, IGrid grid, IParameters parameters)
         {
             var algorithm = _algorithms.FirstOrDefault(x => x.Name == name);
             if (algorithm == null)

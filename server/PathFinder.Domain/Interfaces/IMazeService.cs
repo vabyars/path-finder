@@ -2,7 +2,8 @@
 {
     public interface IMazeService
     {
+        string[] GetAvailableNames();
         void Add(string name, int[,] grid);
-        int[,] Get(string name, bool fromDb);
+        int[,] Get(string name);
     }
 }

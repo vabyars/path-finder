@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Interfaces
 {
@@ -6,6 +7,6 @@ namespace PathFinder.Domain.Interfaces
     {
         IEnumerable<string> AvailableAlgorithmNames();
 
-        List<IState> Execute(string name, IGrid grid, IParameters parameters);// изменить на RenderedStates
+        List<State> Execute(string name, IGrid grid, IParameters parameters);// изменить на RenderedStates
     }
 }

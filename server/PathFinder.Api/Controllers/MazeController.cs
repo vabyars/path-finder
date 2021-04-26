@@ -17,11 +17,11 @@ namespace PathFinder.Api.Controllers
         
         [HttpGet]
         [Route("/{name}")]
-        public ActionResult<int[,]> GetMaze(string name, bool fromDb)
+        public ActionResult<int[,]> GetMaze(string name)
         {
             try
             {
-                return Ok(_mazeService.Get(name, fromDb));
+                return Ok(_mazeService.Get(name));
             }
             catch (ArgumentException e)
             {

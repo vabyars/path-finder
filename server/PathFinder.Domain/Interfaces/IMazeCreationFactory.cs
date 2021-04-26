@@ -1,8 +1,10 @@
-﻿namespace PathFinder.Domain.Interfaces
+﻿using System.Collections.Generic;
+
+namespace PathFinder.Domain.Interfaces
 {
     public interface IMazeCreationFactory
     {
-        string[] GetAvailableNames();
+        IEnumerable<string> GetAvailableNames();
         int[,] Create(string name);
     }
 }
