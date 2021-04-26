@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using PathFinder.Domain.Interfaces;
+﻿using System.Collections.Generic;
 
-namespace PathFinder.DataAccess.Dictionary
+namespace PathFinder.DataAccess1.Implementations
 {
     public class MazeRepository: IMazeRepository
     {

@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PathFinder.DataAccess.Dictionary\PathFinder.DataAccess.Dictionary.csproj" />
+      <ProjectReference Include="..\PathFinder.DataAccess\PathFinder.DataAccess.csproj" />
       <ProjectReference Include="..\PathFinder.Domain\PathFinder.Domain.csproj" />
     </ItemGroup>
 

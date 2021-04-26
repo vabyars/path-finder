@@ -20,7 +20,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
             _queue = queue;
         }
         
-        public IEnumerable<AStarState> Run(IGrid grid, IParameters oldParameters)
+        public IEnumerable<AStarState> Run(IGrid grid, IParameters oldParameters)// TODO fix this hardcode
         {
             var parameters = (AStarParameters) oldParameters;
             _start = parameters.Start;
