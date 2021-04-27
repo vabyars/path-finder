@@ -52,6 +52,14 @@ namespace PathFinder.Domain
             set => _cells[p.X, p.Y] = value;
         }
 
+        public bool InBounds(Point point) => InBounds(point.X, point.Y);
+
+        public bool InBounds(int x, int y) => 0 <= x && x < _width && 0 <= y && y < _height;
+        
+        public bool IsPassable(Point point) => IsPassable(point.X, point.Y);
+
+        public bool IsPassable(int x, int y) => InBounds(x, y) && _cells[x, y] >= 0;
+        
         public double GetCost(Point from, Point to)
         {
             var cost = _cells[to.X, to.Y];
@@ -59,11 +67,7 @@ namespace PathFinder.Domain
                 return cost;
             return cost * Math.Sqrt(2);
         }
-
-        public bool InBounds(Point point) => 0 <= point.X && point.X < _width && 0 <= point.Y && point.Y < _height;
-
-        public bool IsPassable(Point point) => _cells[point.X, point.Y] >= 0;
-
+        
         public IEnumerable<Point> GetNeighbors(Point point, bool allowDiagonal)
         {
             foreach (var cell in GetPointsWithOffset(point, Directions))
