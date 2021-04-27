@@ -5,13 +5,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PathFinder.DataAccess.Dictionary\PathFinder.DataAccess.Dictionary.csproj" />
+      <ProjectReference Include="..\PathFinder.DataAccess\PathFinder.DataAccess.csproj" />
       <ProjectReference Include="..\PathFinder.Domain\PathFinder.Domain.csproj" />
     </ItemGroup>
 

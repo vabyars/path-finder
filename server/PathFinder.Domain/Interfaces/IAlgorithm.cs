@@ -2,11 +2,9 @@
 
 namespace PathFinder.Domain.Interfaces
 {
-    public interface IAlgorithm<out T, in TP> 
-        where T: IState
-        where TP: IParameters
+    public interface IAlgorithm<out T> 
     {
         string Name { get; }
-        IEnumerable<T> Run(IGrid grid, TP parameters);
+        IEnumerable<T> Run(IGrid grid, IParameters parameters);
     }
 }

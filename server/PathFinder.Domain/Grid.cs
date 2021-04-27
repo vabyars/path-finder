@@ -26,13 +26,12 @@ namespace PathFinder.Domain
             new(0, 1),
         };
 
-        private static readonly Point[] DirectionsWithDiagonal = Directions.Concat(new[]
-        {
-            new Point(1, 1),
+        private static readonly Point[] DiagonalDirections = {
+            new(1, 1),
             new(-1, 1),
             new(1, -1),
             new(-1, -1),
-        }).ToArray();
+        };
 
         public Grid(int[,] cells)
         {
@@ -56,6 +55,15 @@ namespace PathFinder.Domain
         public bool InBounds(Point point) => InBounds(point.X, point.Y);
 
         public bool InBounds(int x, int y) => 0 <= x && x < _width && 0 <= y && y < _height;
+        public double GetCost(Point from, Point to)
+        {
+            var cost = _cells[to.X, to.Y];
+            if (Directions.Contains(new Point(from.X - to.X, from.Y - to.Y)))
+                return cost;
+            return cost * Math.Sqrt(2);
+        }
+
+        public bool InBounds(Point point) => 0 <= point.X && point.X < _width && 0 <= point.Y && point.Y < _height;
 
         public bool IsPassable(Point point) => IsPassable(point.X, point.Y);
 
@@ -63,14 +71,21 @@ namespace PathFinder.Domain
 
         public IEnumerable<Point> GetNeighbors(Point point, bool allowDiagonal)
         {
-            var source = allowDiagonal ? DirectionsWithDiagonal : Directions;
+            foreach (var cell in GetPointsWithOffset(point, Directions))
+                yield return cell;
 
-            foreach (var cell in source)
-            {
-                var next = new Point(point.X + cell.X, point.Y + cell.Y);
-                if (InBounds(next) && IsPassable(next))
-                    yield return next;
-            }
+            if (!allowDiagonal)
+                yield break;
+            
+            foreach (var cell in GetPointsWithOffset(point, DiagonalDirections))
+                yield return cell;
+        }
+
+        private IEnumerable<Point> GetPointsWithOffset(Point point, IEnumerable<Point> offsets)
+        {
+            return offsets
+                .Select(cell => new Point(point.X + cell.X, point.Y + cell.Y))
+                .Where(next => InBounds(next) && IsPassable(next));
         }
     }
 }

@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "PathFinder.Domain": {
+      "commandName": "Project"
+    }
+  }
+}

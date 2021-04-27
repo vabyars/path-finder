@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.AStar
 {
-    public class AStarAlgorithm : IAlgorithm<AStarState, AStarParameters>
+    public class AStarAlgorithm : IAlgorithm<AStarState>
     {
         public string Name => "A*";
         private readonly IPriorityQueue<Point> _queue;
@@ -19,8 +20,9 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
             _queue = queue;
         }
         
-        public IEnumerable<AStarState> Run(IGrid grid, AStarParameters parameters)
+        public IEnumerable<AStarState> Run(IGrid grid, IParameters oldParameters)// TODO fix this hardcode
         {
+            var parameters = (AStarParameters) oldParameters;
             _start = parameters.Start;
             _goal = parameters.End;
             _queue.Add(_start, 0);
@@ -29,7 +31,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
 
             while (_queue.Count != 0)
             {
-                var (current, priority) = _queue.ExtractMin();
+                var (current, _) = _queue.ExtractMin();
                 if (current == _goal)
                 {
                     yield return new AStarState(current); //TODO fix
@@ -38,7 +40,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 var currentCost = _cost[current];
                 foreach (var point in grid.GetNeighbors(current, parameters.AllowDiagonal))
                 {
-                    var newCost = currentCost + grid[point]; //TODO add diagonal modifier
+                    var newCost = currentCost + grid.GetCost(current, point);
                     if (!_cost.TryGetValue(point, out var neighborCost) || newCost < neighborCost)
                     {
                         _cost[point] = newCost;

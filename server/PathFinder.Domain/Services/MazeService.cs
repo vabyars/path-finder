@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using PathFinder.DataAccess1;
 using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Domain.Services
@@ -13,33 +15,27 @@ namespace PathFinder.Domain.Services
             _repository = repository;
             _mazeCreationFactory = mazeCreationFactory;
         }
-        
+
         public void Add(string name, int[,] grid)
         {
             _repository.Add(name, grid);
         }
 
-        public int[,] Get(string name, bool fromDb)
+        public int[,] Get(string name)
         {
-            return fromDb ? GetFromRepository(name) : GenerateMaze(name);
+            if (_repository.TryGetValue(name, out var maze))
+                return maze;
+            var generatedMaze = _mazeCreationFactory.Create(name);
+            if (generatedMaze != null)
+                return generatedMaze;
+            throw new ArgumentException($"maze not found {name}");
         }
 
-        private int[,] GetFromRepository(string name)
+        public string[] GetAvailableNames()
         {
-            try
-            {
-                return _repository.Get(name);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException($"maze not found {name}");
-            }
+            return _mazeCreationFactory.GetAvailableNames()
+                .Concat(_repository.GetMazesNames())
+                .ToArray();
         }
-
-        private int[,] GenerateMaze(string name)
-        {
-            return _mazeCreationFactory.Create(name);
-        }
-        
     }
 }

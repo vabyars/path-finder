@@ -12,15 +12,18 @@ function App() {
   const [fieldSize, setFieldSize] = useState<{rows: number, columns: number}>({rows: rows, columns: columns})
   const [field, setField] = useState<boolean[][]>(getEmptyField(fieldSize.rows, fieldSize.columns))
 
+
   function updateField(x: number, y: number, value: boolean) {
     let newField = field.slice()
     newField[x][y] = value
     setField(newField)
   }
 
+
+
   return (
     <div className="App">
-      <Header field={field} clearFunc={() =>setField(getEmptyField(fieldSize.rows, fieldSize.columns))} />
+      <Header  field={field} clearFunc={() =>setField(getEmptyField(fieldSize.rows, fieldSize.columns))} />
       {/* <Button className="my-elem" 
       onClick={() =>{setField(() => getEmptyField(fieldSize.rows, fieldSize.columns))}}> Pause</Button> */}
       <Grid rows={fieldSize.rows} columns={fieldSize.columns} field={field} func={updateField} />

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PathFinder.Domain.Interfaces
+namespace PathFinder.Infrastructure.Interfaces
 {
     public interface IPriorityQueue<TKey>
     {

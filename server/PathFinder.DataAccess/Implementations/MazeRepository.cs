@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using PathFinder.Domain.Interfaces;
+﻿using System.Collections.Generic;
 
-namespace PathFinder.DataAccess.Dictionary
+namespace PathFinder.DataAccess1.Implementations
 {
     public class MazeRepository: IMazeRepository
     {
@@ -16,6 +14,13 @@ namespace PathFinder.DataAccess.Dictionary
         public int[,] Get(string name)
         {
             return _grids[name];
+        }
+
+        public IEnumerable<string> GetMazesNames() => _grids.Keys;
+
+        public bool TryGetValue(string name, out int[,] value)
+        {
+            return _grids.TryGetValue(name, out value);
         }
     }
 }
