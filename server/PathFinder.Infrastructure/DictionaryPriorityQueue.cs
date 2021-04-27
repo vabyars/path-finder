@@ -29,6 +29,6 @@ namespace PathFinder.Infrastructure
 
         public int Count => _items.Count;
 
-        public IEnumerable<TKey> GetAllItems() => _items.Keys;
+        public List<TKey> GetAllItems() => _items.Keys.ToList();
     }
 }

@@ -36,11 +36,4 @@ namespace PathFinder.Api.Controllers
             _mazeService.Add(mazeRequest.Name, mazeRequest.Grid);
         }
     }
-    
-    public class AddMazeRequest
-    {
-        public string Name { get; set; }
-        public int[,] Grid { get; set; }
-        
-    }
 }

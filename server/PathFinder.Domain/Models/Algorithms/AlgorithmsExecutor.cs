@@ -16,16 +16,15 @@ namespace PathFinder.Domain.Models.Algorithms
         }
         
         public IEnumerable<string> AvailableAlgorithmNames()
-        {
-            return _algorithms.Select(x => x.Name);
-        }
+            => _algorithms.Select(x => x.Name);
 
         public List<State> Execute(string name, IGrid grid, IParameters parameters)
         {
             var algorithm = _algorithms.FirstOrDefault(x => x.Name == name);
             if (algorithm == null)
                 throw new ArgumentException($"algorithm not found: {name}");
-            return algorithm.Run(grid, parameters).ToList();
+            var ex = algorithm.Run(grid, parameters);
+            return ex.ToList();
         }
     }
 }

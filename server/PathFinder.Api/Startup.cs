@@ -37,7 +37,7 @@ namespace PathFinder.Api
             services.AddControllers().AddNewtonsoftJson();
             services.AddCors();
             
-            services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>(); // TODO Fix
+            services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>();
             services.AddSingleton<IMazeRepository, MazeRepository>();
             services.AddSingleton<IMazeService, MazeService>();
             services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryTestRealization>();

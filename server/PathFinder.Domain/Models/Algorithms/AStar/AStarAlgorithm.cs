@@ -20,9 +20,8 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
             _queue = queue;
         }
         
-        public IEnumerable<AStarState> Run(IGrid grid, IParameters oldParameters)// TODO fix this hardcode
+        public IEnumerable<AStarState> Run(IGrid grid, IParameters parameters)
         {
-            var parameters = (AStarParameters) oldParameters;
             _start = parameters.Start;
             _goal = parameters.End;
             _queue.Add(_start, 0);
@@ -34,10 +33,15 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 var (current, _) = _queue.ExtractMin();
                 if (current == _goal)
                 {
-                    yield return new AStarState(current); //TODO fix
+                    yield return new AStarState(GetResultPath(), "result");
                     yield break;
                 }
                 var currentCost = _cost[current];
+
+                yield return new AStarState(current, "текущая вершина");
+
+                yield return new AStarState(_queue.GetAllItems(), "оставшиеся в очереди");
+
                 foreach (var point in grid.GetNeighbors(current, parameters.AllowDiagonal))
                 {
                     var newCost = currentCost + grid.GetCost(current, point);
@@ -46,9 +50,11 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                         _cost[point] = newCost;
                         _cameFrom[point] = current;
                         _queue.UpdateOrAdd(point, newCost + GetHeuristicPathLength(point, _goal));
-                        yield return new AStarState(point);
+                        yield return new AStarState(point, "рассмотренная вершина");
+                        //yield return new AStarState(point);
                     }
                 }
+
             }
             //текущая вершина
             //список оставшихся вершин
