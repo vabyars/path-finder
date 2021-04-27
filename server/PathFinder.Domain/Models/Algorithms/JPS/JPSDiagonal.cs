@@ -75,7 +75,7 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
                 var jumpPoint = rawJumpPoint.Value;
                 // determine the jumpPoint's distance from the start along the current path
                 var d = GetEuclideanLength(jumpPoint, point);
-                var ng = distanceToStart[point] + d;
+                var ng = distanceToStart.ContainsKey(point) ? distanceToStart[point] : 0 + d;
 
                 // if the point has already been opened and this is a shorter path, update it
                 // if it hasn't been opened, mark as open and update it
