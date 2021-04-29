@@ -1,4 +1,4 @@
-﻿namespace PathFinder.Api.Controllers
+﻿namespace PathFinder.Api.Models
 {
     public class AddMazeRequest
     {

@@ -12,7 +12,7 @@ namespace PathFinder.Domain.Models
 
         public int[,] Create(string name)
         {
-            return new int[3, 3];
+            return null;
         }
     }
 }

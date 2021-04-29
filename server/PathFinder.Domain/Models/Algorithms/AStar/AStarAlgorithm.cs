@@ -9,9 +9,12 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
     public class AStarAlgorithm : IAlgorithm<AStarState>
     {
         public string Name => "A*";
+        
         private readonly IPriorityQueue<Point> _queue;
+        
         private readonly Dictionary<Point, Point> _cameFrom = new();
         private readonly Dictionary<Point, double> _cost = new();
+        
         private Point _start;
         private Point _goal;
 
@@ -27,7 +30,6 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
             _queue.Add(_start, 0);
             _cameFrom.Add(_start, _start);
             _cost.Add(_start, 0);
-
             while (_queue.Count != 0)
             {
                 var (current, _) = _queue.ExtractMin();
@@ -37,29 +39,20 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                     yield break;
                 }
                 var currentCost = _cost[current];
-
                 yield return new AStarState(current, "текущая вершина");
-
                 yield return new AStarState(_queue.GetAllItems(), "оставшиеся в очереди");
-
-                foreach (var point in grid.GetNeighbors(current, parameters.AllowDiagonal))
+                foreach (var neighbor in grid.GetNeighbors(current, parameters.AllowDiagonal))
                 {
-                    var newCost = currentCost + grid.GetCost(current, point);
-                    if (!_cost.TryGetValue(point, out var neighborCost) || newCost < neighborCost)
+                    var newCost = currentCost + grid.GetCost(current, neighbor);
+                    if (!_cost.TryGetValue(neighbor, out var neighborCost) || newCost < neighborCost)
                     {
-                        _cost[point] = newCost;
-                        _cameFrom[point] = current;
-                        _queue.UpdateOrAdd(point, newCost + GetHeuristicPathLength(point, _goal));
-                        yield return new AStarState(point, "рассмотренная вершина");
-                        //yield return new AStarState(point);
+                        _cost[neighbor] = newCost;
+                        _cameFrom[neighbor] = current;
+                        _queue.UpdateOrAdd(neighbor, newCost + GetHeuristicPathLength(neighbor, _goal));
+                        yield return new AStarState(neighbor, "рассмотренная вершина");
                     }
                 }
-
             }
-            //текущая вершина
-            //список оставшихся вершин
-            
-            //статистика алгоритма в самом конце
         }
 
         private static double GetHeuristicPathLength(Point from, Point to)
@@ -70,10 +63,9 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
             var path = new List<Point>();
             var current = _goal; 
 
-            while (!(current == _start)) {
+            while (current != _start) {
                 if (!_cameFrom.ContainsKey(current))
                 {
-                    Console.WriteLine(current);
                     return new List<Point>();
                 }
 

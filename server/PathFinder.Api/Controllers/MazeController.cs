@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using PathFinder.Api.Models;
 using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Api.Controllers

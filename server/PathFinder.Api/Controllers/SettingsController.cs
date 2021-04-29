@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PathFinder.Api.Models;
 using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
-using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.States;
 using PathFinder.Infrastructure;
 
@@ -29,7 +27,7 @@ namespace PathFinder.Api.Controllers
         [HttpGet]
         public ActionResult<string> GetSettings()
         {
-            var mazes = _mazeService.GetAvailableNames();
+            var mazes = _mazeService.GetAvailableNames().ToArray();
             var algorithms = _algorithmsExecutor.AvailableAlgorithmNames().ToArray();
             var res = new Dictionary<string, string[]>
             {
@@ -41,7 +39,7 @@ namespace PathFinder.Api.Controllers
 
         [HttpPost]
         [Route("execute")]
-        public ActionResult<List<State>> Execute(ExecuteRequest req)
+        public ActionResult<List<State>> Execute(ExecuteAlgorithmRequest req)
         {
             var startPoint = PointParser.Parse(req.Start);
             var goalPoint = PointParser.Parse(req.Goal);
@@ -55,14 +53,5 @@ namespace PathFinder.Api.Controllers
                 return BadRequest("wrong");
             return algorithm;
         }
-    }
-
-    public class ExecuteRequest
-    {
-        public string Name { get; set; }
-        public string Start { get; set; }
-        public string Goal { get; set; }
-        public bool AllowDiagonal { get; set; }
-        public int[,] Grid { get; set; }
     }
 }
