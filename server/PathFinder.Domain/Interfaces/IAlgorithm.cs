@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace PathFinder.Domain.Interfaces
 {
@@ -6,5 +7,7 @@ namespace PathFinder.Domain.Interfaces
     {
         string Name { get; }
         IEnumerable<T> Run(IGrid grid, IParameters parameters);
+
+        IEnumerable<Point> GetResultPath();
     }
 }

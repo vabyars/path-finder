@@ -8,12 +8,14 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
     {
         public string Name { get; set; }
         public IEnumerable<Point> Points { get; set; }
-        public Point? Point { get; }
+        public Point? Point { get; set; }
+        public int Count { get; set; }
 
         public AStarState(string name)
         {
             Name = name;
         }
+        
         public AStarState(Point point, string name) : this(name)
         {
             Point = point;
@@ -22,6 +24,11 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         public AStarState(IEnumerable<Point> points, string name) : this(name)
         {
             Points = points;
+        }
+
+        public AStarState()
+        {
+            
         }
     }
 }
