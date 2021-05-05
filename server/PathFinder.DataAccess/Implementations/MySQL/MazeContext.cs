@@ -12,5 +12,16 @@ namespace PathFinder.DataAccess1.Implementations.MySQL
         {
             Database.EnsureCreated();   // создаем базу данных при первом обращении
         }
+        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            var IntValueConverter = new IntTwoDimensionsArrayToStringValueConverter();
+
+            modelBuilder
+                .Entity<Grid>()
+                .Property(e => e.Maze)
+                .HasConversion(IntValueConverter);
+
+        }
     }
 }

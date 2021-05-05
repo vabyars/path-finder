@@ -4,12 +4,14 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PathFinder.DataAccess1;
 using PathFinder.DataAccess1.Implementations;
+using PathFinder.DataAccess1.Implementations.MySQL;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms;
@@ -39,13 +41,17 @@ namespace PathFinder.Api
             services.AddCors();
             
             services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>();
-            services.AddSingleton<IMazeRepository, MazeRepository>();
+            //services.AddSingleton<IMazeRepository, MazeRepository>();
+            services.AddSingleton<IMazeRepository, MySqlRepository>();
             services.AddSingleton<IMazeService, MazeService>();
             services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryTestRealization>();
 
             services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
 
             services.AddTransient<Render, AStarRender>();
+
+            services.AddDbContext<MazeContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
             services.AddSwaggerGen(c =>
             {
