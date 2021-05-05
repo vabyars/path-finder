@@ -9,12 +9,12 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
     public class AStarAlgorithm : IAlgorithm<AStarState>
     {
         public string Name => "A*";
-        
+
         private readonly IPriorityQueue<Point> _queue;
-        
+
         private readonly Dictionary<Point, Point> _cameFrom = new();
         private readonly Dictionary<Point, double> _cost = new();
-        
+
         private Point _start;
         private Point _goal;
 
@@ -22,7 +22,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         {
             _queue = queue;
         }
-        
+
         public IEnumerable<AStarState> Run(IGrid grid, IParameters parameters)
         {
             _start = parameters.Start;
@@ -35,7 +35,11 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 var (current, _) = _queue.ExtractMin();
                 if (current == _goal)
                 {
-                    yield return new AStarState(GetResultPath(), "result");
+                    yield return new AStarState
+                    {
+                        Points = GetResultPath(),
+                        Name = "result"
+                    };
                     yield break;
                 }
 
@@ -54,7 +58,11 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                         _cost[neighbor] = newCost;
                         _cameFrom[neighbor] = current;
                         _queue.UpdateOrAdd(neighbor, newCost + GetHeuristicPathLength(neighbor, _goal));
-                        yield return new AStarState(neighbor, "рассмотренная вершина");
+                        yield return new AStarState
+                        {
+                            Point = neighbor,
+                            Name = "рассмотренная вершина"
+                        };
                     }
                 }
             }
@@ -63,12 +71,13 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         private static double GetHeuristicPathLength(Point from, Point to)
             => Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
 
-        public IEnumerable<Point> GetResultPath() {
-
+        public IEnumerable<Point> GetResultPath()
+        {
             var path = new List<Point>();
-            var current = _goal; 
+            var current = _goal;
 
-            while (current != _start) {
+            while (current != _start)
+            {
                 if (!_cameFrom.ContainsKey(current))
                 {
                     return new List<Point>();
@@ -77,6 +86,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 path.Add(current);
                 current = _cameFrom[current];
             }
+
             path.Add(_start);
             path.Reverse();
             return path;

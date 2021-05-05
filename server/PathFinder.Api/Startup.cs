@@ -14,6 +14,7 @@ using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Services;
 using PathFinder.Infrastructure;
@@ -43,6 +44,8 @@ namespace PathFinder.Api
             services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryTestRealization>();
 
             services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
+
+            services.AddTransient<Render, AStarRender>();
             
             services.AddSwaggerGen(c =>
             {
@@ -59,6 +62,7 @@ namespace PathFinder.Api
             var builder = new ContainerBuilder(); //done to allow sequence injection
             builder.Populate(services);
             builder.RegisterType<AlgorithmsExecutor>().As<IAlgorithmsExecutor>();
+            builder.RegisterType<RenderProvider>().AsSelf();
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
 

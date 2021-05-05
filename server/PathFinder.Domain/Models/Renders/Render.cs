@@ -4,19 +4,27 @@ using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Models.Renders
 {
-    public class Render
+    public abstract class Render
     {
+        public string[] SupportingAlgorithms { get; }
+        
         private int _statesCount;
 
         public List<State> States { get; } = new();
-        public void RenderState(State state)
+
+        public Render(string[] algorithms)
+        {
+            SupportingAlgorithms = algorithms;
+        }
+        
+        public virtual void RenderState(State state)
         {
             //некоторые манипуляции со стейтами
             States.Add(state);
             _statesCount++;
         }
 
-        public void CreateReportState()
+        public virtual void CreateReportState()
         {
             States.Add(new StatisticState
             {
