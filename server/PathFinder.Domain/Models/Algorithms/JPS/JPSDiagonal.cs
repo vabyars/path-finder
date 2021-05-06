@@ -22,16 +22,14 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
         private Point start;
         public string Name => "JPS";
 
-        public IEnumerable<JumpPointSearchState> Run(IGrid grid, IParameters oldParameters)
+        public IEnumerable<JumpPointSearchState> Run(IGrid grid, IParameters parameters)
         {
-            var parameters = (JumpPointSearchParameters) oldParameters;
             start = parameters.Start;
             goal = parameters.End;
             goalNeighbours = grid.GetNeighbors(goal, false).ToHashSet();
             foreach (var point in FindPathSync(grid))
                 yield return new JumpPointSearchState(point);
         }
-
 
         private IEnumerable<Point> FindPathSync(IGrid grid)
         {

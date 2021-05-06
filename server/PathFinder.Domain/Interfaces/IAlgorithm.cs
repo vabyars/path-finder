@@ -7,7 +7,5 @@ namespace PathFinder.Domain.Interfaces
     {
         string Name { get; }
         IEnumerable<T> Run(IGrid grid, IParameters parameters);
-
-        IEnumerable<Point> GetResultPath();
     }
 }

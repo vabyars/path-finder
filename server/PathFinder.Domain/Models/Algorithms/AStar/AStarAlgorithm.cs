@@ -71,7 +71,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         private static double GetHeuristicPathLength(Point from, Point to)
             => Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
 
-        public IEnumerable<Point> GetResultPath()
+        private IEnumerable<Point> GetResultPath()
         {
             var path = new List<Point>();
             var current = _goal;

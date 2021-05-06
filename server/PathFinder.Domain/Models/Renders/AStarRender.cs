@@ -1,10 +1,11 @@
 ﻿using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.Algorithms.JPS;
 
 namespace PathFinder.Domain.Models.Renders
 {
     public class AStarRender : Render
     {
-        public AStarRender() : base(new[] {nameof(AStarAlgorithm)})
+        public AStarRender() : base(new[] {nameof(AStarAlgorithm), nameof(JpsDiagonal)})
         {
         }
     }
