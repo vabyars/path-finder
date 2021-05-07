@@ -57,7 +57,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                     {
                         _cost[neighbor] = newCost;
                         _cameFrom[neighbor] = current;
-                        _queue.UpdateOrAdd(neighbor, newCost + GetHeuristicPathLength(neighbor, _goal));
+                        _queue.UpdateOrAdd(neighbor, newCost + parameters.Metric(neighbor, _goal));
                         yield return new AStarState
                         {
                             Point = neighbor,
@@ -67,9 +67,6 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 }
             }
         }
-
-        private static double GetHeuristicPathLength(Point from, Point to)
-            => Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
 
         private IEnumerable<Point> GetResultPath()
         {

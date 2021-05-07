@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PathFinder.Api.Models;
 using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Metrics;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.States;
 using PathFinder.Infrastructure;
@@ -24,16 +25,20 @@ namespace PathFinder.Api.Controllers
         [Route("execute")]
         public ActionResult<List<State>> Execute(ExecuteAlgorithmRequest req)
         {
-            var startPoint = PointParser.Parse(req.Start);
-            var goalPoint = PointParser.Parse(req.Goal);
+            var start = PointParser.Parse(req.Start);
+            var goal = PointParser.Parse(req.Goal);
+            var metric = MetricFactory.GetMetric(req.MetricName);
+            if (metric == null)
+                return BadRequest($"metric {req.MetricName} was not found");
             var algorithm = _algorithmsExecutor.Execute(req.Name, 
                 new Grid(req.Grid),
-                new Parameters(startPoint,
-                    goalPoint,
-                    req.AllowDiagonal));
+                new Parameters(start,
+                    goal,
+                    req.AllowDiagonal,
+                    metric));
             
             if (algorithm == null)
-                return BadRequest("wrong");
+                return BadRequest($"algorithm {req.Name} was not found");
             return algorithm;
         }
     }
