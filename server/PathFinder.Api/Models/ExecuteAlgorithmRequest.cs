@@ -1,5 +1,5 @@
 ﻿using PathFinder.Domain;
-using PathFinder.Domain.Metrics;
+using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Api.Models
 {
@@ -10,7 +10,7 @@ namespace PathFinder.Api.Models
         public string Goal { get; set; }
         public bool AllowDiagonal { get; set; }
 
-        public Metric MetricName { get; set; } = Metric.Euclidean;
+        public MetricName MetricName { get; set; } = MetricName.Euclidean;
         public int[,] Grid { get; set; }
     }
 }
