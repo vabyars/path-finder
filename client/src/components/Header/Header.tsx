@@ -20,22 +20,6 @@ function Header(props: any){
     const [currentAlgorithm, setAlgorithm] = useState<SelectData>()
     const [mazes, setMazes] = useState<SelectData[]>([])
     const [currentMaze, setMaze] = useState<SelectData>()
-    
-
-
-    async function loadMazesAndAlgorithms(){
-        let data = await( await fetch("/settings")).json()
-        let parsedAlgorithms = parseArrayToSelectData(data.algorithms)
-        let parsedMazes = parseArrayToSelectData(data.mazes)
-        setMazes(parsedMazes)
-        setAlgorithms(parsedAlgorithms)
-        setAlgorithm(parsedAlgorithms[0])
-        setMaze(parsedMazes[0])
-      }
-
-    useEffect(() => {
-         loadMazesAndAlgorithms()
-        }, [])
 
     return (
         <div className="header">
