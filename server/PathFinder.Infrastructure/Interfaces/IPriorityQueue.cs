@@ -10,7 +10,7 @@ namespace PathFinder.Infrastructure.Interfaces
         (TKey key, double value) ExtractMin();
         bool TryGetValue(TKey key, out double value);
         int Count { get; }
-        IEnumerable<TKey> GetAllItems();
+        List<TKey> GetAllItems();
     }
     
     public static class PriorityQueueExtension

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using PathFinder.DataAccess1;
 using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Domain.Services
@@ -30,11 +32,10 @@ namespace PathFinder.Domain.Services
             throw new ArgumentException($"maze not found {name}");
         }
 
-        public string[] GetAvailableNames()
+        public IEnumerable<string> GetAvailableNames()
         {
             return _mazeCreationFactory.GetAvailableNames()
-                .Concat(_repository.GetMazesNames())
-                .ToArray();
+                .Concat(_repository.GetMazesNames());
         }
     }
 }

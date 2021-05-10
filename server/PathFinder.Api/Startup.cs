@@ -4,16 +4,20 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using PathFinder.DataAccess.Dictionary;
-using PathFinder.Domain;
+using PathFinder.DataAccess1;
+using PathFinder.DataAccess1.Implementations;
+using PathFinder.DataAccess1.Implementations.MySQL;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.Algorithms.JPS;
+using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Services;
 using PathFinder.Infrastructure;
@@ -37,12 +41,19 @@ namespace PathFinder.Api
             services.AddControllers().AddNewtonsoftJson();
             services.AddCors();
             
-            services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>(); // TODO Fix
-            services.AddSingleton<IMazeRepository, MazeRepository>();
+            services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>();
+            //services.AddSingleton<IMazeRepository, MazeRepository>();
+            services.AddSingleton<IMazeRepository, MySqlRepository>();
             services.AddSingleton<IMazeService, MazeService>();
             services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryTestRealization>();
 
             services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
+            services.AddTransient<IAlgorithm<State>, JpsDiagonal>();
+
+            services.AddTransient<Render, AStarRender>();
+
+            services.AddDbContext<MazeContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
             services.AddSwaggerGen(c =>
             {
@@ -59,6 +70,7 @@ namespace PathFinder.Api
             var builder = new ContainerBuilder(); //done to allow sequence injection
             builder.Populate(services);
             builder.RegisterType<AlgorithmsExecutor>().As<IAlgorithmsExecutor>();
+            builder.RegisterType<RenderProvider>().AsSelf();
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
 

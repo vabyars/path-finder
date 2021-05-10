@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using PathFinder.Api.Models;
 using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Api.Controllers
@@ -31,16 +32,17 @@ namespace PathFinder.Api.Controllers
 
         [HttpPost]
         [Route("add")]
-        public void AddMaze(AddMazeRequest mazeRequest)
+        public ActionResult<string> AddMaze(AddMazeRequest mazeRequest)
         {
-            _mazeService.Add(mazeRequest.Name, mazeRequest.Grid);
+            try
+            {
+                _mazeService.Add(mazeRequest.Name, mazeRequest.Grid);
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
-    }
-    
-    public class AddMazeRequest
-    {
-        public string Name { get; set; }
-        public int[,] Grid { get; set; }
-        
     }
 }

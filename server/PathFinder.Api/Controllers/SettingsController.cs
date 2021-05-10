@@ -2,7 +2,12 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PathFinder.Api.Models;
+using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models;
+using PathFinder.Domain.Models.States;
+using PathFinder.Infrastructure;
 
 namespace PathFinder.Api.Controllers
 {
@@ -18,11 +23,11 @@ namespace PathFinder.Api.Controllers
             _mazeService = mazeService;
             _algorithmsExecutor = algorithmsExecutor;
         }
-        
+
         [HttpGet]
         public ActionResult<string> GetSettings()
         {
-            var mazes = _mazeService.GetAvailableNames();
+            var mazes = _mazeService.GetAvailableNames().ToArray();
             var algorithms = _algorithmsExecutor.AvailableAlgorithmNames().ToArray();
             var res = new Dictionary<string, string[]>
             {
