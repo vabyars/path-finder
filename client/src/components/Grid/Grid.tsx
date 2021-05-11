@@ -1,15 +1,9 @@
 import React, { useState } from 'react'
 import Ceil from '../Ceil/Ceil'
+import { CellData, GridProps }  from '../Extentions/Interfaces'
+import { CellState } from "../Extentions/CellState";
+import { UNCLICKABLE_CELL_TYPES} from "../Extentions/Constants";
 import "./Grid.css"
-
-interface GridProps {
-    rows: number,
-    columns: number
-    field: boolean[][]
-    func: any
-}
-
-
 
 function Grid(props: GridProps){
     const [isMouseDown, setIsMouseDown] = useState(false)
@@ -27,15 +21,19 @@ function Grid(props: GridProps){
             temp.push(
                 <Ceil
                     key={boxId}
-                    className={props.field[i][j] ? "box on" : "box off"}
+                    className={getCellClass(props.field[i][j].state)}
                     onMouseDown={() => {
+                      if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
                       setIsMouseDown(true)
-                      props.func(i, j, !props.field[i][j])
+                      props.func(i, j,  [getNewCellDataOnClick(props.field[i][j])])
                     }}
                     onMouseOver={() => {
-                      if (isMouseDown) props.func(i, j, !props.field[i][j])
+                      if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
+                      if (isMouseDown) props.func(i, j, [getNewCellDataOnClick(props.field[i][j])])
                     }}
-                    onMouseUp={() => setIsMouseDown(false)}
+                    onMouseUp={() => {
+                      setIsMouseDown(false)
+                    }}
                 />)
         }
         rowsArr.push(temp)
@@ -44,10 +42,31 @@ function Grid(props: GridProps){
     return (
         <div className="grid"
              style={{width: width, height: height}}
+             onMouseLeave={(e) => {
+               e.stopPropagation()
+               setIsMouseDown(false)
+             }}
           >
           {rowsArr}
         </div>
     );
+}
+
+function getNewCellDataOnClick(cellData: CellData) {
+  if (cellData.state === 'wall')
+    return {
+      state: 'empty',
+      value: 0
+    }
+  return {
+    state: 'wall',
+    value: -1
+  }
+}
+
+function getCellClass(state: CellState) {
+  let additionalClass = state === 'empty' ? '' : state
+  return `cell ${additionalClass}`
 }
 
 export default Grid

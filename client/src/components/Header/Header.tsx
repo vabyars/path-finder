@@ -21,11 +21,24 @@ function Header(props: any){
     const [mazes, setMazes] = useState<SelectData[]>([])
     const [currentMaze, setMaze] = useState<SelectData>()
 
+  async function loadMazesAndAlgorithms(){
+    let data = await( await fetch("/settings")).json()
+    let parsedAlgorithms = parseArrayToSelectData(data.algorithms)
+    let parsedMazes = parseArrayToSelectData(data.mazes)
+    setMazes(parsedMazes)
+    setAlgorithms(parsedAlgorithms)
+    setAlgorithm(parsedAlgorithms[0])
+    setMaze(parsedMazes[0])
+  }
+
+  useEffect(() => {
+    loadMazesAndAlgorithms()
+  }, [])
+
     return (
         <div className="header">
             <label className="flex-elem logo">Pathfinder</label>
-
-            <Button className="flex-elem" onClick={() => console.log(currentMaze)}> Start</Button>
+            <Button className="flex-elem" onClick={() => props.exec(currentAlgorithm?.label, props.field)}> Start</Button>
             <Button className="flex-elem"> Pause</Button>
             <Button className="flex-elem" onClick={props.clearFunc}> Clear field</Button>
 
