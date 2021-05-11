@@ -17,10 +17,10 @@ namespace PathFinder.Api.Controllers
         private readonly IAlgorithmsExecutor _algorithmsExecutor;
         private readonly IMetricFactory _metricFactory;
 
-        public AlgorithmsController(IAlgorithmsExecutor algorithmsExecutor, IMetricFactory _metricFactory)
+        public AlgorithmsController(IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory)
         {
             _algorithmsExecutor = algorithmsExecutor;
-            this._metricFactory = _metricFactory;
+            this._metricFactory = metricFactory;
         }
         
         [HttpPost]

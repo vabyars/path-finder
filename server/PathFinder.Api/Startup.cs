@@ -35,12 +35,22 @@ namespace PathFinder.Api
 
         public IConfiguration Configuration { get; }
         public IContainer ApplicationContainer { get; private set; }
-        
+        private readonly string _myAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _myAllowSpecificOrigins,
+                    corsPolicyBuilder =>
+                    {
+                        corsPolicyBuilder
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowAnyOrigin();
+                    });
+            });
             
             services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>();
             //services.AddSingleton<IMazeRepository, MazeRepository>();
@@ -92,7 +102,7 @@ namespace PathFinder.Api
             
             app.UseRouting();
             
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors(_myAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

@@ -2,13 +2,8 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PathFinder.Api.Models;
-using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Metrics;
-using PathFinder.Domain.Models.States;
-using PathFinder.Infrastructure;
 
 namespace PathFinder.Api.Controllers
 {
