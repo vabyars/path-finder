@@ -17,6 +17,7 @@ using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.Algorithms.JPS;
+using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Services;
@@ -34,18 +35,29 @@ namespace PathFinder.Api
 
         public IConfiguration Configuration { get; }
         public IContainer ApplicationContainer { get; private set; }
-        
+        private readonly string _myAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _myAllowSpecificOrigins,
+                    corsPolicyBuilder =>
+                    {
+                        corsPolicyBuilder
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowAnyOrigin();
+                    });
+            });
             
             services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>();
             //services.AddSingleton<IMazeRepository, MazeRepository>();
             services.AddSingleton<IMazeRepository, MySqlRepository>();
             services.AddSingleton<IMazeService, MazeService>();
             services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryTestRealization>();
+            services.AddSingleton<IMetricFactory, MetricFactory>();
 
             services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
             services.AddTransient<IAlgorithm<State>, JpsDiagonal>();
@@ -90,7 +102,7 @@ namespace PathFinder.Api
             
             app.UseRouting();
             
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors(_myAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

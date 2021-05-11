@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using PathFinder.Api.Models;
 using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Metrics;
 using PathFinder.Domain.Models;
+using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.States;
 using PathFinder.Infrastructure;
 
@@ -15,10 +15,12 @@ namespace PathFinder.Api.Controllers
     public class AlgorithmsController : Controller
     {
         private readonly IAlgorithmsExecutor _algorithmsExecutor;
+        private readonly IMetricFactory _metricFactory;
 
-        public AlgorithmsController(IAlgorithmsExecutor algorithmsExecutor)
+        public AlgorithmsController(IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory)
         {
             _algorithmsExecutor = algorithmsExecutor;
+            this._metricFactory = metricFactory;
         }
         
         [HttpPost]
@@ -27,7 +29,7 @@ namespace PathFinder.Api.Controllers
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
-            var metric = MetricFactory.GetMetric(req.MetricName);
+            var metric = _metricFactory.GetMetric(req.MetricName);
             if (metric == null)
                 return BadRequest($"metric {req.MetricName} was not found");
             var algorithm = _algorithmsExecutor.Execute(req.Name, 

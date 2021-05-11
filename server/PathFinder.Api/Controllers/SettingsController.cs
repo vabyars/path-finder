@@ -2,12 +2,8 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PathFinder.Api.Models;
-using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models;
-using PathFinder.Domain.Models.States;
-using PathFinder.Infrastructure;
+using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Api.Controllers
 {
@@ -17,11 +13,13 @@ namespace PathFinder.Api.Controllers
     {
         private readonly IMazeService _mazeService;
         private readonly IAlgorithmsExecutor _algorithmsExecutor;
+        private readonly IMetricFactory _metricFactory;
 
-        public SettingsController(IMazeService mazeService, IAlgorithmsExecutor algorithmsExecutor)
+        public SettingsController(IMazeService mazeService, IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory)
         {
             _mazeService = mazeService;
             _algorithmsExecutor = algorithmsExecutor;
+            this._metricFactory = metricFactory;
         }
 
         [HttpGet]
@@ -29,10 +27,12 @@ namespace PathFinder.Api.Controllers
         {
             var mazes = _mazeService.GetAvailableNames().ToArray();
             var algorithms = _algorithmsExecutor.AvailableAlgorithmNames().ToArray();
+            var metrics = _metricFactory.GetAvailableMetricNames().ToArray();
             var res = new Dictionary<string, string[]>
             {
                 ["mazes"] = mazes,
-                ["algorithms"] = algorithms
+                ["algorithms"] = algorithms,
+                ["metrics"] = metrics
             };
             return JsonConvert.SerializeObject(res, Formatting.Indented);
         }
