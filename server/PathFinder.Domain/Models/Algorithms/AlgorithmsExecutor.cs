@@ -22,7 +22,7 @@ namespace PathFinder.Domain.Models.Algorithms
         public IEnumerable<string> AvailableAlgorithmNames()
             => _algorithms.Select(x => x.Name);
 
-        public List<State> Execute(string name, IGrid grid, IParameters parameters)
+        public AlgorithmExecutionInfo Execute(string name, IGrid grid, IParameters parameters)
         {
             var algorithm = _algorithms.FirstOrDefault(x => x.Name == name);
             if (algorithm == null)
@@ -30,14 +30,13 @@ namespace PathFinder.Domain.Models.Algorithms
             
             var render = _renderProvider.GetRender(algorithm);
             var ex = algorithm.Run(grid, parameters);
-            
+
             foreach (var state in ex)
             {
                 render.RenderState(state);
             }
 
-            render.CreateReportState();
-            return render.States;
+            return render.GetInfo();
         }
     }
 

@@ -7,6 +7,6 @@ namespace PathFinder.Domain.Interfaces
     {
         IEnumerable<string> AvailableAlgorithmNames();
 
-        List<State> Execute(string name, IGrid grid, IParameters parameters);// изменить на RenderedStates
+        AlgorithmExecutionInfo Execute(string name, IGrid grid, IParameters parameters);// изменить на RenderedStates
     }
 }

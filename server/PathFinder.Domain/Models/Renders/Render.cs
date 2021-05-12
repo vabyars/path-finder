@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.States;
 
@@ -10,7 +11,7 @@ namespace PathFinder.Domain.Models.Renders
         
         private int _statesCount;
 
-        public List<State> States { get; } = new();
+        private List<State> States { get; } = new();
 
         public Render(string[] algorithms)
         {
@@ -30,6 +31,19 @@ namespace PathFinder.Domain.Models.Renders
             {
                 IterationsCount = _statesCount
             });
+        }
+
+        public AlgorithmExecutionInfo GetInfo()
+        {
+            return new()
+            {
+                States = States.SkipLast(1),
+                ResultPath = States.TakeLast(1).FirstOrDefault()?.Points,
+                Stat = new StatisticState
+                {
+                    IterationsCount = _statesCount
+                }
+            };
         }
     }
 }

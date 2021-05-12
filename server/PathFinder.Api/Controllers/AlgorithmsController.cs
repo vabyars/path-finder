@@ -25,7 +25,7 @@ namespace PathFinder.Api.Controllers
         
         [HttpPost]
         [Route("execute")]
-        public ActionResult<List<State>> Execute(ExecuteAlgorithmRequest req)
+        public ActionResult<AlgorithmExecutionInfo> Execute(ExecuteAlgorithmRequest req)
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
