@@ -1,47 +1,85 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Grid from './components/Grid/Grid'
 import Header from './components/Header/Header'
-import {Button} from '@skbkontur/react-ui'
-
+import { CellData, Field } from './components/Extentions/Interfaces'
 const rows = 30
 const columns = 60
 
+
 function App() {
   const [fieldSize, setFieldSize] = useState<{rows: number, columns: number}>({rows: rows, columns: columns})
-  const [field, setField] = useState<boolean[][]>(getEmptyField(fieldSize.rows, fieldSize.columns))
+  const [field, setField] = useState<Field>(getEmptyField(fieldSize.rows, fieldSize.columns))
 
-
-  function updateField(x: number, y: number, value: boolean) {
-    let newField = field.slice()
-    newField[x][y] = value
-    setField(newField)
+  function executeAlgorithm(name: string) {
+    fetch("/algorithm/execute", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: name,
+        start: `${field.start.x},${field.start.y}`,
+        goal: `${field.end.x},${field.end.y}`,
+        "allowDiagonal": 0,
+        "metricName": 0,
+        grid: parseCellsDataToNumbers(field.field)
+      })
+    }).then((res) => res.json().then((data) => console.log(data))).catch((e) => console.log(e))
   }
-
-
 
   return (
     <div className="App">
-      <Header  field={field} clearFunc={() =>setField(getEmptyField(fieldSize.rows, fieldSize.columns))} />
-      {/* <Button className="my-elem" 
-      onClick={() =>{setField(() => getEmptyField(fieldSize.rows, fieldSize.columns))}}> Pause</Button> */}
-      <Grid rows={fieldSize.rows} columns={fieldSize.columns} field={field} func={updateField} />
+      <Header  field={field} clearFunc={() =>setField(getEmptyField(fieldSize.rows, fieldSize.columns))}
+               exec={executeAlgorithm}/>
+      <Grid rows={fieldSize.rows} columns={fieldSize.columns} field={field.field}
+            func={(x: number, y: number, data: CellData[]) => setField(getUpdatedField(x, y, data, field))}
+
+      />
     </div>
   );
 }
 
-interface HeaderProps{
-  
+
+function parseCellsDataToNumbers(data: CellData[][]) {
+  return data.map((row) => {
+    return row.map((cellData) => cellData.value)
+  })
 }
 
-function getEmptyField(rows: number, columns: number){
-  let result: boolean[][] = []
-  for (let i = 0; i < rows; i++){
-      let t = new Array(columns).fill(false)
-      result.push(t)             
+function getUpdatedField(x: number, y: number, data: CellData[], field: Field) {
+  let newField = field.field.slice()
+  for (let nodeData of data){
+    newField[x][y] = nodeData
   }
-  return result
+  return {
+      ...field, field: newField
+  }
+}
+
+
+function getEmptyField(rows: number, columns: number){
+  let result: CellData[][] = []
+  for (let i = 0; i < rows; i++){
+      result.push(new Array(columns).fill({
+        state: 'empty',
+        value: 0
+      }))
+  }
+  result[5][10] = {
+    state: 'start',
+    value: 0
+  }
+  result[10][15] = {
+    state: 'end',
+    value: 0
+  }
+
+  return {
+    start: {x: 5, y: 10},
+    end: {x: 10, y: 20},
+    field: result
+  }
 }
 
 export default App;
