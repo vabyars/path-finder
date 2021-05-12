@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Implementations;
 using PathFinder.DataAccess1.Implementations.MySQL;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;

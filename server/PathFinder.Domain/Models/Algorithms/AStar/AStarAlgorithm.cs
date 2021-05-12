@@ -43,12 +43,12 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                     yield break;
                 }
 
-                /*yield return new AStarState
+                yield return new AStarState
                 {
                     Points = _queue.GetAllItems(),
                     Point = current,
                     Name = "текущая вершина"
-                };*/
+                };
                 var currentCost = _cost[current];
                 foreach (var neighbor in grid.GetNeighbors(current, parameters.AllowDiagonal))
                 {
@@ -58,11 +58,11 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                         _cost[neighbor] = newCost;
                         _cameFrom[neighbor] = current;
                         _queue.UpdateOrAdd(neighbor, newCost + parameters.Metric(neighbor, _goal));
-                        /*yield return new AStarState
+                        yield return new AStarState
                         {
                             Point = neighbor,
                             Name = "рассмотренная вершина"
-                        };*/
+                        };
                     }
                 }
             }

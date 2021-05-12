@@ -4,7 +4,7 @@ using PathFinder.Domain;
 
 namespace PathFinder.Test.AlgorithmsTests.TestGrids
 {
-    public class TestGrid
+    public class TestGrid : IDiagonalPath, IPath
     {
         //add findsMinPath: bool
 
@@ -14,11 +14,25 @@ namespace PathFinder.Test.AlgorithmsTests.TestGrids
         public Point Goal { get; set; } = new(2, 2);
 
         public bool OnlyOneShortestPath { get; set; } = false;
-        public bool OnlyOneShortestDiagonalPath { get; set; } = true;
+        public int MinPathLength { get; set; } = 5;
+        public IEnumerable<Point> MinPath { get; set; }
         
+        public bool OnlyOneShortestDiagonalPath { get; set; } = true;
         public int MinPathLengthWithDiagonal { get; set; } = 3;
-        public int MinPathLengthWithoutDiagonal { get; set; } = 5;
-
         public IEnumerable<Point> MinPathWithDiagonal { get; set; } = new[] {new Point(0, 0), new (1, 1), new(2, 2)};
+    }
+
+    public interface IDiagonalPath
+    {
+        bool OnlyOneShortestDiagonalPath { get; set; }
+        int MinPathLengthWithDiagonal { get; set; }
+        IEnumerable<Point> MinPathWithDiagonal { get; set; }
+    }
+
+    public interface IPath
+    {
+        bool OnlyOneShortestPath { get; set; }
+        int MinPathLength { get; set; }
+        IEnumerable<Point> MinPath { get; set; }
     }
 }

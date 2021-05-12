@@ -5,6 +5,7 @@ using NUnit.Framework;
 using PathFinder.Domain;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.Metrics;
 using PathFinder.Infrastructure;
 using PathFinder.Infrastructure.Interfaces;
 
@@ -26,6 +27,8 @@ namespace PathFinder.Test.AlgorithmsTests
         [Test]
         public void SimpleTest()
         {
+            new GridsController()
+                .Run(new AStarAlgorithm(_queue), true, MetricName.Euclidean);
             /*var grid = new Grid(new[,] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}});
             var parameters = new Parameters(new Point(0, 0), new Point(2, 2), false);
 
