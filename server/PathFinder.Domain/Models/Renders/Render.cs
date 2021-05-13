@@ -12,6 +12,7 @@ namespace PathFinder.Domain.Models.Renders
         private int _statesCount;
 
         private List<State> States { get; } = new();
+        private StatisticState StatisticState { get; set; }
 
         public Render(string[] algorithms)
         {
@@ -27,10 +28,10 @@ namespace PathFinder.Domain.Models.Renders
 
         public virtual void CreateReportState()
         {
-            States.Add(new StatisticState
+            StatisticState = new StatisticState
             {
                 IterationsCount = _statesCount
-            });
+            };
         }
 
         public AlgorithmExecutionInfo GetInfo()
@@ -39,10 +40,7 @@ namespace PathFinder.Domain.Models.Renders
             {
                 States = States.SkipLast(1),
                 ResultPath = States.TakeLast(1).FirstOrDefault()?.Points,
-                Stat = new StatisticState
-                {
-                    IterationsCount = _statesCount
-                }
+                Stat = StatisticState
             };
         }
     }

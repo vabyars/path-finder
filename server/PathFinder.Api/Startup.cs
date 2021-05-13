@@ -16,6 +16,7 @@ using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.Algorithms.JPS;
+using PathFinder.Domain.Models.Algorithms.Lee;
 using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
@@ -60,6 +61,7 @@ namespace PathFinder.Api
 
             services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
             services.AddTransient<IAlgorithm<State>, JpsDiagonal>();
+            services.AddTransient<IAlgorithm<State>, LeeAlgorithm>();
 
             services.AddTransient<Render, AStarRender>();
 

@@ -35,7 +35,7 @@ namespace PathFinder.Domain.Models.Algorithms
             {
                 render.RenderState(state);
             }
-
+            render.CreateReportState();
             return render.GetInfo();
         }
     }
