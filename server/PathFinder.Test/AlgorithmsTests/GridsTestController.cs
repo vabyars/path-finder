@@ -22,6 +22,7 @@ namespace PathFinder.Test.AlgorithmsTests
             new SimpleTestGrid(),
             new LargeSimpleGrid(),
             new SimpleMaze(),
+            new SimpleMazeWithOneShortestPath()
         };
         
         public void Run(Func<IPriorityQueue<Point>, IAlgorithm<State>> getInstance, bool findsMinPath, MetricName metric)

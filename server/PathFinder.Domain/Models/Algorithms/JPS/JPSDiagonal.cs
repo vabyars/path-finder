@@ -10,6 +10,8 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
 {
     public class JpsDiagonal : IAlgorithm<JumpPointSearchState>
     {
+        private readonly IPriorityQueue<Point> _openQueue;
+
         private readonly Dictionary<Point, double>
             _distanceToStart = new(); // distance to start (parent's g + distance from parent)
 
@@ -22,19 +24,28 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
         private Point _start;
         private Func<Point, Point, double> _metric;
         public string Name => "JPS";
+
+        public JpsDiagonal(IPriorityQueue<Point> openQueue)
+        {
+            _openQueue = openQueue;
+        }
+        
         public IEnumerable<JumpPointSearchState> Run(IGrid grid, IParameters parameters)
         {
             _start = parameters.Start;
             _goal = parameters.End;
             _metric = parameters.Metric;
             _goalNeighbours = grid.GetNeighbors(_goal, false).ToHashSet();
-            foreach (var point in FindPathSync(grid))
-                yield return new JumpPointSearchState(point);
+            yield return new JumpPointSearchState
+            {
+                Points = FindPathSync(grid).ToList()
+            };
+            /*foreach (var point in FindPathSync(grid))
+                yield return new JumpPointSearchState(point);*/
         }
 
         private IEnumerable<Point> FindPathSync(IGrid grid)
         {
-            var open = new DictionaryPriorityQueue<Point>();
             var closed = new HashSet<Point>();
 
             if (grid.IsPassable(_goal))
@@ -43,18 +54,18 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
             if (_goalNeighbours.Count == 0)
                 return null;
             Console.WriteLine(_start);
-            open.Add(_start, 0);
+            _openQueue.Add(_start, 0);
 
-            while (open.Count > 0)
+            while (_openQueue.Count > 0)
             {
-                var (current, _) = open.ExtractMin();
+                var (current, _) = _openQueue.ExtractMin();
                 closed.Add(current);
 
                 if (_goalNeighbours.Contains(current))
                     return Backtrace(current);
 
                 // add all possible next steps from the current point
-                IdentifySuccessors(current, open, closed, grid);
+                IdentifySuccessors(current, _openQueue, closed, grid);
             }
 
             return null;
