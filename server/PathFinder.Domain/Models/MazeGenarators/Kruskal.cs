@@ -8,23 +8,19 @@ namespace PathFinder.Domain.Models.MazeGenarators
 {
     public class Kruskal : IMazeGenerator
     {
-        private readonly Grid grid;
+        private Grid grid;
         private Grid uniqueNumbersGrid;
-        private readonly int height;
-        private readonly int width;
-        private readonly int[,] mazeGrid;
+        private int height;
+        private int width;
+        
         private const int WallValue = -1;
         
-        public Kruskal(Grid grid, int width, int height)
+        public int[,] Create(int width, int height)
         {
-            this.grid = grid;
             this.width = width;
             this.height = height;
-            mazeGrid = GetGridWithWallsEverywhere();
-        }
-
-        public int[,] Create()
-        {
+            grid = new Grid(new int[width, height]);
+            var mazeGrid = GetGridWithWallsEverywhere();
             uniqueNumbersGrid = CreateGridWithUniqueNumbers();
             var candidates = CreateListOfWalls();
             while (candidates.Count > 0)

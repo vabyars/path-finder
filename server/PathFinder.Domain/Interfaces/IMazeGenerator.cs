@@ -2,6 +2,6 @@
 {
     public interface IMazeGenerator
     {
-        int[,] Create();
+        int[,] Create(int width, int height);
     }
 }
