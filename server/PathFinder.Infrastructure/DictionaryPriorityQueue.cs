@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PathFinder.Infrastructure.Interfaces;
@@ -30,5 +31,9 @@ namespace PathFinder.Infrastructure
         public int Count => _items.Count;
 
         public List<TKey> GetAllItems() => _items.Keys.ToList();
+
+        public IEnumerator<TKey> GetEnumerator() => ((IEnumerable<TKey>) _items.Keys).GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
