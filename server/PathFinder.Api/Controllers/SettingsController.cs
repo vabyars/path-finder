@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Api.Controllers
@@ -13,15 +14,15 @@ namespace PathFinder.Api.Controllers
     public class SettingsController : Controller
     {
         private readonly IMazeService mazeService;
-        private readonly IAlgorithmsExecutor algorithmsExecutor;
+        private readonly DomainAlgorithmsController algorithmsController;
         private readonly IMetricFactory metricFactory;
         private readonly GridConfigurationParameters mazeParameters;
 
-        public SettingsController(IMazeService mazeService, IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory,
+        public SettingsController(IMazeService mazeService, DomainAlgorithmsController algorithmsController, IMetricFactory metricFactory,
             GridConfigurationParameters mazeParameters)
         {
             this.mazeService = mazeService;
-            this.algorithmsExecutor = algorithmsExecutor;
+            this.algorithmsController = algorithmsController;
             this.metricFactory = metricFactory;
             this.mazeParameters = mazeParameters;
         }
@@ -30,7 +31,7 @@ namespace PathFinder.Api.Controllers
         public ActionResult<string> GetSettings()
         {
             var mazes = mazeService.GetAvailableNames().ToArray();
-            var algorithms = algorithmsExecutor.AvailableAlgorithmNames().ToArray();
+            var algorithms = algorithmsController.GetInfoAboutAlgorithmsWithAvailableParams();
             var metrics = metricFactory.GetAvailableMetricNames().ToArray();
             var res = new Dictionary<string, object>
             {
@@ -38,7 +39,7 @@ namespace PathFinder.Api.Controllers
                 ["algorithms"] = algorithms,
                 ["metrics"] = metrics,
                 ["width"] = mazeParameters.Width,
-                ["height"] = mazeParameters.Height
+                ["height"] = mazeParameters.Height,
             };
             return JsonConvert.SerializeObject(res, Formatting.Indented);
         }

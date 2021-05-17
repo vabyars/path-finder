@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Infrastructure;
 using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.AStar

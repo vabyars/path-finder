@@ -75,6 +75,8 @@ namespace PathFinder.Api
 
             services.AddTransient<Render, AStarRender>();
 
+            services.AddTransient<IAlgorithmsExecutor, AlgorithmsExecutor>();
+            
             services.AddDbContext<MazeContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
@@ -92,7 +94,7 @@ namespace PathFinder.Api
 
             var builder = new ContainerBuilder(); //done to allow sequence injection
             builder.Populate(services);
-            builder.RegisterType<AlgorithmsExecutor>().As<IAlgorithmsExecutor>();
+            builder.RegisterType<DomainAlgorithmsController>().AsSelf();
             builder.RegisterType<MazeCreationFactory>().As<IMazeCreationFactory>();
             builder.RegisterType<RenderProvider>().AsSelf();
             ApplicationContainer = builder.Build();

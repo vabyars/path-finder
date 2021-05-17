@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Infrastructure;
 using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
@@ -23,14 +22,16 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
         private HashSet<Point> goalNeighbours = new();
         private Point start;
         private Func<Point, Point, double> metric;
-        private IPriorityQueue<Point> priorityQueue;
+        private readonly IPriorityQueue<Point> priorityQueue;
         public string Name => "JPS";
 
         public JpsDiagonal(IPriorityQueue<Point> queue)
         {
             priorityQueue = queue;
         }
-        
+
+        public Type GetParametersType() => typeof(JPSParameters);
+
         public IEnumerable<JumpPointSearchState> Run(IGrid grid, IParameters parameters)
         {
             start = parameters.Start;

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PathFinder.Api.Models;
 using PathFinder.Domain;
-using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
+using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.States;
 using PathFinder.Infrastructure;
@@ -14,12 +13,12 @@ namespace PathFinder.Api.Controllers
     [Route("algorithm")]
     public class AlgorithmsController : Controller
     {
-        private readonly IAlgorithmsExecutor algorithmsExecutor;
+        private readonly DomainAlgorithmsController algorithmsController;
         private readonly IMetricFactory metricFactory;
 
-        public AlgorithmsController(IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory)
+        public AlgorithmsController(DomainAlgorithmsController algorithmsController, IMetricFactory metricFactory)
         {
-            this.algorithmsExecutor = algorithmsExecutor;
+            this.algorithmsController = algorithmsController;
             this.metricFactory = metricFactory;
         }
         
@@ -32,7 +31,7 @@ namespace PathFinder.Api.Controllers
             var metric = metricFactory.GetMetric(req.MetricName);
             if (metric == null)
                 return BadRequest($"metric {req.MetricName} was not found");
-            var algorithm = algorithmsExecutor.Execute(req.Name, 
+            var algorithm = algorithmsController.ExecuteAlgorithm(req.Name, 
                 new Grid(req.Grid),
                 new Parameters(start,
                     goal,
