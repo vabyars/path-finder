@@ -8,6 +8,8 @@ namespace PathFinder.Domain.Models.MazeGenarators
 {
     public class Kruskal : IMazeGenerator
     {
+        public string Name => "Kruskal";
+
         private Grid grid;
         private Grid uniqueNumbersGrid;
         private int height;

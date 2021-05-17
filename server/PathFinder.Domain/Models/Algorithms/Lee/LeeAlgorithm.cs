@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.Lee
@@ -17,11 +18,14 @@ namespace PathFinder.Domain.Models.Algorithms.Lee
             {
                 var current = queue.Dequeue();
                 if (current.Point == parameters.End)
+                {
                     yield return new LeeState
                     {
-                        Points = GetResultPath(current),
+                        Points = GetResultPath(current).ToList(),
                         Cost = current.CostFromStart
                     };
+                    yield break;
+                }
 
                 foreach (var neighbor in grid.GetNeighbors(current.Point, parameters.AllowDiagonal))
                 {

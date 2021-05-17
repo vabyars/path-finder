@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Models.Renders

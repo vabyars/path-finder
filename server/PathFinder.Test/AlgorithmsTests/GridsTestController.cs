@@ -22,17 +22,19 @@ namespace PathFinder.Test.AlgorithmsTests
             new SimpleTestGrid(),
             new LargeSimpleGrid(),
             new SimpleMaze(),
+            new SimpleMazeWithOneShortestPath()
         };
         
-        public void Run(Func<IPriorityQueue<Point>, IAlgorithm<State>> getInstance, bool findsMinPath, MetricName metric)
+        public void Run(Func<IPriorityQueue<Point>, IAlgorithm<State>> getInstance, bool findsMinPath, MetricName metricName)
         {
+            var metric = new MetricFactory().GetMetric(metricName);
             foreach (var testGrid in _testGrids)
             {
                 var algorithmResultWithDiagonal = getInstance(new DictionaryPriorityQueue<Point>()).Run(testGrid.Grid,
-                    new Parameters(testGrid.Start, testGrid.Goal, true, new MetricFactory().GetMetric(metric)));
+                    new Parameters(testGrid.Start, testGrid.Goal, true, metric));
                 
                 var algorithmResultWithoutDiagonal = getInstance(new DictionaryPriorityQueue<Point>()).Run(testGrid.Grid,
-                    new Parameters(testGrid.Start, testGrid.Goal, false, new MetricFactory().GetMetric(metric)));
+                    new Parameters(testGrid.Start, testGrid.Goal, false, metric));
 
                 if (testGrid is IPath path)
                 {
