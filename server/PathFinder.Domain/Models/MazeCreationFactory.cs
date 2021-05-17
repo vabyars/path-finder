@@ -7,24 +7,24 @@ namespace PathFinder.Domain.Models
 {
     public class MazeCreationFactory : IMazeCreationFactory
     {
-        private readonly IMazeGenerator[] _generators;
-        private readonly GridConfigurationParameters _parameters;
+        private readonly IMazeGenerator[] generators;
+        private readonly GridConfigurationParameters parameters;
 
         public MazeCreationFactory(IMazeGenerator[] generators, GridConfigurationParameters parameters)
         {
-            _generators = generators;
-            _parameters = parameters;
+            this.generators = generators;
+            this.parameters = parameters;
         }
         
         public IEnumerable<string> GetAvailableNames()
-            => _generators.Select(x => x.Name);
+            => generators.Select(x => x.Name);
 
         public int[,] Create(string name)
         {
-            var generator = _generators.FirstOrDefault(x => x.Name == name);
+            var generator = generators.FirstOrDefault(x => x.Name == name);
             if (generator == null)
                 throw new ArgumentException($"cannot find creator with name \"{name}\"");
-            return generator.Create(_parameters.Width, _parameters.Height);
+            return generator.Create(parameters.Width, parameters.Height);
         }
     }
 }

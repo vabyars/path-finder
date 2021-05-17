@@ -4,10 +4,10 @@ using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Test.AlgorithmsTests
 {
-    public class JPSTests
+    public class JpsTests
     {
         [Test]
-        public void JPSTest()
+        public void JpsTest()
         {
             new GridsTestController()
                 .Run(q => new JpsDiagonal(q), true, MetricName.Euclidean);

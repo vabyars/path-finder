@@ -7,33 +7,33 @@ namespace PathFinder.DataAccess1.Implementations.MySQL
 {
     public class MySqlRepository : IMazeRepository
     {
-        private readonly MazeContext _context;
+        private readonly MazeContext context;
 
         public MySqlRepository(MazeContext context)
         {
-            _context = context;
+            this.context = context;
         }
 
         public IEnumerable<string> GetMazesNames()
         {
-            return _context.Grids.Select(x => x.Name);
+            return context.Grids.Select(x => x.Name);
         }
 
         public void Add(string name, int[,] grid)
         {
-            if (_context.Grids.Any(x => x.Name == name))
+            if (context.Grids.Any(x => x.Name == name))
                 throw new ArgumentException($"maze with name {name} already exists");
-            _context.Grids.Add(new Grid
+            context.Grids.Add(new Grid
             {
                 Name = name,
                 Maze = grid
             });
-            _context.SaveChanges();
+            context.SaveChanges();
         }
 
         public int[,] Get(string name)
         {
-            return _context.Grids.FirstOrDefault(x => x.Name == name)?.Maze;
+            return context.Grids.FirstOrDefault(x => x.Name == name)?.Maze;
         }
 
         public bool TryGetValue(string name, out int[,] value)

@@ -12,33 +12,33 @@ namespace PathFinder.Api.Controllers
     [Route("settings")]
     public class SettingsController : Controller
     {
-        private readonly IMazeService _mazeService;
-        private readonly IAlgorithmsExecutor _algorithmsExecutor;
-        private readonly IMetricFactory _metricFactory;
-        private readonly GridConfigurationParameters _mazeParameters;
+        private readonly IMazeService mazeService;
+        private readonly IAlgorithmsExecutor algorithmsExecutor;
+        private readonly IMetricFactory metricFactory;
+        private readonly GridConfigurationParameters mazeParameters;
 
         public SettingsController(IMazeService mazeService, IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory,
             GridConfigurationParameters mazeParameters)
         {
-            _mazeService = mazeService;
-            _algorithmsExecutor = algorithmsExecutor;
-            _metricFactory = metricFactory;
-            _mazeParameters = mazeParameters;
+            this.mazeService = mazeService;
+            this.algorithmsExecutor = algorithmsExecutor;
+            this.metricFactory = metricFactory;
+            this.mazeParameters = mazeParameters;
         }
 
         [HttpGet]
         public ActionResult<string> GetSettings()
         {
-            var mazes = _mazeService.GetAvailableNames().ToArray();
-            var algorithms = _algorithmsExecutor.AvailableAlgorithmNames().ToArray();
-            var metrics = _metricFactory.GetAvailableMetricNames().ToArray();
+            var mazes = mazeService.GetAvailableNames().ToArray();
+            var algorithms = algorithmsExecutor.AvailableAlgorithmNames().ToArray();
+            var metrics = metricFactory.GetAvailableMetricNames().ToArray();
             var res = new Dictionary<string, object>
             {
                 ["mazes"] = mazes,
                 ["algorithms"] = algorithms,
                 ["metrics"] = metrics,
-                ["width"] = _mazeParameters.Width,
-                ["height"] = _mazeParameters.Height
+                ["width"] = mazeParameters.Width,
+                ["height"] = mazeParameters.Height
             };
             return JsonConvert.SerializeObject(res, Formatting.Indented);
         }

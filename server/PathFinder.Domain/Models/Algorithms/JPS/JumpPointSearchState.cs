@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models.States;
+﻿using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
 {

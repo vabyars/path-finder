@@ -9,11 +9,11 @@ namespace PathFinder.Api.Controllers
     [Route("maze")]
     public class MazeController : Controller
     {
-        private readonly IMazeService _mazeService;
+        private readonly IMazeService mazeService;
 
         public MazeController(IMazeService mazeService)
         {
-            _mazeService = mazeService;
+            this.mazeService = mazeService;
         }
         
         [HttpGet]
@@ -22,7 +22,7 @@ namespace PathFinder.Api.Controllers
         {
             try
             {
-                return Ok(_mazeService.Get(name));
+                return Ok(mazeService.Get(name));
             }
             catch (ArgumentException e)
             {
@@ -36,7 +36,7 @@ namespace PathFinder.Api.Controllers
         {
             try
             {
-                _mazeService.Add(mazeRequest.Name, mazeRequest.Grid);
+                mazeService.Add(mazeRequest.Name, mazeRequest.Grid);
                 return Ok();
             }
             catch (ArgumentException e)

@@ -8,7 +8,7 @@ namespace PathFinder.Domain.Models.Renders
     {
         public string[] SupportingAlgorithms { get; }
         
-        private int _statesCount;
+        private int statesCount;
 
         private List<State> States { get; } = new();
         private StatisticState StatisticState { get; set; }
@@ -22,14 +22,14 @@ namespace PathFinder.Domain.Models.Renders
         {
             //некоторые манипуляции со стейтами
             States.Add(state);
-            _statesCount++;
+            statesCount++;
         }
 
         public virtual void CreateReportState()
         {
             StatisticState = new StatisticState
             {
-                IterationsCount = _statesCount
+                IterationsCount = statesCount
             };
         }
 

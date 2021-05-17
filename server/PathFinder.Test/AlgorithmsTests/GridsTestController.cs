@@ -17,7 +17,7 @@ namespace PathFinder.Test.AlgorithmsTests
 {
     public class GridsTestController
     {
-        private readonly List<TestGrid> _testGrids = new ()
+        private readonly List<TestGrid> testGrids = new ()
         {
             new SimpleTestGrid(),
             new LargeSimpleGrid(),
@@ -28,7 +28,7 @@ namespace PathFinder.Test.AlgorithmsTests
         public void Run(Func<IPriorityQueue<Point>, IAlgorithm<State>> getInstance, bool findsMinPath, MetricName metricName)
         {
             var metric = new MetricFactory().GetMetric(metricName);
-            foreach (var testGrid in _testGrids)
+            foreach (var testGrid in testGrids)
             {
                 var algorithmResultWithDiagonal = getInstance(new DictionaryPriorityQueue<Point>()).Run(testGrid.Grid,
                     new Parameters(testGrid.Start, testGrid.Goal, true, metric));

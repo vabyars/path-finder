@@ -10,25 +10,25 @@ namespace PathFinder.Domain.Models.Algorithms
 {
     public class AlgorithmsExecutor : IAlgorithmsExecutor
     {
-        private readonly IAlgorithm<State>[] _algorithms;
-        private readonly RenderProvider _renderProvider;
+        private readonly IAlgorithm<State>[] algorithms;
+        private readonly RenderProvider renderProvider;
 
         public AlgorithmsExecutor(IAlgorithm<State>[] algorithms, RenderProvider renderProvider)
         {
-            _algorithms = algorithms;
-            _renderProvider = renderProvider;
+            this.algorithms = algorithms;
+            this.renderProvider = renderProvider;
         }
         
         public IEnumerable<string> AvailableAlgorithmNames()
-            => _algorithms.Select(x => x.Name);
+            => algorithms.Select(x => x.Name);
 
         public AlgorithmExecutionInfo Execute(string name, IGrid grid, IParameters parameters)
         {
-            var algorithm = _algorithms.FirstOrDefault(x => x.Name == name);
+            var algorithm = algorithms.FirstOrDefault(x => x.Name == name);
             if (algorithm == null)
                 throw new ArgumentException($"algorithm not found: {name}");
             
-            var render = _renderProvider.GetRender(algorithm);
+            var render = renderProvider.GetRender(algorithm);
             var ex = algorithm.Run(grid, parameters);
 
             foreach (var state in ex)

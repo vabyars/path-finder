@@ -1,5 +1,4 @@
-﻿using PathFinder.Domain;
-using PathFinder.Domain.Models.Metrics;
+﻿using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Api.Models
 {

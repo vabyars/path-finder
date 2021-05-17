@@ -14,13 +14,13 @@ namespace PathFinder.Api.Controllers
     [Route("algorithm")]
     public class AlgorithmsController : Controller
     {
-        private readonly IAlgorithmsExecutor _algorithmsExecutor;
-        private readonly IMetricFactory _metricFactory;
+        private readonly IAlgorithmsExecutor algorithmsExecutor;
+        private readonly IMetricFactory metricFactory;
 
         public AlgorithmsController(IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory)
         {
-            _algorithmsExecutor = algorithmsExecutor;
-            _metricFactory = metricFactory;
+            this.algorithmsExecutor = algorithmsExecutor;
+            this.metricFactory = metricFactory;
         }
         
         [HttpPost]
@@ -29,10 +29,10 @@ namespace PathFinder.Api.Controllers
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
-            var metric = _metricFactory.GetMetric(req.MetricName);
+            var metric = metricFactory.GetMetric(req.MetricName);
             if (metric == null)
                 return BadRequest($"metric {req.MetricName} was not found");
-            var algorithm = _algorithmsExecutor.Execute(req.Name, 
+            var algorithm = algorithmsExecutor.Execute(req.Name, 
                 new Grid(req.Grid),
                 new Parameters(start,
                     goal,

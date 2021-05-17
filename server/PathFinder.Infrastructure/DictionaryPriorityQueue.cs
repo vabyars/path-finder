@@ -8,31 +8,31 @@ namespace PathFinder.Infrastructure
 {
     public class DictionaryPriorityQueue<TKey> : IPriorityQueue<TKey>
     {
-        private readonly Dictionary<TKey, double> _items = new();
+        private readonly Dictionary<TKey, double> items = new();
 
-        public void Add(TKey key, double value) => _items.Add(key, value);
+        public void Add(TKey key, double value) => items.Add(key, value);
 
-        public void Delete(TKey key) => _items.Remove(key);
+        public void Delete(TKey key) => items.Remove(key);
 
-        public void Update(TKey key, double newValue) => _items[key] = newValue;
+        public void Update(TKey key, double newValue) => items[key] = newValue;
 
         public (TKey key, double value) ExtractMin()
         {
-            if (_items.Count == 0)
+            if (items.Count == 0)
                 return default;
-            var min = _items.Min(z => z.Value);
-            var key = _items.FirstOrDefault(z => Math.Abs(z.Value - min) < 0.000009).Key;
-            _items.Remove(key);
+            var min = items.Min(z => z.Value);
+            var key = items.FirstOrDefault(z => Math.Abs(z.Value - min) < 0.000009).Key;
+            items.Remove(key);
             return (key, min);
         }
 
-        public bool TryGetValue(TKey key, out double value) => _items.TryGetValue(key, out value);
+        public bool TryGetValue(TKey key, out double value) => items.TryGetValue(key, out value);
 
-        public int Count => _items.Count;
+        public int Count => items.Count;
 
-        public List<TKey> GetAllItems() => _items.Keys.ToList();
+        public List<TKey> GetAllItems() => items.Keys.ToList();
 
-        public IEnumerator<TKey> GetEnumerator() => ((IEnumerable<TKey>) _items.Keys).GetEnumerator();
+        public IEnumerator<TKey> GetEnumerator() => ((IEnumerable<TKey>) items.Keys).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

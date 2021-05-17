@@ -37,14 +37,15 @@ namespace PathFinder.Api
 
         public IConfiguration Configuration { get; }
         public IContainer ApplicationContainer { get; private set; }
-        private readonly string _myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
             services.AddCors(options =>
             {
-                options.AddPolicy(name: _myAllowSpecificOrigins,
+                options.AddPolicy(name: MyAllowSpecificOrigins,
                     corsPolicyBuilder =>
                     {
                         corsPolicyBuilder
@@ -92,10 +93,7 @@ namespace PathFinder.Api
             var builder = new ContainerBuilder(); //done to allow sequence injection
             builder.Populate(services);
             builder.RegisterType<AlgorithmsExecutor>().As<IAlgorithmsExecutor>();
-            builder.RegisterType<MazeCreationFactory>()
-                .As<IMazeCreationFactory>();
-                /*.WithParameter("width", Configuration["GridParameters:Width"])
-                .WithParameter("height", Configuration["GridParameters:Height"]);*/
+            builder.RegisterType<MazeCreationFactory>().As<IMazeCreationFactory>();
             builder.RegisterType<RenderProvider>().AsSelf();
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
@@ -116,7 +114,7 @@ namespace PathFinder.Api
             
             app.UseRouting();
             
-            app.UseCors(_myAllowSpecificOrigins);
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
