@@ -4,21 +4,19 @@ using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Infrastructure;
-using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
 {
     public class JpsDiagonal : IAlgorithm<JumpPointSearchState>
     {
         private readonly Dictionary<Point, double>
-            distanceToStart = new(); // distance to start (parent's g + distance from parent)
-
-        private readonly Dictionary<Point, double> distanceToStartAndEstimateToEnd = new();
+            distanceToStart = new(); // distance to start (parent's g + distance from parent) 
+        private readonly Dictionary<Point, double> distanceToStartAndEstimateToEnd = new(); 
         private readonly Dictionary<Point, double> estimateDistanceToEnd = new();
         private readonly Dictionary<Point, Point> parentMap = new();
-
+        private readonly HeapPriorityQueue<Point> open = new();
+        private readonly HashSet<Point> closed = new();
         private readonly List<Point> jumpPoints = new();
-        
         private Point goal;
         private HashSet<Point> goalNeighbours = new();
         private Point start;
@@ -47,8 +45,6 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
 
         private IEnumerable<Point> FindPath(IGrid grid)
         {
-            var open = new HeapPriorityQueue<Point>();
-            var closed = new HashSet<Point>();
 
             if (grid.IsPassable(goal))
                 goalNeighbours.Add(goal);
@@ -65,13 +61,13 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
                 if (goalNeighbours.Contains(current))
                     return Backtrace(current);
                 
-                IdentifySuccessors(current, open, closed, grid);
+                IdentifySuccessors(current, grid);
             }
 
             return null;
         }
 
-        private void IdentifySuccessors(Point point, IPriorityQueue<Point> open, IReadOnlySet<Point> closed, IGrid grid)
+        private void IdentifySuccessors(Point point, IGrid grid)
         {
             foreach (var neighbor in FindNeighbors(point, grid))
             {
