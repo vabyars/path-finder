@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Infrastructure;
 using PathFinder.Infrastructure.Interfaces;
@@ -46,7 +47,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
 
                 yield return new AStarState
                 {
-                    Points = _queue.GetAllItems(),
+                    Points = _queue.ToList(),
                     Point = current,
                     Name = "текущая вершина"
                 };

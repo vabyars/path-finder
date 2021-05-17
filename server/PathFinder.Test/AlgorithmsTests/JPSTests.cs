@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using PathFinder.Domain.Models.Algorithms.JPS;
-using PathFinder.Domain.Models.Algorithms.Lee;
 using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Test.AlgorithmsTests

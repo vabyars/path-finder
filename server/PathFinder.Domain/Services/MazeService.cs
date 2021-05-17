@@ -19,7 +19,16 @@ namespace PathFinder.Domain.Services
 
         public void Add(string name, int[,] grid)
         {
+            if (IsMazeExists(name))
+                throw new ArgumentException($"maze with name \"{name}\" has already exists");
             _repository.Add(name, grid);
+        }
+
+        private bool IsMazeExists(string name)
+        {
+            var existsInRepository = _repository.TryGetValue(name, out var maze);
+            var existsInFactory = _mazeCreationFactory.GetAvailableNames().Contains(name);
+            return existsInRepository || existsInFactory;
         }
 
         public int[,] Get(string name)
