@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Infrastructure;
 using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
@@ -61,11 +60,11 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
 
             if (goalNeighbours.Count == 0)
                 return null;
-            open.Add(start, 0);
+            priorityQueue.Add(start, 0);
 
-            while (open.Count > 0)
+            while (priorityQueue.Count > 0)
             {
-                var (current, _) = open.ExtractMin();
+                var (current, _) = priorityQueue.ExtractMin();
                 closed.Add(current);
 
                 if (goalNeighbours.Contains(current))
