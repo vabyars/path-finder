@@ -20,7 +20,7 @@ namespace PathFinder.Api.Controllers
         public AlgorithmsController(IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory)
         {
             _algorithmsExecutor = algorithmsExecutor;
-            this._metricFactory = metricFactory;
+            _metricFactory = metricFactory;
         }
         
         [HttpPost]

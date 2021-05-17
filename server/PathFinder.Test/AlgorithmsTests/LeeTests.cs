@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.Algorithms.Lee;
 using PathFinder.Domain.Models.Metrics;
 

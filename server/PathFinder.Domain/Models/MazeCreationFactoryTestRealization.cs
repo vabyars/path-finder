@@ -1,18 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Domain.Models
 {
     public class MazeCreationFactoryTestRealization : IMazeCreationFactory
-    {//по факту, в нормальной реализации, надо принимать в конструкторе массив из IMazeGenerator, который будет инжектится,
-        public IEnumerable<string> GetAvailableNames()
+    {
+        private readonly IMazeGenerator[] _generators; 
+        public MazeCreationFactoryTestRealization(IMazeGenerator[] generators)
         {
-            return new[] {"random", "special"};
+            _generators = generators;
         }
+        
+        public IEnumerable<string> GetAvailableNames()
+            => _generators.Select(x => x.Name);
 
         public int[,] Create(string name)
         {
-            return null;
+            var generator = _generators.FirstOrDefault(x => x.Name == name);
+            if (generator == null)
+                throw new ArgumentException($"cannot find creator with name \"{name}\"");
+            return generator.Create();
         }
     }
 }
