@@ -12,9 +12,15 @@ export interface GridProps {
   func: any
 }
 
-interface CellIndex {
+export interface CellIndex {
   x: number,
   y: number
+}
+
+export interface CeilProps {
+  className: string
+  onMouseDown: any
+  onMouseOver: any
 }
 
 export interface Field {

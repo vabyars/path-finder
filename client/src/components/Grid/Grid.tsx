@@ -31,9 +31,6 @@ function Grid(props: GridProps){
                       if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
                       if (isMouseDown) props.func(i, j, [getNewCellDataOnClick(props.field[i][j])])
                     }}
-                    onMouseUp={() => {
-                      setIsMouseDown(false)
-                    }}
                 />)
         }
         rowsArr.push(temp)
@@ -42,8 +39,10 @@ function Grid(props: GridProps){
     return (
         <div className="grid"
              style={{width: width, height: height}}
+             onMouseUp={() => {
+               setIsMouseDown(false)
+             }}
              onMouseLeave={(e) => {
-               e.stopPropagation()
                setIsMouseDown(false)
              }}
           >

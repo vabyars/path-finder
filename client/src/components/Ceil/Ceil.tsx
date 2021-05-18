@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
+import {CeilProps} from "../Extentions/Interfaces";
 import './Ceil.css'
 
-interface CeilProps {
-    className: string
-    onMouseDown: any
-    onMouseOver: any
-    onMouseUp: any
-}
+
+
 
 function Ceil(props: CeilProps){
     
@@ -16,7 +13,6 @@ function Ceil(props: CeilProps){
             style={{width: 20, height: 20}}
             onMouseDown={props.onMouseDown}
             onMouseOver={props.onMouseOver}
-            onMouseUp={props.onMouseUp}
         >
         </div>
     )
