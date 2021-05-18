@@ -17,7 +17,7 @@ namespace PathFinder.Api.Controllers
         }
         
         [HttpGet]
-        [Route("/{name}")]
+        [Route("{name}")]
         public ActionResult<int[,]> GetMaze(string name)
         {
             try

@@ -21,7 +21,7 @@ namespace PathFinder.Domain.Models.MazeGenarators
         {
             this.width = width;
             this.height = height;
-            grid = new Grid(new int[width, height]);
+            grid = new Grid(new int[height, width]);
             var mazeGrid = GetGridWithWallsEverywhere();
             uniqueNumbersGrid = CreateGridWithUniqueNumbers();
             var candidates = CreateListOfWalls();
@@ -41,10 +41,10 @@ namespace PathFinder.Domain.Models.MazeGenarators
         
         private int[,] GetGridWithWallsEverywhere()
         {
-            var temp = new int[width, height];
-            for (var x = 0; x < width; x++)
+            var temp = new int[height, width];
+            for (var x = 0; x < height; x++)
             {
-                for (var y = 0; y < height; y++)
+                for (var y = 0; y < width; y++)
                 {
                     temp[x, y] = WallValue;
                 }
@@ -55,11 +55,11 @@ namespace PathFinder.Domain.Models.MazeGenarators
         
         private Grid CreateGridWithUniqueNumbers()
         {
-            var board = new Grid(new int[width, height]);
+            var board = new Grid(new int[height, width]);
             var counter = 1;
-            for (var x = 0; x < width; x++)
+            for (var x = 0; x < height; x++)
             {
-                for (var y = 0; y < height; y++)
+                for (var y = 0; y < width; y++)
                 {
                     board[x, y] = counter;
                     counter++;
@@ -72,9 +72,9 @@ namespace PathFinder.Domain.Models.MazeGenarators
         private List<Point> CreateListOfWalls()
         {
             var walls = new List<Point>();
-            for (var x = 0; x < width; x++)
+            for (var x = 0; x < height; x++)
             {
-                for (var y = 0; y < height; y++)
+                for (var y = 0; y < width; y++)
                 {
                     var wall = new Point(x, y);
                     if (!grid.InBounds(wall)) 
@@ -109,9 +109,9 @@ namespace PathFinder.Domain.Models.MazeGenarators
         {
             var currentValue = uniqueNumbersGrid[current.X, current.Y];
             var neighborValue = uniqueNumbersGrid[neighbor.X, neighbor.Y];
-            for (var x = 0; x < width; x++) 
+            for (var x = 0; x < height; x++) 
             {
-                for (var y = 0; y < height; y++) 
+                for (var y = 0; y < width; y++) 
                 {
                     if (uniqueNumbersGrid[x, y] == neighborValue) 
                     {
