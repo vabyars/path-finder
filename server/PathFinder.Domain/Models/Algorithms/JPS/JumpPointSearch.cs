@@ -7,22 +7,16 @@ using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
 {
-    public class JpsDiagonal : IAlgorithm<JumpPointSearchState>
+    public class JpsDiagonal : IAlgorithm<JumpPointSearchState>, IHasOwnParameters
     {
-        private readonly Dictionary<Point, double>
-            distanceToStart = new(); // distance to start (parent's g + distance from parent)
-
-        private readonly Dictionary<Point, double> distanceToStartAndEstimateToEnd = new();
-        private readonly Dictionary<Point, double> estimateDistanceToEnd = new();
+        private readonly Dictionary<Point, double> distanceToStart = new();
         private readonly Dictionary<Point, Point> parentMap = new();
-
-        private readonly List<Point> jumpPoints = new();
-        
         private Point goal;
         private HashSet<Point> goalNeighbours = new();
         private Point start;
         private Func<Point, Point, double> metric;
         private readonly IPriorityQueue<Point> priorityQueue;
+        private readonly HashSet<Point> closed = new();
         public string Name => "JPS";
 
         public JpsDiagonal(IPriorityQueue<Point> queue)
@@ -38,30 +32,11 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
             goal = parameters.End;
             metric = parameters.Metric;
             goalNeighbours = grid.GetNeighbors(goal, parameters.AllowDiagonal).ToHashSet();
-            var path = FindPath(grid).ToList();
-            foreach (var jumpPoint in jumpPoints)
-                yield return new JumpPointSearchState
-                {
-                    Point = jumpPoint,
-                    Name = "Jump point"
-                };
-            
-            yield return new JumpPointSearchState
-            {
-                Points = path,
-                Name = "result"
-            };
-        }
-
-        private IEnumerable<Point> FindPath(IGrid grid)
-        {
-            var closed = new HashSet<Point>();
-
             if (grid.IsPassable(goal))
                 goalNeighbours.Add(goal);
 
             if (goalNeighbours.Count == 0)
-                return null;
+                yield break;
             priorityQueue.Add(start, 0);
 
             while (priorityQueue.Count > 0)
@@ -70,16 +45,30 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
                 closed.Add(current);
 
                 if (goalNeighbours.Contains(current))
-                    return Backtrace(current);
-                
-                IdentifySuccessors(current, priorityQueue, closed, grid);
-            }
+                {
+                    yield return new JumpPointSearchState
+                    {
+                        Points = Backtrace(current),
+                        Name = "result"
+                    };
+                    yield break;
+                }
 
-            return null;
+                var currentJumpPoints = IdentifySuccessors(current, grid);
+                foreach (var jumpPoint in currentJumpPoints)
+                {
+                    yield return new JumpPointSearchState
+                    {
+                        Point = jumpPoint,
+                        Name = "jump point"
+                    };
+                }
+            }
         }
 
-        private void IdentifySuccessors(Point point, IPriorityQueue<Point> open, IReadOnlySet<Point> closed, IGrid grid)
+        private IEnumerable<Point> IdentifySuccessors(Point point, IGrid grid)
         {
+            var jumpPoints = new List<Point>();
             foreach (var neighbor in FindNeighbors(point, grid))
             {
                 var rawJumpPoint = Jump(neighbor, point, grid);
@@ -90,21 +79,16 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
                 
                 var distance = distanceToStart.ContainsKey(point) ? distanceToStart[point] : 0 + metric(jumpPoint, point);
 
-                if (!open.TryGetValue(jumpPoint, out _) || distance < distanceToStart[jumpPoint])
-                {
-                    distanceToStart[jumpPoint] = distance;
-                    estimateDistanceToEnd[jumpPoint] = metric(jumpPoint, goal);
-                    distanceToStartAndEstimateToEnd[jumpPoint] = 
-                        distanceToStart[jumpPoint] + estimateDistanceToEnd[jumpPoint];
-                    Console.WriteLine("jumpPoint: " + jumpPoint + " f: " + distanceToStartAndEstimateToEnd[jumpPoint]);
-                    parentMap[jumpPoint] = point;
-                    jumpPoints.Add(jumpPoint);
-                    if (!open.TryGetValue(jumpPoint, out _))
-                    {
-                        open.Add(jumpPoint, distanceToStartAndEstimateToEnd[jumpPoint]);
-                    }
-                }
+                if (priorityQueue.TryGetValue(jumpPoint, out _) && !(distance < distanceToStart[jumpPoint])) continue;
+                distanceToStart[jumpPoint] = distance;
+                var distanceToStartAndEstimateToEnd = distanceToStart[jumpPoint] + metric(jumpPoint, goal);
+                parentMap[jumpPoint] = point;
+                jumpPoints.Add(jumpPoint);
+                if (!priorityQueue.TryGetValue(jumpPoint, out _))
+                    priorityQueue.Add(jumpPoint, distanceToStartAndEstimateToEnd);
             }
+
+            return jumpPoints;
         }
 
         private IEnumerable<Point> FindNeighbors(Point point, IGrid grid)
@@ -260,6 +244,8 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
 
                 point = parentMap[point];
             }
+
+            path.AddLast(goal);
 
             return path;
         }

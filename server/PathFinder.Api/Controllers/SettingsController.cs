@@ -1,11 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PathFinder.Domain;
-using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models.Algorithms;
-using PathFinder.Domain.Models.Metrics;
+using PathFinder.Api.Models;
 
 namespace PathFinder.Api.Controllers
 {
@@ -13,35 +8,16 @@ namespace PathFinder.Api.Controllers
     [Route("settings")]
     public class SettingsController : Controller
     {
-        private readonly IMazeService mazeService;
-        private readonly DomainAlgorithmsController algorithmsController;
-        private readonly IMetricFactory metricFactory;
-        private readonly GridConfigurationParameters mazeParameters;
-
-        public SettingsController(IMazeService mazeService, DomainAlgorithmsController algorithmsController, IMetricFactory metricFactory,
-            GridConfigurationParameters mazeParameters)
+        private readonly SettingsProvider settingsProvider;
+        public SettingsController(SettingsProvider settingsProvider)
         {
-            this.mazeService = mazeService;
-            this.algorithmsController = algorithmsController;
-            this.metricFactory = metricFactory;
-            this.mazeParameters = mazeParameters;
+            this.settingsProvider = settingsProvider;
         }
 
         [HttpGet]
         public ActionResult<string> GetSettings()
         {
-            var mazes = mazeService.GetAvailableNames().ToArray();
-            var algorithms = algorithmsController.GetInfoAboutAlgorithmsWithAvailableParams();
-            var metrics = metricFactory.GetAvailableMetricNames().ToArray();
-            var res = new Dictionary<string, object>
-            {
-                ["mazes"] = mazes,
-                ["algorithms"] = algorithms,
-                ["metrics"] = metrics,
-                ["width"] = mazeParameters.Width,
-                ["height"] = mazeParameters.Height,
-            };
-            return JsonConvert.SerializeObject(res, Formatting.Indented);
+            return JsonConvert.SerializeObject(settingsProvider.GetSettings(), Formatting.Indented);
         }
     }
 }

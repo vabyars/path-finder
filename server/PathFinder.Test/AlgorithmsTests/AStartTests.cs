@@ -11,7 +11,7 @@ namespace PathFinder.Test.AlgorithmsTests
         public void AStarTest()
         {
             new GridsTestController()
-                .Run(q => new AStarAlgorithm(q), true, MetricName.Euclidean);
+                .Run(q => new AStarAlgorithm(q), true, false, MetricName.Euclidean);
         }
     }
 }

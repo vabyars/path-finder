@@ -23,17 +23,16 @@ namespace PathFinder.Domain.Models.Algorithms
         {
             foreach (var algorithm in algorithms)
             {
-                var name = algorithm.Name;
-                var res = new Dictionary<string, object> {["name"] = name};
+                var res = new Dictionary<string, object> {["name"] = algorithm.Name};
                 var parameters = algorithm.GetParametersType()
                     .GetProperties()
-                    .Select(x => CustomAttributeExtensions.GetCustomAttributes<AlgorithmSelectableAttribute>((MemberInfo) x, false))
-                    .Where(x => x.Any())
-                    .Select(x => x.FirstOrDefault());
-
+                    .Select(x => x.GetCustomAttributes<AlgorithmSelectableParameterAttribute>(false)
+                        .FirstOrDefault())
+                    .Where(x => x != null);
+                
                 foreach (var parameter in parameters)
                 {
-                    res.Add(parameter.Name, parameter.PossibleValues);
+                    res.Add(parameter.DisplayName, parameter.PossibleValues);
                 }
                 yield return res;
             }
