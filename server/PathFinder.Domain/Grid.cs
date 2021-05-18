@@ -10,13 +10,13 @@ namespace PathFinder.Domain
     [Serializable]
     public class Grid : IGrid
     {
-        private readonly int[,] _cells;
+        private readonly int[,] cells;
 
         [JsonIgnore]
-        private readonly int _width;
+        private readonly int width;
 
         [JsonIgnore]
-        private readonly int _height;
+        private readonly int height;
 
         private static readonly Point[] Directions =
         {
@@ -35,34 +35,34 @@ namespace PathFinder.Domain
 
         public Grid(int[,] cells)
         {
-            _cells = cells;
-            _width = cells.GetLength(0);
-            _height = cells.GetLength(1);
+            this.cells = cells;
+            width = cells.GetLength(0);
+            height = cells.GetLength(1);
         }
 
         public int this[int x, int y] //TODO add validation
         {
-            get => _cells[x, y];
-            set => _cells[x, y] = value;
+            get => cells[x, y];
+            set => cells[x, y] = value;
         }
 
         public int this[Point p] //TODO add validation
         {
-            get => _cells[p.X, p.Y];
-            set => _cells[p.X, p.Y] = value;
+            get => cells[p.X, p.Y];
+            set => cells[p.X, p.Y] = value;
         }
 
         public bool InBounds(Point point) => InBounds(point.X, point.Y);
 
-        public bool InBounds(int x, int y) => 0 <= x && x < _width && 0 <= y && y < _height;
+        public bool InBounds(int x, int y) => 0 <= x && x < width && 0 <= y && y < height;
         
         public bool IsPassable(Point point) => IsPassable(point.X, point.Y);
 
-        public bool IsPassable(int x, int y) => InBounds(x, y) && _cells[x, y] >= 0;
+        public bool IsPassable(int x, int y) => InBounds(x, y) && cells[x, y] >= 0;
         
         public double GetCost(Point from, Point to)
         {
-            var cost = _cells[to.X, to.Y];
+            var cost = cells[to.X, to.Y];
             if (Directions.Contains(new Point(from.X - to.X, from.Y - to.Y)))
                 return cost;
             return cost * Math.Sqrt(2);

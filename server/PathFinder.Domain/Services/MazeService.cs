@@ -8,25 +8,34 @@ namespace PathFinder.Domain.Services
 {
     public class MazeService : IMazeService
     {
-        private readonly IMazeRepository _repository;
-        private readonly IMazeCreationFactory _mazeCreationFactory;
+        private readonly IMazeRepository repository;
+        private readonly IMazeCreationFactory mazeCreationFactory;
 
         public MazeService(IMazeRepository repository, IMazeCreationFactory mazeCreationFactory)
         {
-            _repository = repository;
-            _mazeCreationFactory = mazeCreationFactory;
+            this.repository = repository;
+            this.mazeCreationFactory = mazeCreationFactory;
         }
 
         public void Add(string name, int[,] grid)
         {
-            _repository.Add(name, grid);
+            if (IsMazeExists(name))
+                throw new ArgumentException($"maze with name \"{name}\" has already exists");
+            repository.Add(name, grid);
+        }
+
+        private bool IsMazeExists(string name)
+        {
+            var existsInRepository = repository.TryGetValue(name, out var maze);
+            var existsInFactory = mazeCreationFactory.GetAvailableNames().Contains(name);
+            return existsInRepository || existsInFactory;
         }
 
         public int[,] Get(string name)
         {
-            if (_repository.TryGetValue(name, out var maze))
+            if (repository.TryGetValue(name, out var maze))
                 return maze;
-            var generatedMaze = _mazeCreationFactory.Create(name);
+            var generatedMaze = mazeCreationFactory.Create(name);
             if (generatedMaze != null)
                 return generatedMaze;
             throw new ArgumentException($"maze not found {name}");
@@ -34,8 +43,8 @@ namespace PathFinder.Domain.Services
 
         public IEnumerable<string> GetAvailableNames()
         {
-            return _mazeCreationFactory.GetAvailableNames()
-                .Concat(_repository.GetMazesNames());
+            return mazeCreationFactory.GetAvailableNames()
+                .Concat(repository.GetMazesNames());
         }
     }
 }

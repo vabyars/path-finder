@@ -2,7 +2,7 @@
 
 namespace PathFinder.Infrastructure.Interfaces
 {
-    public interface IPriorityQueue<TKey>
+    public interface IPriorityQueue<TKey> : IEnumerable<TKey>
     {
         void Add(TKey key, double value);
         void Delete(TKey key);
@@ -10,7 +10,6 @@ namespace PathFinder.Infrastructure.Interfaces
         (TKey key, double value) ExtractMin();
         bool TryGetValue(TKey key, out double value);
         int Count { get; }
-        List<TKey> GetAllItems();
     }
     
     public static class PriorityQueueExtension
@@ -18,8 +17,12 @@ namespace PathFinder.Infrastructure.Interfaces
         public static bool UpdateOrAdd<TKey>(this IPriorityQueue<TKey> queue, TKey node, double newValue)
         {
             var nodeInQueue = queue.TryGetValue(node, out var oldPrice);
-            if (nodeInQueue && !(oldPrice > newValue)) return false;
-            queue.Update(node, newValue);
+            if (nodeInQueue && !(oldPrice > newValue)) 
+                return false;
+            if (nodeInQueue)
+                queue.Update(node, newValue);
+            else
+                queue.Add(node, newValue);
             return true;
         }
     }

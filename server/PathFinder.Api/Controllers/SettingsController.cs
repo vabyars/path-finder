@@ -2,7 +2,9 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Api.Controllers
@@ -11,28 +13,33 @@ namespace PathFinder.Api.Controllers
     [Route("settings")]
     public class SettingsController : Controller
     {
-        private readonly IMazeService _mazeService;
-        private readonly IAlgorithmsExecutor _algorithmsExecutor;
-        private readonly IMetricFactory _metricFactory;
+        private readonly IMazeService mazeService;
+        private readonly DomainAlgorithmsController algorithmsController;
+        private readonly IMetricFactory metricFactory;
+        private readonly GridConfigurationParameters mazeParameters;
 
-        public SettingsController(IMazeService mazeService, IAlgorithmsExecutor algorithmsExecutor, IMetricFactory metricFactory)
+        public SettingsController(IMazeService mazeService, DomainAlgorithmsController algorithmsController, IMetricFactory metricFactory,
+            GridConfigurationParameters mazeParameters)
         {
-            _mazeService = mazeService;
-            _algorithmsExecutor = algorithmsExecutor;
-            this._metricFactory = metricFactory;
+            this.mazeService = mazeService;
+            this.algorithmsController = algorithmsController;
+            this.metricFactory = metricFactory;
+            this.mazeParameters = mazeParameters;
         }
 
         [HttpGet]
         public ActionResult<string> GetSettings()
         {
-            var mazes = _mazeService.GetAvailableNames().ToArray();
-            var algorithms = _algorithmsExecutor.AvailableAlgorithmNames().ToArray();
-            var metrics = _metricFactory.GetAvailableMetricNames().ToArray();
-            var res = new Dictionary<string, string[]>
+            var mazes = mazeService.GetAvailableNames().ToArray();
+            var algorithms = algorithmsController.GetInfoAboutAlgorithmsWithAvailableParams();
+            var metrics = metricFactory.GetAvailableMetricNames().ToArray();
+            var res = new Dictionary<string, object>
             {
                 ["mazes"] = mazes,
                 ["algorithms"] = algorithms,
-                ["metrics"] = metrics
+                ["metrics"] = metrics,
+                ["width"] = mazeParameters.Width,
+                ["height"] = mazeParameters.Height,
             };
             return JsonConvert.SerializeObject(res, Formatting.Indented);
         }

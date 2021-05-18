@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using PathFinder.Domain.Models;
 
 namespace PathFinder.Domain.Interfaces
 {
@@ -7,5 +9,7 @@ namespace PathFinder.Domain.Interfaces
     {
         string Name { get; }
         IEnumerable<T> Run(IGrid grid, IParameters parameters);
+
+        public Type GetParametersType() => typeof(Parameters);
     }
 }

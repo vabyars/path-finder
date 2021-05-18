@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Infrastructure.Interfaces;
 
@@ -10,30 +10,30 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
     {
         public string Name => "A*";
 
-        private readonly IPriorityQueue<Point> _queue;
+        private readonly IPriorityQueue<Point> queue;
 
-        private readonly Dictionary<Point, Point> _cameFrom = new();
-        private readonly Dictionary<Point, double> _cost = new();
+        private readonly Dictionary<Point, Point> cameFrom = new();
+        private readonly Dictionary<Point, double> cost = new();
 
-        private Point _start;
-        private Point _goal;
+        private Point start;
+        private Point goal;
 
         public AStarAlgorithm(IPriorityQueue<Point> queue)
         {
-            _queue = queue;
+            this.queue = queue;
         }
 
         public IEnumerable<AStarState> Run(IGrid grid, IParameters parameters)
         {
-            _start = parameters.Start;
-            _goal = parameters.End;
-            _queue.Add(_start, 0);
-            _cameFrom.Add(_start, _start);
-            _cost.Add(_start, 0);
-            while (_queue.Count != 0)
+            start = parameters.Start;
+            goal = parameters.End;
+            queue.Add(start, 0);
+            cameFrom.Add(start, start);
+            cost.Add(start, 0);
+            while (queue.Count != 0)
             {
-                var (current, _) = _queue.ExtractMin();
-                if (current == _goal)
+                var (current, _) = queue.ExtractMin();
+                if (current == goal)
                 {
                     yield return new AStarState
                     {
@@ -43,26 +43,26 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                     yield break;
                 }
 
-                /*yield return new AStarState
+                yield return new AStarState
                 {
-                    Points = _queue.GetAllItems(),
+                    Points = queue.ToList(),
                     Point = current,
                     Name = "текущая вершина"
-                };*/
-                var currentCost = _cost[current];
+                };
+                var currentCost = cost[current];
                 foreach (var neighbor in grid.GetNeighbors(current, parameters.AllowDiagonal))
                 {
                     var newCost = currentCost + grid.GetCost(current, neighbor);
-                    if (!_cost.TryGetValue(neighbor, out var neighborCost) || newCost < neighborCost)
+                    if (!cost.TryGetValue(neighbor, out var neighborCost) || newCost < neighborCost)
                     {
-                        _cost[neighbor] = newCost;
-                        _cameFrom[neighbor] = current;
-                        _queue.UpdateOrAdd(neighbor, newCost + parameters.Metric(neighbor, _goal));
-                        /*yield return new AStarState
+                        cost[neighbor] = newCost;
+                        cameFrom[neighbor] = current;
+                        queue.UpdateOrAdd(neighbor, newCost + parameters.Metric(neighbor, goal));
+                        yield return new AStarState
                         {
                             Point = neighbor,
                             Name = "рассмотренная вершина"
-                        };*/
+                        };
                     }
                 }
             }
@@ -71,20 +71,20 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         private IEnumerable<Point> GetResultPath()
         {
             var path = new List<Point>();
-            var current = _goal;
+            var current = goal;
 
-            while (current != _start)
+            while (current != start)
             {
-                if (!_cameFrom.ContainsKey(current))
+                if (!cameFrom.ContainsKey(current))
                 {
                     return new List<Point>();
                 }
 
                 path.Add(current);
-                current = _cameFrom[current];
+                current = cameFrom[current];
             }
 
-            path.Add(_start);
+            path.Add(start);
             path.Reverse();
             return path;
         }

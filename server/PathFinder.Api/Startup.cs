@@ -10,13 +10,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Implementations;
 using PathFinder.DataAccess1.Implementations.MySQL;
+using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.Algorithms.JPS;
+using PathFinder.Domain.Models.Algorithms.Lee;
+using PathFinder.Domain.Models.MazeGenarators;
 using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
@@ -35,14 +37,15 @@ namespace PathFinder.Api
 
         public IConfiguration Configuration { get; }
         public IContainer ApplicationContainer { get; private set; }
-        private readonly string _myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
             services.AddCors(options =>
             {
-                options.AddPolicy(name: _myAllowSpecificOrigins,
+                options.AddPolicy(name: MyAllowSpecificOrigins,
                     corsPolicyBuilder =>
                     {
                         corsPolicyBuilder
@@ -51,19 +54,29 @@ namespace PathFinder.Api
                             .AllowAnyOrigin();
                     });
             });
+
+            services.AddSingleton(_ => new GridConfigurationParameters
+            {
+                Width = int.Parse(Configuration["GridParameters:Width"]),
+                Height = int.Parse(Configuration["GridParameters:Height"])
+            });
             
-            services.AddTransient<IPriorityQueue<Point>, DictionaryPriorityQueue<Point>>();
+            services.AddTransient<IPriorityQueue<Point>, HeapPriorityQueue<Point>>();
             //services.AddSingleton<IMazeRepository, MazeRepository>();
             services.AddSingleton<IMazeRepository, MySqlRepository>();
             services.AddSingleton<IMazeService, MazeService>();
-            services.AddSingleton<IMazeCreationFactory, MazeCreationFactoryTestRealization>();
             services.AddSingleton<IMetricFactory, MetricFactory>();
 
             services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
             services.AddTransient<IAlgorithm<State>, JpsDiagonal>();
+            services.AddTransient<IAlgorithm<State>, LeeAlgorithm>();
+            
+            services.AddTransient<IMazeGenerator, Kruskal>();
 
             services.AddTransient<Render, AStarRender>();
 
+            services.AddTransient<IAlgorithmsExecutor, AlgorithmsExecutor>();
+            
             services.AddDbContext<MazeContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
@@ -81,7 +94,8 @@ namespace PathFinder.Api
 
             var builder = new ContainerBuilder(); //done to allow sequence injection
             builder.Populate(services);
-            builder.RegisterType<AlgorithmsExecutor>().As<IAlgorithmsExecutor>();
+            builder.RegisterType<DomainAlgorithmsController>().AsSelf();
+            builder.RegisterType<MazeCreationFactory>().As<IMazeCreationFactory>();
             builder.RegisterType<RenderProvider>().AsSelf();
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
@@ -102,7 +116,7 @@ namespace PathFinder.Api
             
             app.UseRouting();
             
-            app.UseCors(_myAllowSpecificOrigins);
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

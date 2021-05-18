@@ -33,12 +33,7 @@ namespace PathFinder.DataAccess1.Entities
 
         public static int[,] StringToIntArray(string value)
         {
-            if (string.IsNullOrEmpty(value))
-            {
-                return null;
-            }
-
-            return JsonConvert.DeserializeObject<int[,]>(value);
+            return string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<int[,]>(value);
         }
     }
 }

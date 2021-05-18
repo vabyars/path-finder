@@ -15,12 +15,12 @@ namespace PathFinder.DataAccess1.Implementations.MySQL
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var IntValueConverter = new IntTwoDimensionsArrayToStringValueConverter();
+            var intValueConverter = new IntTwoDimensionsArrayToStringValueConverter();
 
             modelBuilder
                 .Entity<Grid>()
                 .Property(e => e.Maze)
-                .HasConversion(IntValueConverter);
+                .HasConversion(intValueConverter);
 
         }
     }

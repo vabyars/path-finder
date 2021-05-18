@@ -2,6 +2,7 @@
 {
     public interface IMazeGenerator
     {
-        int[,] Create();
+        string Name { get; }
+        int[,] Create(int width, int height);
     }
 }
