@@ -7,7 +7,7 @@ using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
 {
-    public class JpsDiagonal : IAlgorithm<JumpPointSearchState>
+    public class JpsDiagonal : IAlgorithm<JumpPointSearchState>, IHasOwnParameters
     {
         private readonly Dictionary<Point, double>
             distanceToStart = new(); // distance to start (parent's g + distance from parent)

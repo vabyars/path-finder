@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PathFinder.Domain.Models.States;
+﻿using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Interfaces
 {
