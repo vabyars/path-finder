@@ -1,16 +1,16 @@
 ﻿using NUnit.Framework;
-using PathFinder.Domain.Models.Algorithms.JPS;
+using PathFinder.Domain.Models.Algorithms.IDA;
 using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Test.AlgorithmsTests
 {
-    public class JpsTests
+    public class IDATests
     {
         [Test]
-        public void JpsTest()
+        public void IDATest()
         {
             new GridsTestController()
-                .Run(q => new JpsDiagonal(q), true, true, MetricName.Euclidean);
+                .Run(q => new IDA(), true, true, MetricName.Euclidean);
         }
     }
 }

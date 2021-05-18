@@ -245,6 +245,8 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
                 point = parentMap[point];
             }
 
+            path.AddLast(goal);
+
             return path;
         }
 
