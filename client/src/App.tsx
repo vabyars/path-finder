@@ -4,9 +4,10 @@ import Grid from './components/Grid/Grid'
 import Header from './components/Header/Header'
 import {CellData, Field, CellIndex} from './components/Extentions/Interfaces'
 import {UNCLICKABLE_CELL_TYPES} from "./components/Extentions/Constants";
+import {CellState} from "./components/Extentions/CellState";
 
 const rows = 30
-const columns = 50
+const columns = 60
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
     })
         .then((res) => res.json()
             .then((data) => {
+              setField(getFieldWithoutExecuteVisualize(field))
               let visitedPromises = getVisitedPrintPromises(data.states, field, setField)
               Promise.all(visitedPromises).then((res) => {
                 printPath(data.resultPath, field, setField)
@@ -41,7 +43,7 @@ function App() {
   return (
       <div className="App">
         <Header field={field} clearFunc={() => setField(getEmptyField(fieldSize.rows, fieldSize.columns))}
-                exec={executeAlgorithm}/>
+                exec={executeAlgorithm} setField={setField}/>
         <Grid rows={fieldSize.rows} columns={fieldSize.columns} field={field.field}
               func={(x: number, y: number, data: CellData[]) => setField(getUpdatedField(x, y, data, field))}
 
@@ -79,11 +81,25 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
       newField[indexes.x][indexes.y] = {...newField[indexes.x][indexes.y], state: 'visited'}
       resolve(setField({
         ...field, field: newField
-      }))}, 30 * i)))
+      }))}, 50 * i)))
   }
   return visitedPromises
 }
 
+
+function getFieldWithoutExecuteVisualize(field: Field) {
+  let newField = field.field.slice()
+  for (let i = 0; i < newField.length; i++)
+    for (let j = 0; j < newField[i].length; j++){
+      let state = newField[i][j].state
+      if (state === 'visited' || state === 'path')
+        newField[i][j] = {...newField[i][j], state: 'empty'}
+    }
+  return {
+      ...field,
+      field: newField
+  }
+}
 
 
 function parseCellsDataToNumbers(data: CellData[][]) {
@@ -111,9 +127,6 @@ function getCellIndex(str: string) {
   return {x: parseInt(indexes[0]), y: parseInt(indexes[1])}
 }
 
-function clearPath(field: CellData[][]) {
-
-}
 
 
 function getEmptyField(rows: number, columns: number) {

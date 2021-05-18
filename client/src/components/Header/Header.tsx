@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Button} from '@skbkontur/react-ui'
 import './Header.css'
-import { strict } from 'node:assert'
 import Select from 'react-select';
+import {CellData} from "../Extentions/Interfaces";
 
 
 interface SelectData{
@@ -13,7 +13,6 @@ interface SelectData{
 function parseArrayToSelectData(data: any[]){
     return data.map(function(label, i){return {label: label, value: i + 1}})
 }
-
 
 function Header(props: any){
     const [algorithms, setAlgorithms] = useState<SelectData[]>([])
@@ -47,7 +46,28 @@ function Header(props: any){
             { currentAlgorithm && <Select className="flex-elem algorithm" isSearchable={false}
               options={algorithms} defaultValue={currentAlgorithm}  onChange={(value: any) => setAlgorithm(value)} />}
             { currentMaze && <Select className="flex-elem mazes" isSearchable={false}
-              options={mazes} defaultValue={currentMaze}  onChange={(value: any) => setMaze(value)} /> }
+              options={mazes} defaultValue={currentMaze}  onChange={(value: any) =>
+            {
+              setMaze(value)
+              fetch(`/maze/${value.label}`)
+                  .then((res) => res.json()
+                      .then((data: number[][]) => {
+                        let field: CellData[][] = []
+                        for (let i = 0; i < data.length; i++) {
+                          for (let j = 0; j < data[i].length; j++) {
+                            if (!field[j])
+                              field[j] = []
+                            field[j][i] = {
+                              value: data[i][j],
+                              state: data[i][j] === -1 ? 'wall' : 'empty'
+                            }
+                          }
+                      }
+                        props.setField({...props.field, field: field})
+                      })
+                      .catch((e) => console.log(e)))
+                  .catch((e) => console.log(e))
+            }} /> }
         </div>        
     )
 }
