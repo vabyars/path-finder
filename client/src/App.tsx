@@ -31,10 +31,11 @@ function App() {
     })
         .then((res) => res.json()
             .then((data) => {
+              console.log(data)
               setField(getFieldWithoutExecuteVisualize(field))
               let visitedPromises = getVisitedPrintPromises(data.states, field, setField)
               Promise.all(visitedPromises).then((res) => {
-                printPath(data.resultPath, field, setField)
+                printPath(data.resultPath.slice(), field, setField)
               })
             }))
         .catch((e) => console.log(e))
@@ -54,6 +55,7 @@ function App() {
 
 
 function printPath(pathData: string[], field: Field, setField: (f: Field) => void) {
+  console.log(pathData)
   let indexes = getCellsIndexes(pathData.splice(1, pathData.length - 2))
   let newField = field.field.slice()
   for (let i = 0; i < indexes.length; i++) {
@@ -134,16 +136,16 @@ function getEmptyField(rows: number, columns: number) {
   for (let i = 0; i < rows; i++) {
     result.push(new Array(columns).fill({
       state: 'empty',
-      value: 0
+      value: 1
     }))
   }
   result[5][10] = {
     state: 'start',
-    value: 0
+    value: 1
   }
   result[10][20] = {
     state: 'end',
-    value: 0
+    value: 1
   }
 
   return {
