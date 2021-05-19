@@ -21,7 +21,7 @@ namespace PathFinder.DataAccess1.Entities
         {
         }
 
-        public static string ArrayToString(int[,] value)
+        private static string ArrayToString(int[,] value)
         {
             if (value == null || value.Length == 0)
             {
@@ -31,7 +31,7 @@ namespace PathFinder.DataAccess1.Entities
             return JsonConvert.SerializeObject(value);
         }
 
-        public static int[,] StringToIntArray(string value)
+        private static int[,] StringToIntArray(string value)
         {
             return string.IsNullOrEmpty(value) ? null : JsonConvert.DeserializeObject<int[,]>(value);
         }

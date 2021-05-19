@@ -24,7 +24,7 @@ function App() {
         name: name,
         start: `${field.start.x},${field.start.y}`,
         goal: `${field.end.x},${field.end.y}`,
-        "allowDiagonal": 0,
+        "allowDiagonal": 1,
         "metricName": 0,
         grid: parseCellsDataToNumbers(field.field)
       })
