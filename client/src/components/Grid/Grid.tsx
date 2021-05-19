@@ -13,7 +13,7 @@ function Grid(props: GridProps){
     let rowsArr: any = [];
 
 
-    
+
     for(let i = 0; i < props.rows; i++) {
         let temp = []
         for(let j = 0; j < props.columns; j++) {
@@ -23,13 +23,13 @@ function Grid(props: GridProps){
                     key={boxId}
                     className={getCellClass(props.field[i][j].state)}
                     onMouseDown={() => {
-                      if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
-                      setIsMouseDown(true)
-                      props.func(i, j,  [getNewCellDataOnClick(props.field[i][j])])
+                        if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
+                        setIsMouseDown(true)
+                        props.func(i, j,  [getNewCellDataOnClick(props.field[i][j])])
                     }}
                     onMouseOver={() => {
-                      if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
-                      if (isMouseDown) props.func(i, j, [getNewCellDataOnClick(props.field[i][j])])
+                        if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
+                        if (isMouseDown) props.func(i, j, [getNewCellDataOnClick(props.field[i][j])])
                     }}
                 />)
         }
@@ -40,32 +40,32 @@ function Grid(props: GridProps){
         <div className="grid"
              style={{width: width, height: height}}
              onMouseUp={() => {
-               setIsMouseDown(false)
+                 setIsMouseDown(false)
              }}
              onMouseLeave={(e) => {
-               setIsMouseDown(false)
+                 setIsMouseDown(false)
              }}
-          >
-          {rowsArr}
+        >
+            {rowsArr}
         </div>
     );
 }
 
 function getNewCellDataOnClick(cellData: CellData) {
-  if (cellData.state === 'wall')
+    if (cellData.state === 'wall')
+        return {
+            state: 'empty',
+            value: 1
+        }
     return {
-      state: 'empty',
-      value: 0
+        state: 'wall',
+        value: -1
     }
-  return {
-    state: 'wall',
-    value: -1
-  }
 }
 
 function getCellClass(state: CellState) {
-  let additionalClass = state === 'empty' ? '' : state
-  return `cell ${additionalClass}`
+    let additionalClass = state === 'empty' ? '' : state
+    return `cell ${additionalClass}`
 }
 
 export default Grid

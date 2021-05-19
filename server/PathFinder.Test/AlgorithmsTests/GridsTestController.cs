@@ -22,7 +22,10 @@ namespace PathFinder.Test.AlgorithmsTests
             new SimpleTestGrid(),
             new LargeSimpleGrid(),
             new SimpleMaze(),
-            new SimpleMazeWithOneShortestPath()
+            new SimpleMazeWithOneShortestPath(),
+            new TestGridToCheckShortestPath(),
+            new TestGridToCheckShortestPath2(),
+            new TestGridWithZeroCostCells()
         };
         
         public void Run(Func<IPriorityQueue<Point>, IAlgorithm<State>> getInstance,
@@ -31,8 +34,6 @@ namespace PathFinder.Test.AlgorithmsTests
             var metric = new MetricFactory().GetMetric(metricName);
             foreach (var testGrid in testGrids)
             {
-
-
                 if (testGrid is IPath path && !worksOnlyWithDiagonal)
                 {
                     var algorithmResultWithoutDiagonal = getInstance(new HeapPriorityQueue<Point>()).Run(testGrid.Grid,

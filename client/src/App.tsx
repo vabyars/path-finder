@@ -134,7 +134,7 @@ function getEmptyField(rows: number, columns: number) {
   for (let i = 0; i < rows; i++) {
     result.push(new Array(columns).fill({
       state: 'empty',
-      value: 0
+      value: 1
     }))
   }
   result[5][10] = {

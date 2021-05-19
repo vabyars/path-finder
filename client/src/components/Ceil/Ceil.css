@@ -5,12 +5,12 @@
 }
 
 .wall {
-    /*background-color: black;*/
-    animation-name: wallAnimation;
-    /*background-color: #1269db;*/
+    background-color: black;
+/*    animation-name: wallAnimation;
+    !*background-color: #1269db;*!
     animation-duration: 0.5s;
     animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    animation-fill-mode: forwards;*/
 }
 
 .start {
@@ -51,12 +51,12 @@
 
     75% {
         transform: scale(1.2);
-        background-color: black;
+        background-color: #000000;
     }
 
     100% {
         transform: scale(1);
-        background-color: black;
+        background-color: #000000;
     }
 }
 
