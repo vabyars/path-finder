@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Ceil from '../Ceil/Ceil'
+import Cell from '../Ceil/Cell'
 import { CellData, GridProps }  from '../Extentions/Interfaces'
 import { CellState } from "../Extentions/CellState";
 import { UNCLICKABLE_CELL_TYPES} from "../Extentions/Constants";
@@ -19,7 +19,7 @@ function Grid(props: GridProps){
         for(let j = 0; j < props.columns; j++) {
             let boxId = `${i}_${j}`;
             temp.push(
-                <Ceil
+                <Cell
                     key={boxId}
                     className={getCellClass(props.field[i][j].state)}
                     onMouseDown={() => {

@@ -6,11 +6,11 @@
 
 .wall {
     background-color: black;
-/*    animation-name: wallAnimation;
-    !*background-color: #1269db;*!
-    animation-duration: 0.5s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;*/
+    /*animation-name: wallAnimation;*/
+    /*!*background-color: #1269db;*!*/
+    /*animation-duration: 0.5s;*/
+    /*animation-iteration-count: 10;*/
+    /*animation-fill-mode: forwards;*/
 }
 
 .start {
@@ -22,19 +22,21 @@
 }
 
 .path {
-    animation-name: pathAnimation;
-    /*background-color: #1269db;*/
-    animation-duration: 0.75s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    /*animation-name: pathAnimation;*/
+    /*!*background-color: #1269db;*!*/
+    /*animation-duration: 0.75s;*/
+    /*animation-iteration-count: 1;*/
+    /*animation-fill-mode: forwards;*/
+    background-color: yellow;
 }
 
 .visited{
-    animation-name: visitedAnimation;
-    /*background-color: #1269db;*/
-    animation-duration: 0.75s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    /*animation-name: visitedAnimation;*/
+    /*!*background-color: #1269db;*!*/
+    /*animation-duration: 0.75s;*/
+    /*animation-iteration-count: 1;*/
+    /*animation-fill-mode: forwards;*/
+    background-color: #9323ff;
 }
 
 

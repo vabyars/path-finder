@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import {CeilProps} from "../Extentions/Interfaces";
-import './Ceil.css'
+import './Cell.css'
 
 
 
 
-function Ceil(props: CeilProps){
+function Cell(props: CeilProps){
     
     return (
         <div 
@@ -18,4 +18,4 @@ function Ceil(props: CeilProps){
     )
 }
 
-export default Ceil
+export default Cell
