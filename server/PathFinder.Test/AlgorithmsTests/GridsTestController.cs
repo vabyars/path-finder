@@ -22,8 +22,8 @@ namespace PathFinder.Test.AlgorithmsTests
             new SimpleTestGrid(),
             new LargeSimpleGrid(),
             new SimpleMaze(),
-            new SimpleMazeWithOneShortestPath(),
-            new TestGridToCheckShortestPath(),
+            new SimpleMazeWithOneShortestHasPath(),
+            new TestGridToCheckShortestHasPath(),
             new TestGridToCheckShortestPath2(),
         };
         
@@ -33,7 +33,7 @@ namespace PathFinder.Test.AlgorithmsTests
             var metric = new MetricFactory().GetMetric(metricName);
             foreach (var testGrid in testGrids)
             {
-                if (testGrid is IPath path && !worksOnlyWithDiagonal)
+                if (testGrid is IHasPath path && !worksOnlyWithDiagonal)
                 {
                     var algorithmResultWithoutDiagonal = getInstance(new HeapPriorityQueue<Point>()).Run(testGrid.Grid,
                         new Parameters(testGrid.Start, testGrid.Goal, false, metric));
@@ -42,7 +42,7 @@ namespace PathFinder.Test.AlgorithmsTests
                         () => path.MinPathLength, () => path.MinPath, path.OnlyOneShortestPath);
                 }
                 
-                if (testGrid is IDiagonalPath diagonalPath)
+                if (testGrid is IHasDiagonalPath diagonalPath)
                 {
                     var algorithmResultWithDiagonal = getInstance(new HeapPriorityQueue<Point>()).Run(testGrid.Grid,
                         new Parameters(testGrid.Start, testGrid.Goal, true, metric));

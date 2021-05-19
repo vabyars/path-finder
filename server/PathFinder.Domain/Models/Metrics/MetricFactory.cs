@@ -14,7 +14,6 @@ namespace PathFinder.Domain.Models.Metrics
         };
 
         public IEnumerable<string> GetAvailableMetricNames() => Euristics.Keys.Select(x => x.ToString());
-
         
         public Func<Point, Point, double> GetMetric(MetricName name)
         {

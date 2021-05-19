@@ -40,18 +40,40 @@ namespace PathFinder.Domain
             height = cells.GetLength(1);
         }
 
-        public int this[int x, int y] //TODO add validation
+        public int this[int x, int y]
         {
-            get => cells[x, y];
-            set => cells[x, y] = value;
+            get
+            {
+                Validate(x, y);
+                return cells[x, y];
+            }
+            set
+            {
+                Validate(x, y);
+                cells[x, y] = value;
+            }
         }
 
-        public int this[Point p] //TODO add validation
+        public int this[Point p]
         {
-            get => cells[p.X, p.Y];
-            set => cells[p.X, p.Y] = value;
+            get
+            {
+                Validate(p.X, p.Y);
+                return cells[p.X, p.Y];
+            }
+            set
+            {
+                Validate(p.X, p.Y);
+                cells[p.X, p.Y] = value;
+            }
         }
 
+        private void Validate(int x, int y)
+        {
+            if (!InBounds(x, y))
+                throw new ArgumentException($"incorrect point: {x}, {y}");
+        }
+        
         public bool InBounds(Point point) => InBounds(point.X, point.Y);
 
         public bool InBounds(int x, int y) => 0 <= x && x < width && 0 <= y && y < height;

@@ -43,12 +43,6 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                     yield break;
                 }
 
-                yield return new AStarState
-                {
-                    Points = queue.ToList(),
-                    Point = current,
-                    Name = "текущая вершина"
-                };
                 var currentCost = cost[current];
                 foreach (var neighbor in grid.GetNeighbors(current, parameters.AllowDiagonal))
                 {
