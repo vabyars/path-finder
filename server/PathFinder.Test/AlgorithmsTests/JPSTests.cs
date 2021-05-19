@@ -10,7 +10,7 @@ namespace PathFinder.Test.AlgorithmsTests
         public void JpsTest()
         {
             new GridsTestController()
-                .Run(q => new JpsDiagonal(q), true, MetricName.Euclidean);
+                .Run(q => new JpsDiagonal(q), true, true, MetricName.Euclidean);
         }
     }
 }

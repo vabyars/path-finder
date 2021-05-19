@@ -10,7 +10,7 @@ namespace PathFinder.Test.AlgorithmsTests
         public void LeeTest()
         {
             new GridsTestController()
-                .Run(q => new LeeAlgorithm(), true, MetricName.Euclidean);
+                .Run(q => new LeeAlgorithm(), true, false, MetricName.Euclidean);
         }
     }
 }

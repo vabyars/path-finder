@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
-import './Ceil.css'
+import {CeilProps} from "../Extentions/Interfaces";
+import './Cell.css'
 
-interface CeilProps {
-    className: string
-    onMouseDown: any
-    onMouseOver: any
-    onMouseUp: any
-}
 
-function Ceil(props: CeilProps){
+
+
+function Cell(props: CeilProps){
     
     return (
         <div 
@@ -16,10 +13,9 @@ function Ceil(props: CeilProps){
             style={{width: 20, height: 20}}
             onMouseDown={props.onMouseDown}
             onMouseOver={props.onMouseOver}
-            onMouseUp={props.onMouseUp}
         >
         </div>
     )
 }
 
-export default Ceil
+export default Cell
