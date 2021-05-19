@@ -1,0 +1,6 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(22px, 1fr));
+    margin: 2vh 0vh 0vh 12vh;
+    /* border: 1px solid #000000; */
+}
