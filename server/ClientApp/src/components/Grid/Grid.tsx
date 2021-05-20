@@ -25,7 +25,7 @@ function Grid(props: GridProps){
                     onMouseDown={() => {
                       if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
                       setIsMouseDown(true)
-                      props.func(i, j,  [getNewCellDataOnClick(props.field[i][j])])
+                      props.func(i, j, [getNewCellDataOnClick(props.field[i][j])])
                     }}
                     onMouseOver={() => {
                       if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return

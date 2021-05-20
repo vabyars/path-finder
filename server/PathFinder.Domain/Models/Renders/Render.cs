@@ -20,7 +20,6 @@ namespace PathFinder.Domain.Models.Renders
         
         public virtual void RenderState(State state)
         {
-            //некоторые манипуляции со стейтами
             States.Add(state);
             statesCount++;
         }

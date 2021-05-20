@@ -21,7 +21,7 @@ using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.Algorithms.IDA;
 using PathFinder.Domain.Models.Algorithms.JPS;
 using PathFinder.Domain.Models.Algorithms.Lee;
-using PathFinder.Domain.Models.MazeGenarators;
+using PathFinder.Domain.Models.MazeGenerators;
 using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
@@ -90,7 +90,7 @@ namespace PathFinder.Api
             services.AddSwaggerGen(c =>
             {
                 c.CustomSchemaIds(type => type.ToString());
-                c.SwaggerDoc("v1", new OpenApiInfo()
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "PathFinder.Api",
                     Version = "v1",

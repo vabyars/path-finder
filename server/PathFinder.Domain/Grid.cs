@@ -71,7 +71,7 @@ namespace PathFinder.Domain
         private void Validate(int x, int y)
         {
             if (!InBounds(x, y))
-                throw new ArgumentException($"incorrect point: {x}, {y}");
+                throw new IndexOutOfRangeException($"incorrect point: {x}, {y}");
         }
         
         public bool InBounds(Point point) => InBounds(point.X, point.Y);

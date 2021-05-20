@@ -31,16 +31,16 @@ namespace PathFinder.Api.Controllers
             var metric = metricFactory.GetMetric(req.MetricName);
             if (metric == null)
                 return BadRequest($"metric {req.MetricName} was not found");
-            var algorithm = algorithmsController.ExecuteAlgorithm(req.Name, 
+            var algorithmResult = algorithmsController.ExecuteAlgorithm(req.Name, 
                 new Grid(req.Grid),
                 new Parameters(start,
                     goal,
                     req.AllowDiagonal,
                     metric));
             
-            if (algorithm == null)
+            if (algorithmResult == null)
                 return BadRequest($"algorithm {req.Name} was not found");
-            return algorithm;
+            return algorithmResult;
         }
     }
 }

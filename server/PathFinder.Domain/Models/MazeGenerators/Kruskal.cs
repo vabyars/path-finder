@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
 
-namespace PathFinder.Domain.Models.MazeGenarators
+namespace PathFinder.Domain.Models.MazeGenerators
 {
     public class Kruskal : IMazeGenerator
     {
@@ -42,14 +42,8 @@ namespace PathFinder.Domain.Models.MazeGenarators
         private int[,] GetGridWithWallsEverywhere()
         {
             var temp = new int[height, width];
-            for (var x = 0; x < height; x++)
-            {
-                for (var y = 0; y < width; y++)
-                {
-                    temp[x, y] = WallValue;
-                }
-            }
-
+            ApplyFunctionForeachPointInGrid((x, y) => temp[x, y] = WallValue);
+            
             return temp;
         }
         
@@ -57,32 +51,22 @@ namespace PathFinder.Domain.Models.MazeGenarators
         {
             var board = new Grid(new int[height, width]);
             var counter = 1;
-            for (var x = 0; x < height; x++)
-            {
-                for (var y = 0; y < width; y++)
-                {
-                    board[x, y] = counter;
-                    counter++;
-                }
-            }
-
+            ApplyFunctionForeachPointInGrid((x, y) => board[x, y] = counter++);
+            
             return board;
         }
         
         private List<Point> CreateListOfWalls()
         {
             var walls = new List<Point>();
-            for (var x = 0; x < height; x++)
+            ApplyFunctionForeachPointInGrid((x, y) =>
             {
-                for (var y = 0; y < width; y++)
-                {
-                    var wall = new Point(x, y);
-                    if (!grid.InBounds(wall)) 
-                        continue;
-                    for (var i = 0; i < 4; i++)
-                        walls.Add(wall);
-                }
-            }
+                var wall = new Point(x, y);
+                if (!grid.InBounds(wall))
+                    return;
+                for (var i = 0; i < 4; i++)
+                    walls.Add(wall);
+            });
 
             return walls;
         }
@@ -109,22 +93,31 @@ namespace PathFinder.Domain.Models.MazeGenarators
         {
             var currentValue = uniqueNumbersGrid[current.X, current.Y];
             var neighborValue = uniqueNumbersGrid[neighbor.X, neighbor.Y];
-            for (var x = 0; x < height; x++) 
+            
+            ApplyFunctionForeachPointInGrid((x, y) =>
             {
-                for (var y = 0; y < width; y++) 
+                if (uniqueNumbersGrid[x, y] == neighborValue) 
                 {
-                    if (uniqueNumbersGrid[x, y] == neighborValue) 
-                    {
-                        uniqueNumbersGrid[x, y] = currentValue;
-                    }
+                    uniqueNumbersGrid[x, y] = currentValue;
                 }
-            }
+            });
         }
         
         private static int GetRandomIndexLessUpperBound(int rightBoarder)
         {
             var rnd = new Random();
             return rnd.Next(rightBoarder);
+        }
+
+        private void ApplyFunctionForeachPointInGrid(Action<int, int> updateFunc)
+        {
+            for (var x = 0; x < height; x++)
+            {
+                for (var y = 0; y < width; y++)
+                {
+                    updateFunc(x, y);
+                }
+            }
         }
     }
 }

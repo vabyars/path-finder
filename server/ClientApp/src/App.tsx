@@ -64,7 +64,7 @@ function printPath(pathData: string[], field: Field, setField: (f: Field) => voi
       newField[index.x][index.y] = {...newField[index.x][index.y], state: 'path'}
       setField({
         ...field, field: newField
-      })}, 100 * i)
+      })}, 1 * i)
   }
 
 }
@@ -83,7 +83,7 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
       newField[indexes.x][indexes.y] = {...newField[indexes.x][indexes.y], state: 'visited'}
       resolve(setField({
         ...field, field: newField
-      }))}, 50 * i)))
+      }))}, 1 * i)))
   }
   return visitedPromises
 }
