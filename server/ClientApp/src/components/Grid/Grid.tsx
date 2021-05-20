@@ -7,12 +7,21 @@ import "./Grid.css"
 
 function Grid(props: GridProps){
     const [isMouseDown, setIsMouseDown] = useState(false)
-
+    const [isStartSelect, setIsStartSelect] = useState(false)
+    const [isEndSelect, setIsEndSelect] = useState(false)
     const width = props.columns * 22;
     const height = props.rows * 22;
     let rowsArr: any = [];
 
+    function a(cellData: CellData) {
+      if (cellData.state === 'start')
+      {
+        setIsStartSelect(true)
+      }
 
+      if (cellData.state === 'end')
+        setIsEndSelect(true)
+    }
     
     for(let i = 0; i < props.rows; i++) {
         let temp = []
@@ -23,13 +32,23 @@ function Grid(props: GridProps){
                     key={boxId}
                     className={getCellClass(props.field[i][j].state)}
                     onMouseDown={() => {
-                      if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
                       setIsMouseDown(true)
-                      props.func(i, j,  [getNewCellDataOnClick(props.field[i][j])])
+                      if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) {
+                        a(props.field[i][j])
+                        return}
+
+                      props.func(i, j,  getNewCellDataOnClick(props.field[i][j], isStartSelect, isEndSelect))
                     }}
+                    onMouseLeave={() => {
+                      if ((isEndSelect && props.field[i][j].state === 'end')
+                          || (isStartSelect && props.field[i][j].state === 'start'))
+                        props.func(i, j,  {state: 'empty', value: 1})
+                    }
+                    }
                     onMouseOver={() => {
                       if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
-                      if (isMouseDown) props.func(i, j, [getNewCellDataOnClick(props.field[i][j])])
+                      if (isMouseDown)
+                        props.func(i, j,  getNewCellDataOnClick(props.field[i][j], isStartSelect, isEndSelect))
                     }}
                 />)
         }
@@ -41,6 +60,8 @@ function Grid(props: GridProps){
              style={{width: width, height: height}}
              onMouseUp={() => {
                setIsMouseDown(false)
+               setIsEndSelect(false)
+               setIsStartSelect(false)
              }}
              onMouseLeave={(e) => {
                setIsMouseDown(false)
@@ -51,12 +72,23 @@ function Grid(props: GridProps){
     );
 }
 
-function getNewCellDataOnClick(cellData: CellData) {
+function getNewCellDataOnClick(cellData: CellData, start: boolean, end: boolean) {
+  if (start)
+    return {
+      state: 'start',
+      value: 1
+    }
+  if (end)
+    return {
+      state: 'end',
+      value: 1
+    }
   if (cellData.state === 'wall')
     return {
       state: 'empty',
-      value: 0
+      value: 1
     }
+
   return {
     state: 'wall',
     value: -1

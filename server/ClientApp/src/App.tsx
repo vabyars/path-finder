@@ -15,6 +15,15 @@ function App() {
   const [field, setField] = useState<Field>(getEmptyField(fieldSize.rows, fieldSize.columns))
 
   function executeAlgorithm(name: string) {
+    let js = JSON.stringify({
+      name: name,
+      start: `${field.start.x},${field.start.y}`,
+      goal: `${field.end.x},${field.end.y}`,
+      "allowDiagonal": 0,
+      "metricName": 0,
+      grid: parseCellsDataToNumbers(field.field)
+    })
+    console.log(js)
     fetch("/algorithm/execute", {
       method: "POST",
       headers: {
@@ -43,10 +52,11 @@ function App() {
 
   return (
       <div className="App">
-        <Header field={field} clearFunc={() => setField(getEmptyField(fieldSize.rows, fieldSize.columns))}
-                exec={executeAlgorithm} setField={setField}/>
+        <Header field={field} clearField={() => setField(getEmptyField(fieldSize.rows, fieldSize.columns))}
+                executeAlgorithm={executeAlgorithm} clearPath={() => setField(getFieldWithoutExecuteVisualize(field))}
+                setField={setField}/>
         <Grid rows={fieldSize.rows} columns={fieldSize.columns} field={field.field}
-              func={(x: number, y: number, data: CellData[]) => setField(getUpdatedField(x, y, data, field))}
+              func={(x: number, y: number, data: CellData) => setField(getUpdatedField(x, y, data, field))}
 
         />
       </div>
@@ -83,7 +93,7 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
       newField[indexes.x][indexes.y] = {...newField[indexes.x][indexes.y], state: 'visited'}
       resolve(setField({
         ...field, field: newField
-      }))}, 50 * i)))
+      }))}, 10 * i)))
   }
   return visitedPromises
 }
@@ -110,11 +120,25 @@ function parseCellsDataToNumbers(data: CellData[][]) {
   })
 }
 
-function getUpdatedField(x: number, y: number, data: CellData[], field: Field) {
+function getUpdatedField(x: number, y: number, data: CellData, field: Field) {
   let newField = field.field.slice()
-  for (let nodeData of data) {
-    newField[x][y] = nodeData
+  newField[x][y] = data
+  let index = {
+    x: x,
+    y: y
   }
+  if (data.state === 'start')
+    return {
+      ...field,
+      start: index,
+      field: newField
+    }
+  if (data.state === 'end')
+    return {
+      ...field,
+      end: index,
+      field: newField
+    }
   return {
     ...field, field: newField
   }

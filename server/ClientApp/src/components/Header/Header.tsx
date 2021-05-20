@@ -39,9 +39,10 @@ function Header(props: any){
     return (
         <div className="header">
             <label className="flex-elem logo">Pathfinder</label>
-            <Button className="flex-elem" onClick={() => props.exec(currentAlgorithm?.label, props.field)}> Start</Button>
+            <Button className="flex-elem" onClick={() => props.executeAlgorithm(currentAlgorithm?.label, props.field)}> Start</Button>
             <Button className="flex-elem"> Pause</Button>
-            <Button className="flex-elem" onClick={props.clearFunc}> Clear field</Button>
+            <Button className="flex-elem" onClick={props.clearField}> Clear field</Button>
+            <Button className="flex-elem" onClick={props.clearPath}> Clear path</Button>
 
             { currentAlgorithm && <Select className="flex-elem algorithm" isSearchable={false}
               options={algorithms} defaultValue={currentAlgorithm}  onChange={(value: any) => setAlgorithm(value)} />}
@@ -52,6 +53,7 @@ function Header(props: any){
               fetch(`/maze/${value.label}`)
                   .then((res) => res.json()
                       .then((data: number[][]) => {
+                        console.log(data)
                         let field: CellData[][] = []
                         for (let i = 0; i < data.length; i++) {
                           for (let j = 0; j < data[i].length; j++) {
@@ -62,7 +64,8 @@ function Header(props: any){
                               state: data[i][j] === -1 ? 'wall' : 'empty'
                             }
                           }
-                      }
+                        }
+                        console.log(field)
                         props.setField({...props.field, field: field})
                       })
                       .catch((e) => console.log(e)))
