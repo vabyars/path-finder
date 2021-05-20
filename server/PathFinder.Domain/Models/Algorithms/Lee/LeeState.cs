@@ -4,6 +4,6 @@ namespace PathFinder.Domain.Models.Algorithms.Lee
 {
     public class LeeState : State
     {
-        public int Cost { get; set; }
+        public int Cost { get; init; }
     }
 }

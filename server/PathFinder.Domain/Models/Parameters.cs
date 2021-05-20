@@ -2,7 +2,6 @@
 using System.Drawing;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models.Algorithms;
-using PathFinder.Domain.Models.Algorithms.AStar;
 
 namespace PathFinder.Domain.Models
 {

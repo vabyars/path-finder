@@ -78,6 +78,7 @@ namespace PathFinder.Api
             services.AddTransient<IMazeGenerator, Kruskal>();
 
             services.AddTransient<Render, AStarRender>();
+            services.AddTransient<Render, LeeRender>();
 
             services.AddSingleton<SettingsProvider>();
 

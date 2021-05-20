@@ -22,10 +22,9 @@ namespace PathFinder.Test.AlgorithmsTests
             new SimpleTestGrid(),
             new LargeSimpleGrid(),
             new SimpleMaze(),
-            new SimpleMazeWithOneShortestPath(),
-            new TestGridToCheckShortestPath(),
+            new SimpleMazeWithOneShortestHasPath(),
+            new TestGridToCheckShortestHasPath(),
             new TestGridToCheckShortestPath2(),
-            new TestGridWithZeroCostCells()
         };
         
         public void Run(Func<IPriorityQueue<Point>, IAlgorithm<State>> getInstance,
@@ -34,7 +33,7 @@ namespace PathFinder.Test.AlgorithmsTests
             var metric = new MetricFactory().GetMetric(metricName);
             foreach (var testGrid in testGrids)
             {
-                if (testGrid is IPath path && !worksOnlyWithDiagonal)
+                if (testGrid is IHasPath path && !worksOnlyWithDiagonal)
                 {
                     var algorithmResultWithoutDiagonal = getInstance(new HeapPriorityQueue<Point>()).Run(testGrid.Grid,
                         new Parameters(testGrid.Start, testGrid.Goal, false, metric));
@@ -43,7 +42,7 @@ namespace PathFinder.Test.AlgorithmsTests
                         () => path.MinPathLength, () => path.MinPath, path.OnlyOneShortestPath);
                 }
                 
-                if (testGrid is IDiagonalPath diagonalPath)
+                if (testGrid is IHasDiagonalPath diagonalPath)
                 {
                     var algorithmResultWithDiagonal = getInstance(new HeapPriorityQueue<Point>()).Run(testGrid.Grid,
                         new Parameters(testGrid.Start, testGrid.Goal, true, metric));
@@ -58,14 +57,15 @@ namespace PathFinder.Test.AlgorithmsTests
         private void AssertResultPath(IEnumerable<Point> resultPath, TestGrid testGrid, bool findsMinPath,
             Func<int> minPathLength, Func<IEnumerable<Point>> minPath, bool onlyOneShortestPath)
         {
+            var mapName = $"Exception throw on {testGrid.GetType().Name}";
             if (findsMinPath)
             {
-                Assert.AreEqual(minPathLength(), resultPath.Count());
+                Assert.AreEqual(minPathLength(), resultPath.Count(), mapName);
                 if (onlyOneShortestPath)
-                    CollectionAssert.AreEqual(minPath(), resultPath);
+                    CollectionAssert.AreEqual(minPath(), resultPath, mapName);
             }
-            Assert.AreEqual(testGrid.Start, resultPath.First());
-            Assert.AreEqual(testGrid.Goal, resultPath.Last());
+            Assert.AreEqual(testGrid.Start, resultPath.First(), mapName);
+            Assert.AreEqual(testGrid.Goal, resultPath.Last(), mapName);
         }
     }
 }

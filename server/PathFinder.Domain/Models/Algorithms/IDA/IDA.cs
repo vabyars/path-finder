@@ -36,26 +36,26 @@ namespace PathFinder.Domain.Models.Algorithms.IDA
 
         private IEnumerable<Point> GetPath()
         {
-            var currentFBound = metric(start, goal);
+            var bound = metric(start, goal);
             var path = new Stack<Point>();
             path.Push(start);
             do
             {
-                var smallestFBound = Recursive(path, 0, currentFBound);
-                if (smallestFBound == 0.0)
+                var distance = Recursive(path, 0, bound);
+                if (distance == 0.0)
                     return Backtrace(path.Peek());
-                currentFBound = smallestFBound;
-            } while (Math.Abs(currentFBound - double.MaxValue) > double.Epsilon);
+                bound = distance;
+            } while (Math.Abs(bound - double.MaxValue) > double.Epsilon);
 
             return null;
         }
 
-        private double Recursive(Stack<Point> path, double distanceToStart, double bound)
+        private double Recursive(Stack<Point> path, double distance, double bound)
         {
             var node = path.Peek();
-            var distanceToStartAndEstimateToEnd = distanceToStart + metric(node, goal);
-            if (distanceToStartAndEstimateToEnd > bound)
-                return distanceToStartAndEstimateToEnd;
+            var estimate = distance + metric(node, goal);
+            if (estimate > bound)
+                return estimate;
             if (node == goal)
                 return 0.0;
             var min = double.MaxValue;
@@ -64,7 +64,7 @@ namespace PathFinder.Domain.Models.Algorithms.IDA
             
             foreach (var neighbor in neighbors)
             {
-                var priority = distanceToStart + grid.GetCost(neighbor, node) + metric(neighbor, goal);
+                var priority = distance + grid.GetCost(neighbor, node) + metric(neighbor, goal);
                 queue.Add(neighbor, priority);
             }
 
@@ -73,7 +73,7 @@ namespace PathFinder.Domain.Models.Algorithms.IDA
                 if (path.Contains(neighbor)) continue;
                 path.Push(neighbor);
                 parentMap[neighbor] = node;
-                var t = Recursive(path, distanceToStart + grid.GetCost(neighbor, node), bound);
+                var t = Recursive(path, distance + grid.GetCost(neighbor, node), bound);
                 if (t == 0.0)
                     return 0.0;
                 min = Math.Min(min, t);

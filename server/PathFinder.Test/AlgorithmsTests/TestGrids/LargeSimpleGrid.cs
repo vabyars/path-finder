@@ -4,7 +4,7 @@ using PathFinder.Domain;
 
 namespace PathFinder.Test.AlgorithmsTests.TestGrids
 {
-    public class LargeSimpleGrid : TestGrid, IDiagonalPath, IPath
+    public class LargeSimpleGrid : TestGrid, IHasDiagonalPath, IHasPath
     {
         public override Grid Grid { get; } = new(new [,]
         {

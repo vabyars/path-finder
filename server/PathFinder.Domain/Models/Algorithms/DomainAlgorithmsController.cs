@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Models.Algorithms
@@ -37,9 +36,6 @@ namespace PathFinder.Domain.Models.Algorithms
                 yield return res;
             }
         }
-        
-        public IEnumerable<string> AvailableAlgorithmNames()
-            => algorithms.Select(x => x.Name);
 
         public AlgorithmExecutionInfo ExecuteAlgorithm(string name, IGrid grid, IParameters parameters)
         {

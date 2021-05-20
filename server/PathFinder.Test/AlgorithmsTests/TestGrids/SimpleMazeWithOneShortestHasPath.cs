@@ -5,7 +5,7 @@ using PathFinder.Domain;
 
 namespace PathFinder.Test.AlgorithmsTests.TestGrids
 {
-    public class SimpleMazeWithOneShortestPath : TestGrid, IPath, IDiagonalPath
+    public class SimpleMazeWithOneShortestHasPath : TestGrid, IHasPath, IHasDiagonalPath
     {
         public override Grid Grid { get; } = new(new[,]
         {
