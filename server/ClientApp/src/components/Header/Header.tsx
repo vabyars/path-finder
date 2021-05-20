@@ -3,6 +3,7 @@ import { Button} from '@skbkontur/react-ui'
 import './Header.css'
 import Select from 'react-select';
 import {CellData} from "../Extentions/Interfaces";
+import {parseCellsDataToNumbers} from "../Extentions/Functions";
 
 
 interface SelectData{
@@ -53,26 +54,39 @@ function Header(props: any){
               fetch(`/maze/${value.label}`)
                   .then((res) => res.json()
                       .then((data: number[][]) => {
-                        console.log(data)
                         let field: CellData[][] = []
                         for (let i = 0; i < data.length; i++) {
                           for (let j = 0; j < data[i].length; j++) {
-                            if (!field[j])
-                              field[j] = []
-                            field[j][i] = {
+                            if (!field[i])
+                              field[i] = []
+                            field[i][j] = {
                               value: data[i][j],
                               state: data[i][j] === -1 ? 'wall' : 'empty'
                             }
                           }
                         }
-                        console.log(field)
                         props.setField({...props.field, field: field})
                       })
                       .catch((e) => console.log(e)))
                   .catch((e) => console.log(e))
             }} /> }
+
+          <Button className="flex-elem" onClick={() => saveMaze(props.field.field, 'asdf')}> Save maze</Button>
         </div>        
     )
+}
+
+function saveMaze(field: CellData[][], name: string) {
+  fetch("/maze/add", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: name,
+      grid: parseCellsDataToNumbers(field)
+    })
+  })
 }
 
 export default Header
