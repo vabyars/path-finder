@@ -9,10 +9,10 @@ namespace PathFinder.Domain.Models.Algorithms
 {
     public class DomainAlgorithmsController // TODO поменять название
     {
-        private readonly IAlgorithm<State>[] algorithms;
+        private readonly IEnumerable<IAlgorithm<State>> algorithms;
         private readonly IAlgorithmsExecutor algorithmsExecutor;
 
-        public DomainAlgorithmsController(IAlgorithm<State>[] algorithms, IAlgorithmsExecutor algorithmsExecutor)
+        public DomainAlgorithmsController(IEnumerable<IAlgorithm<State>> algorithms, IAlgorithmsExecutor algorithmsExecutor)
         {
             this.algorithms = algorithms;
             this.algorithmsExecutor = algorithmsExecutor;

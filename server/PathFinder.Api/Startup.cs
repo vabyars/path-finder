@@ -65,6 +65,7 @@ namespace PathFinder.Api
             });
             
             services.AddTransient<IPriorityQueue<Point>, HeapPriorityQueue<Point>>();
+            services.AddTransient<IPriorityQueueProvider<Point>, PriorityQueueProvider<Point>>();
             //services.AddSingleton<IMazeRepository, MazeRepository>();
             services.AddSingleton<IMazeRepository, MySqlRepository>();
             services.AddSingleton<IMazeService, MazeService>();
@@ -81,8 +82,12 @@ namespace PathFinder.Api
             services.AddTransient<Render, LeeRender>();
 
             services.AddSingleton<SettingsProvider>();
-
+            services.AddSingleton<DomainAlgorithmsController>();
             services.AddTransient<IAlgorithmsExecutor, AlgorithmsExecutor>();
+
+            services.AddSingleton<IMazeCreationFactory, MazeCreationFactory>();
+
+            services.AddSingleton<RenderProvider>();
             
             services.AddDbContext<MazeContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -93,7 +98,7 @@ namespace PathFinder.Api
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Title = "PathFinder.Api",
-                    Version = "v1",
+                    Version = "7.0",
                 });
             });
             
@@ -106,9 +111,9 @@ namespace PathFinder.Api
 
             var builder = new ContainerBuilder(); //done to allow sequence injection
             builder.Populate(services);
-            builder.RegisterType<DomainAlgorithmsController>().AsSelf();
-            builder.RegisterType<MazeCreationFactory>().As<IMazeCreationFactory>();
-            builder.RegisterType<RenderProvider>().AsSelf();
+            //builder.RegisterType<DomainAlgorithmsController>().AsSelf();
+            //builder.RegisterType<MazeCreationFactory>().As<IMazeCreationFactory>();
+            //builder.RegisterType<RenderProvider>().AsSelf();
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
 

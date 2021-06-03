@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models.States;
@@ -7,9 +8,9 @@ namespace PathFinder.Domain.Models.Renders
 {
     public class RenderProvider
     {
-        private readonly Render[] renders;
+        private readonly IEnumerable<Render> renders;
 
-        public RenderProvider(Render[] renders)
+        public RenderProvider(IEnumerable<Render> renders)
         {
             this.renders = renders;
         }

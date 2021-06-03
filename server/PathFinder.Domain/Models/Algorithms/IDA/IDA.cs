@@ -9,7 +9,7 @@ namespace PathFinder.Domain.Models.Algorithms.IDA
 {
     public class IDA : IAlgorithm<IDAState>
     {
-        private readonly Dictionary<Point, Point> parentMap = new();
+        private Dictionary<Point, Point> parentMap = new();
         private Func<Point, Point, double> metric;
         private IParameters parameters;
         private IGrid grid; 
@@ -23,13 +23,14 @@ namespace PathFinder.Domain.Models.Algorithms.IDA
             start = parameters.Start;
             goal = parameters.End;
             metric = parameters.Metric;
+            parentMap = new Dictionary<Point, Point>();
             this.parameters = parameters;
             this.grid = grid;
             var path = GetPath().ToList();
             path.Reverse();
             yield return new IDAState
             {
-                Points = path,
+                ResultPath = path,
                 Name = "result"
             };
         }

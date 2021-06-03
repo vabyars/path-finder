@@ -7,10 +7,10 @@ namespace PathFinder.Domain.Models
 {
     public class MazeCreationFactory : IMazeCreationFactory
     {
-        private readonly IMazeGenerator[] generators;
+        private readonly IEnumerable<IMazeGenerator> generators;
         private readonly GridConfigurationParameters parameters;
 
-        public MazeCreationFactory(IMazeGenerator[] generators, GridConfigurationParameters parameters)
+        public MazeCreationFactory(IEnumerable<IMazeGenerator> generators, GridConfigurationParameters parameters)
         {
             this.generators = generators;
             this.parameters = parameters;

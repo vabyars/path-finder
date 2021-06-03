@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.Drawing;
+using NUnit.Framework;
 using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.Metrics;
+using PathFinder.Infrastructure;
 
 namespace PathFinder.Test.AlgorithmsTests
 {
@@ -11,7 +13,7 @@ namespace PathFinder.Test.AlgorithmsTests
         public void AStarTest()
         {
             new GridsTestController()
-                .Run(q => new AStarAlgorithm(q), true, false, MetricName.Euclidean);
+                .Run(new AStarAlgorithm(new PriorityQueueProvider<Point>()), true, false, MetricName.Euclidean);
         }
     }
 }

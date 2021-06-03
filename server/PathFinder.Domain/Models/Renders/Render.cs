@@ -30,7 +30,7 @@ namespace PathFinder.Domain.Models.Renders
             return new()
             {
                 IterationsCount = statesCount,
-                PathLength = resultState.Points.Count()
+                PathLength = resultState.ResultPath.Count()
             };
         }
 
@@ -40,7 +40,7 @@ namespace PathFinder.Domain.Models.Renders
             return new AlgorithmExecutionInfo
             {
                 States = States.SkipLast(1),
-                ResultPath = resultState?.Points,
+                ResultPath = resultState?.ResultPath,
                 Stat = CreateReportState(resultState),
             };
         }
