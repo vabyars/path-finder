@@ -9,28 +9,38 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
 {
     public class JpsDiagonal : IAlgorithm<JumpPointSearchState>, IHasOwnParameters
     {
-        private readonly Dictionary<Point, double> distanceToStart = new();
-        private readonly Dictionary<Point, Point> parentMap = new();
+        private readonly IPriorityQueueProvider<Point> queueProvider;
+        private Dictionary<Point, double> distanceToStart = new();
+        private Dictionary<Point, Point> parentMap = new();
         private Point goal;
         private HashSet<Point> goalNeighbours = new();
         private Point start;
         private Func<Point, Point, double> metric;
-        private readonly IPriorityQueue<Point> priorityQueue;
-        private readonly HashSet<Point> closed = new();
+        private IPriorityQueue<Point> priorityQueue;
+        private HashSet<Point> closed = new();
         public string Name => "JPS";
 
-        public JpsDiagonal(IPriorityQueue<Point> queue)
+        public JpsDiagonal(IPriorityQueueProvider<Point> queueProvider)
         {
-            priorityQueue = queue;
+            this.queueProvider = queueProvider;
         }
 
         public Type GetParametersType() => typeof(JPSParameters);
 
-        public IEnumerable<JumpPointSearchState> Run(IGrid grid, IParameters parameters)
+        private void Init(IParameters parameters)
         {
             start = parameters.Start;
             goal = parameters.End;
             metric = parameters.Metric;
+            priorityQueue = queueProvider.Create();
+            distanceToStart = new Dictionary<Point, double>();
+            parentMap = new Dictionary<Point, Point>();
+            closed = new HashSet<Point>();
+        }
+
+        public IEnumerable<JumpPointSearchState> Run(IGrid grid, IParameters parameters)
+        {
+            Init(parameters);
             goalNeighbours = grid.GetNeighbors(goal, parameters.AllowDiagonal).ToHashSet();
             if (grid.IsPassable(goal))
                 goalNeighbours.Add(goal);
@@ -48,7 +58,7 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
                 {
                     yield return new JumpPointSearchState
                     {
-                        Points = Backtrace(current),
+                        ResultPath = Backtrace(current),
                         Name = "result"
                     };
                     yield break;

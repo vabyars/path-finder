@@ -21,7 +21,7 @@ namespace PathFinder.Domain.Models.Algorithms.Lee
                 {
                     yield return new LeeState
                     {
-                        Points = GetResultPath(current).ToList(),
+                        ResultPath = GetResultPath(current).ToList(),
                         Cost = current.CostFromStart
                     };
                     yield break;

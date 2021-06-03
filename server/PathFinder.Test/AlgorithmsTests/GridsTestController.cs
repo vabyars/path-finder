@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using NUnit.Framework;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
@@ -27,7 +25,9 @@ namespace PathFinder.Test.AlgorithmsTests
             new TestGridToCheckShortestPath2(),
         };
         
-        public void Run(Func<IPriorityQueue<Point>, IAlgorithm<State>> getInstance,
+        private IPriorityQueueProvider<Point> queueProvider => new PriorityQueueProvider<Point>();
+        
+        public void Run(IAlgorithm<State> algorithm,
             bool findsMinPath, bool worksOnlyWithDiagonal, MetricName metricName)
         {
             var metric = new MetricFactory().GetMetric(metricName);
@@ -35,19 +35,19 @@ namespace PathFinder.Test.AlgorithmsTests
             {
                 if (testGrid is IHasPath path && !worksOnlyWithDiagonal)
                 {
-                    var algorithmResultWithoutDiagonal = getInstance(new HeapPriorityQueue<Point>()).Run(testGrid.Grid,
+                    var algorithmResultWithoutDiagonal = algorithm.Run(testGrid.Grid,
                         new Parameters(testGrid.Start, testGrid.Goal, false, metric));
                     
-                    AssertResultPath(algorithmResultWithoutDiagonal.Last().Points, testGrid, findsMinPath, 
+                    AssertResultPath(algorithmResultWithoutDiagonal.Last().ResultPath, testGrid, findsMinPath, 
                         () => path.MinPathLength, () => path.MinPath, path.OnlyOneShortestPath);
                 }
                 
                 if (testGrid is IHasDiagonalPath diagonalPath)
                 {
-                    var algorithmResultWithDiagonal = getInstance(new HeapPriorityQueue<Point>()).Run(testGrid.Grid,
+                    var algorithmResultWithDiagonal = algorithm.Run(testGrid.Grid,
                         new Parameters(testGrid.Start, testGrid.Goal, true, metric));
                     
-                    AssertResultPath(algorithmResultWithDiagonal.Last().Points, testGrid, findsMinPath, 
+                    AssertResultPath(algorithmResultWithDiagonal.Last().ResultPath, testGrid, findsMinPath, 
                         () => diagonalPath.MinPathLengthWithDiagonal,
                         () => diagonalPath.MinPathWithDiagonal, diagonalPath.OnlyOneShortestDiagonalPath);
                 }
@@ -58,14 +58,15 @@ namespace PathFinder.Test.AlgorithmsTests
             Func<int> minPathLength, Func<IEnumerable<Point>> minPath, bool onlyOneShortestPath)
         {
             var mapName = $"Exception throw on {testGrid.GetType().Name}";
+            var enumerable = resultPath as Point[] ?? resultPath.ToArray();
             if (findsMinPath)
             {
-                Assert.AreEqual(minPathLength(), resultPath.Count(), mapName);
+                Assert.AreEqual(minPathLength(), enumerable.Length, mapName);
                 if (onlyOneShortestPath)
-                    CollectionAssert.AreEqual(minPath(), resultPath, mapName);
+                    CollectionAssert.AreEqual(minPath(), enumerable, mapName);
             }
-            Assert.AreEqual(testGrid.Start, resultPath.First(), mapName);
-            Assert.AreEqual(testGrid.Goal, resultPath.Last(), mapName);
+            Assert.AreEqual(testGrid.Start, enumerable.First(), mapName);
+            Assert.AreEqual(testGrid.Goal, enumerable.Last(), mapName);
         }
     }
 }

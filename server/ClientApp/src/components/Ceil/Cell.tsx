@@ -13,6 +13,7 @@ function Cell(props: CeilProps){
             style={{width: 20, height: 20}}
             onMouseDown={props.onMouseDown}
             onMouseOver={props.onMouseOver}
+            onMouseLeave={props.onMouseLeave}
         >
         </div>
     )

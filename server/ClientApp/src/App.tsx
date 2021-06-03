@@ -4,7 +4,7 @@ import Grid from './components/Grid/Grid'
 import Header from './components/Header/Header'
 import {CellData, Field, CellIndex} from './components/Extentions/Interfaces'
 import {UNCLICKABLE_CELL_TYPES} from "./components/Extentions/Constants";
-import {CellState} from "./components/Extentions/CellState";
+import {parseCellsDataToNumbers} from "./components/Extentions/Functions";
 
 const rows = 30
 const columns = 60
@@ -25,13 +25,12 @@ function App() {
         start: `${field.start.x},${field.start.y}`,
         goal: `${field.end.x},${field.end.y}`,
         "allowDiagonal": 1,
-        "metricName": 0,
+        "metricName": 1,
         grid: parseCellsDataToNumbers(field.field)
       })
     })
         .then((res) => res.json()
             .then((data) => {
-              console.log(data)
               setField(getFieldWithoutExecuteVisualize(field))
               let visitedPromises = getVisitedPrintPromises(data.states, field, setField)
               Promise.all(visitedPromises).then((res) => {
@@ -43,10 +42,11 @@ function App() {
 
   return (
       <div className="App">
-        <Header field={field} clearFunc={() => setField(getEmptyField(fieldSize.rows, fieldSize.columns))}
-                exec={executeAlgorithm} setField={setField}/>
+        <Header field={field} clearField={() => setField(getEmptyField(fieldSize.rows, fieldSize.columns))}
+                executeAlgorithm={executeAlgorithm} clearPath={() => setField(getFieldWithoutExecuteVisualize(field))}
+                setField={setField}/>
         <Grid rows={fieldSize.rows} columns={fieldSize.columns} field={field.field}
-              func={(x: number, y: number, data: CellData[]) => setField(getUpdatedField(x, y, data, field))}
+              func={(x: number, y: number, data: CellData) => setField(getUpdatedField(x, y, data, field))}
 
         />
       </div>
@@ -55,7 +55,6 @@ function App() {
 
 
 function printPath(pathData: string[], field: Field, setField: (f: Field) => void) {
-  console.log(pathData)
   let indexes = getCellsIndexes(pathData.splice(1, pathData.length - 2))
   let newField = field.field.slice()
   for (let i = 0; i < indexes.length; i++) {
@@ -83,7 +82,7 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
       newField[indexes.x][indexes.y] = {...newField[indexes.x][indexes.y], state: 'visited'}
       resolve(setField({
         ...field, field: newField
-      }))}, 1 * i)))
+      }))}, 60 * i)))
   }
   return visitedPromises
 }
@@ -104,17 +103,31 @@ function getFieldWithoutExecuteVisualize(field: Field) {
 }
 
 
-function parseCellsDataToNumbers(data: CellData[][]) {
-  return data.map((row) => {
-    return row.map((cellData) => cellData.value)
-  })
-}
+// function parseCellsDataToNumbers(data: CellData[][]) {
+//   return data.map((row) => {
+//     return row.map((cellData) => cellData.value)
+//   })
+// }
 
-function getUpdatedField(x: number, y: number, data: CellData[], field: Field) {
+function getUpdatedField(x: number, y: number, data: CellData, field: Field) {
   let newField = field.field.slice()
-  for (let nodeData of data) {
-    newField[x][y] = nodeData
+  newField[x][y] = data
+  let index = {
+    x: x,
+    y: y
   }
+  if (data.state === 'start')
+    return {
+      ...field,
+      start: index,
+      field: newField
+    }
+  if (data.state === 'end')
+    return {
+      ...field,
+      end: index,
+      field: newField
+    }
   return {
     ...field, field: newField
   }

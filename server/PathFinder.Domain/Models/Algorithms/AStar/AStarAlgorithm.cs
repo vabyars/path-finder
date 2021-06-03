@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Infrastructure.Interfaces;
 
@@ -10,23 +9,33 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
     {
         public string Name => "A*";
 
-        private readonly IPriorityQueue<Point> queue;
+        private IPriorityQueue<Point> queue;
+        private readonly IPriorityQueueProvider<Point> queueProvider;
 
-        private readonly Dictionary<Point, Point> cameFrom = new();
-        private readonly Dictionary<Point, double> cost = new();
+        private Dictionary<Point, Point> cameFrom = new();
+        private Dictionary<Point, double> cost = new();
 
         private Point start;
         private Point goal;
 
-        public AStarAlgorithm(IPriorityQueue<Point> queue)
+        public AStarAlgorithm(IPriorityQueueProvider<Point> queueProvider)
         {
-            this.queue = queue;
+            this.queueProvider = queueProvider;
         }
 
-        public IEnumerable<AStarState> Run(IGrid grid, IParameters parameters)
+        private void Init(IParameters parameters)
         {
             start = parameters.Start;
             goal = parameters.End;
+            queue = queueProvider.Create();
+            cameFrom = new Dictionary<Point, Point>();
+            cost = new Dictionary<Point, double>();
+        }
+        
+
+        public IEnumerable<AStarState> Run(IGrid grid, IParameters parameters)
+        {
+            Init(parameters);
             queue.Add(start, 0);
             cameFrom.Add(start, start);
             cost.Add(start, 0);
@@ -37,7 +46,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 {
                     yield return new AStarState
                     {
-                        Points = GetResultPath(),
+                        ResultPath = GetResultPath(),
                         Name = "result"
                     };
                     yield break;

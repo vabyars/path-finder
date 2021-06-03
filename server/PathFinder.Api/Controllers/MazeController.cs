@@ -6,7 +6,7 @@ using PathFinder.Domain.Interfaces;
 namespace PathFinder.Api.Controllers
 {
     [ApiController]
-    [Route("maze")]
+    [Route("maze/{name}")]
     public class MazeController : Controller
     {
         private readonly IMazeService mazeService;
@@ -17,7 +17,6 @@ namespace PathFinder.Api.Controllers
         }
         
         [HttpGet]
-        [Route("{name}")]
         public ActionResult<int[,]> GetMaze(string name)
         {
             try
@@ -31,7 +30,6 @@ namespace PathFinder.Api.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
         public ActionResult<string> AddMaze(AddMazeRequest mazeRequest)
         {
             try

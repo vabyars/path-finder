@@ -3,6 +3,7 @@ import { Button} from '@skbkontur/react-ui'
 import './Header.css'
 import Select from 'react-select';
 import {CellData} from "../Extentions/Interfaces";
+import {parseCellsDataToNumbers} from "../Extentions/Functions";
 
 
 interface SelectData{
@@ -39,9 +40,10 @@ function Header(props: any){
     return (
         <div className="header">
             <label className="flex-elem logo">Pathfinder</label>
-            <Button className="flex-elem" onClick={() => props.exec(currentAlgorithm?.label, props.field)}> Start</Button>
+            <Button className="flex-elem" onClick={() => props.executeAlgorithm(currentAlgorithm?.label, props.field)}> Start</Button>
             <Button className="flex-elem"> Pause</Button>
-            <Button className="flex-elem" onClick={props.clearFunc}> Clear field</Button>
+            <Button className="flex-elem" onClick={props.clearField}> Clear field</Button>
+            <Button className="flex-elem" onClick={props.clearPath}> Clear path</Button>
 
             { currentAlgorithm && <Select className="flex-elem algorithm" isSearchable={false}
               options={algorithms} defaultValue={currentAlgorithm}  onChange={(value: any) => setAlgorithm(value)} />}
@@ -55,21 +57,36 @@ function Header(props: any){
                         let field: CellData[][] = []
                         for (let i = 0; i < data.length; i++) {
                           for (let j = 0; j < data[i].length; j++) {
-                            if (!field[j])
-                              field[j] = []
-                            field[j][i] = {
+                            if (!field[i])
+                              field[i] = []
+                            field[i][j] = {
                               value: data[i][j],
                               state: data[i][j] === -1 ? 'wall' : 'empty'
                             }
                           }
-                      }
+                        }
                         props.setField({...props.field, field: field})
                       })
                       .catch((e) => console.log(e)))
                   .catch((e) => console.log(e))
             }} /> }
+
+          <Button className="flex-elem" onClick={() => saveMaze(props.field.field, 'asdf')}> Save maze</Button>
         </div>        
     )
+}
+
+function saveMaze(field: CellData[][], name: string) {
+  fetch("/maze/add", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: name,
+      grid: parseCellsDataToNumbers(field)
+    })
+  })
 }
 
 export default Header

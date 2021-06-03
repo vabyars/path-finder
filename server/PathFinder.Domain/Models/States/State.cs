@@ -6,7 +6,7 @@ namespace PathFinder.Domain.Models.States
 {
     public class State : IState
     {
-        public IEnumerable<Point> Points { get; init; }
+        public IEnumerable<Point> ResultPath { get; init; }
         public Point? Point { get; init; }
     }
 }

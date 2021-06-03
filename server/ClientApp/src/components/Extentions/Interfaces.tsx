@@ -21,6 +21,7 @@ export interface CeilProps {
   className: string
   onMouseDown: any
   onMouseOver: any
+  onMouseLeave: any
 }
 
 export interface Field {
