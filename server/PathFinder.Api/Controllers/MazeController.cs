@@ -6,7 +6,7 @@ using PathFinder.Domain.Interfaces;
 namespace PathFinder.Api.Controllers
 {
     [ApiController]
-    [Route("maze/{name}")]
+    [Route("maze")]
     public class MazeController : Controller
     {
         private readonly IMazeService mazeService;
@@ -17,11 +17,13 @@ namespace PathFinder.Api.Controllers
         }
         
         [HttpGet]
+        [Route("{name}")]
         public ActionResult<int[,]> GetMaze(string name)
         {
             try
             {
-                return Ok(mazeService.Get(name));
+                var maze = mazeService.Get(name);
+                return Ok(maze);
             }
             catch (ArgumentException e)
             {
@@ -29,11 +31,13 @@ namespace PathFinder.Api.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         public ActionResult<string> AddMaze(AddMazeRequest mazeRequest)
         {
             try
             {
+                if (!ModelState.IsValid)
+                    return BadRequest();
                 mazeService.Add(mazeRequest.Name, mazeRequest.Grid);
                 return Ok();
             }

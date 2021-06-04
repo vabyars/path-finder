@@ -22,9 +22,7 @@ namespace PathFinder.Domain.Models
         public int[,] Create(string name)
         {
             var generator = generators.FirstOrDefault(x => x.Name == name);
-            if (generator == null)
-                throw new ArgumentException($"cannot find creator with name \"{name}\"");
-            return generator.Create(parameters.Width, parameters.Height);
+            return generator?.Create(parameters.Width, parameters.Height);
         }
     }
 }
