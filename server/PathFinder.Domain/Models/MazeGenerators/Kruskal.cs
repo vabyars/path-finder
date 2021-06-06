@@ -35,7 +35,6 @@ namespace PathFinder.Domain.Models.MazeGenerators
                     mazeGrid[wall.X, wall.Y] = grid[wall.X, wall.Y];
                 }
             }
-
             return mazeGrid;
         }
         

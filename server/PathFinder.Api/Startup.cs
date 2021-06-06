@@ -42,7 +42,7 @@ namespace PathFinder.Api
         public IContainer ApplicationContainer { get; private set; }
         private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
@@ -67,8 +67,8 @@ namespace PathFinder.Api
             services.AddTransient<IPriorityQueue<Point>, HeapPriorityQueue<Point>>();
             services.AddTransient<IPriorityQueueProvider<Point>, PriorityQueueProvider<Point>>();
             //services.AddSingleton<IMazeRepository, MazeRepository>();
-            services.AddSingleton<IMazeRepository, MySqlRepository>();
-            services.AddSingleton<IMazeService, MazeService>();
+            services.AddScoped<IMazeRepository, MySqlRepository>();
+            services.AddScoped<IMazeService, MazeService>();
             services.AddSingleton<IMetricFactory, MetricFactory>();
 
             services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
@@ -81,7 +81,7 @@ namespace PathFinder.Api
             services.AddTransient<Render, AStarRender>();
             services.AddTransient<Render, LeeRender>();
 
-            services.AddSingleton<SettingsProvider>();
+            services.AddScoped<SettingsProvider>();
             services.AddSingleton<DomainAlgorithmsController>();
             services.AddTransient<IAlgorithmsExecutor, AlgorithmsExecutor>();
 
@@ -107,7 +107,7 @@ namespace PathFinder.Api
                 configuration.RootPath = "../ClientApp/build";
             });
 
-            #region Autofac injection
+            /*#region Autofac injection
 
             var builder = new ContainerBuilder(); //done to allow sequence injection
             builder.Populate(services);
@@ -117,7 +117,7 @@ namespace PathFinder.Api
             ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(ApplicationContainer);
 
-            #endregion
+            #endregion*/
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

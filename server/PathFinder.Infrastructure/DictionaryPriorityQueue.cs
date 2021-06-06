@@ -30,7 +30,10 @@ namespace PathFinder.Infrastructure
 
         public int Count => items.Count;
 
-        public IEnumerator<TKey> GetEnumerator() => items.Keys.GetEnumerator();
+        public IEnumerator<TKey> GetEnumerator() => items
+            .OrderBy(x => x.Value)
+            .Select(x => x.Key)
+            .GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
