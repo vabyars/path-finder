@@ -1,6 +1,9 @@
 using System;
+using System.ComponentModel.Design;
 using System.Drawing;
 using Autofac;
+using Autofac.Core;
+using Autofac.Core.Activators.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,9 +42,10 @@ namespace PathFinder.Api
         }
 
         public IConfiguration Configuration { get; }
+        public IContainer ApplicationContainer { get; private set; }
         private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
@@ -70,8 +74,8 @@ namespace PathFinder.Api
             services.AddScoped<IMazeService, MazeService>();
             services.AddScoped<IMetricFactory, MetricFactory>();
 
-            services.AddScoped<IAlgorithm<State>>(sp
-                => new AStarAlgorithm(new AStarRenderNew(), sp.GetRequiredService<IPriorityQueueProvider<Point>>()));
+            //services.AddScoped<IAlgorithm<State>>(sp
+              //  => new AStarAlgorithm(new AStarRenderNew(), sp.GetRequiredService<IPriorityQueueProvider<Point>>()));
             
             //services.AddTransient<IRender, AStarRenderNew>();
             //services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
@@ -109,6 +113,22 @@ namespace PathFinder.Api
             {
                 configuration.RootPath = "../ClientApp/build";
             });
+            
+            #region Autofac injection
+
+            var builder = new ContainerBuilder(); //done to apply wheninjectedinto analog
+            builder.Populate(services);
+            RegisterAlgorithms(builder);
+            ApplicationContainer = builder.Build();
+            return new AutofacServiceProvider(ApplicationContainer);
+
+            #endregion
+        }
+
+        private void RegisterAlgorithms(ContainerBuilder builder)
+        {
+            builder.RegisterType<AStarRenderNew>().Named<IRender>("AStar");
+            builder.RegisterType<AStarAlgorithm>().WithParameter(ResolvedParameter.ForNamed<IRender>("AStar"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
