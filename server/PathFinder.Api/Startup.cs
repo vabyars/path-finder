@@ -39,7 +39,6 @@ namespace PathFinder.Api
         }
 
         public IConfiguration Configuration { get; }
-        public IContainer ApplicationContainer { get; private set; }
         private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         public void ConfigureServices(IServiceCollection services)
@@ -64,30 +63,34 @@ namespace PathFinder.Api
                 Height = int.Parse(Configuration["GridParameters:Height"])
             });
             
-            services.AddTransient<IPriorityQueue<Point>, HeapPriorityQueue<Point>>();
-            services.AddTransient<IPriorityQueueProvider<Point>, PriorityQueueProvider<Point>>();
+            services.AddScoped<IPriorityQueue<Point>, HeapPriorityQueue<Point>>();
+            services.AddScoped<IPriorityQueueProvider<Point>, PriorityQueueProvider<Point>>();
             //services.AddSingleton<IMazeRepository, MazeRepository>();
             services.AddScoped<IMazeRepository, MySqlRepository>();
             services.AddScoped<IMazeService, MazeService>();
-            services.AddSingleton<IMetricFactory, MetricFactory>();
+            services.AddScoped<IMetricFactory, MetricFactory>();
 
-            services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
+            services.AddScoped<IAlgorithm<State>>(sp
+                => new AStarAlgorithm(new AStarRenderNew(), sp.GetRequiredService<IPriorityQueueProvider<Point>>()));
+            
+            //services.AddTransient<IRender, AStarRenderNew>();
+            //services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
             services.AddTransient<IAlgorithm<State>, JpsDiagonal>();
             services.AddTransient<IAlgorithm<State>, LeeAlgorithm>();
             services.AddTransient<IAlgorithm<State>, IDA>();
             
             services.AddTransient<IMazeGenerator, Kruskal>();
 
-            services.AddTransient<Render, AStarRender>();
-            services.AddTransient<Render, LeeRender>();
+            //services.AddTransient<Render, AStarRender>();
+            //services.AddTransient<Render, LeeRender>();
 
             services.AddScoped<SettingsProvider>();
-            services.AddSingleton<DomainAlgorithmsController>();
-            services.AddTransient<IAlgorithmsExecutor, AlgorithmsExecutor>();
+            services.AddScoped<DomainAlgorithmsController>();
+            services.AddScoped<IAlgorithmsExecutor, AlgorithmsExecutor>();
 
-            services.AddSingleton<IMazeCreationFactory, MazeCreationFactory>();
+            services.AddScoped<IMazeCreationFactory, MazeCreationFactory>();
 
-            services.AddSingleton<RenderProvider>();
+            services.AddScoped<RenderProvider>();
             
             services.AddDbContext<MazeContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -106,18 +109,6 @@ namespace PathFinder.Api
             {
                 configuration.RootPath = "../ClientApp/build";
             });
-
-            /*#region Autofac injection
-
-            var builder = new ContainerBuilder(); //done to allow sequence injection
-            builder.Populate(services);
-            //builder.RegisterType<DomainAlgorithmsController>().AsSelf();
-            //builder.RegisterType<MazeCreationFactory>().As<IMazeCreationFactory>();
-            //builder.RegisterType<RenderProvider>().AsSelf();
-            ApplicationContainer = builder.Build();
-            return new AutofacServiceProvider(ApplicationContainer);
-
-            #endregion*/
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

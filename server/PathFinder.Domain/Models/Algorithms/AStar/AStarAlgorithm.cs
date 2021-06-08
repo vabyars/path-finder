@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models.Renders;
+using PathFinder.Domain.Models.States;
 using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.AStar
 {
-    public class AStarAlgorithm : IAlgorithm<AStarState>
+    public class AStarAlgorithm : IAlgorithm<State>
     {
+        public IRender Render { get; }
         public string Name => "A*";
 
         private IPriorityQueue<Point> queue;
@@ -18,8 +23,9 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         private Point start;
         private Point goal;
 
-        public AStarAlgorithm(IPriorityQueueProvider<Point> queueProvider)
+        public AStarAlgorithm(IRender render, IPriorityQueueProvider<Point> queueProvider)
         {
+            Render = render;
             this.queueProvider = queueProvider;
         }
 
@@ -33,7 +39,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         }
         
 
-        public IEnumerable<AStarState> Run(IGrid grid, IParameters parameters)
+        public IEnumerable<State> Run(IGrid grid, IParameters parameters)
         {
             Init(parameters);
             queue.Add(start, 0);
@@ -44,14 +50,18 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 var (current, _) = queue.ExtractMin();
                 if (current == goal)
                 {
-                    yield return new AStarState
+                    yield return new ResultPathState()
                     {
-                        ResultPath = GetResultPath(),
-                        Name = "result"
+                        Path = GetResultPath(),
                     };
                     yield break;
                 }
 
+                yield return new CurrentPointState
+                {
+                    PreparedPoint = current
+                };
+                
                 var currentCost = cost[current];
                 foreach (var neighbor in grid.GetNeighbors(current, parameters.AllowDiagonal))
                 {
@@ -61,10 +71,9 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                         cost[neighbor] = newCost;
                         cameFrom[neighbor] = current;
                         queue.UpdateOrAdd(neighbor, newCost + parameters.Metric(neighbor, goal));
-                        yield return new AStarState
+                        yield return new CandidateToPrepareState
                         {
-                            Point = neighbor,
-                            Name = "рассмотренная вершина"
+                            Candidate = neighbor
                         };
                     }
                 }

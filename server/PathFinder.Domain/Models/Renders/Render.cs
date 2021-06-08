@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.StatisticsStates;
@@ -11,7 +12,7 @@ namespace PathFinder.Domain.Models.Renders
         
         private int statesCount;
 
-        private List<State> States { get; } = new();
+        private List<RenderedState> States { get; } = new();
 
         public Render(string[] algorithms)
         {
@@ -20,7 +21,13 @@ namespace PathFinder.Domain.Models.Renders
         
         public virtual void RenderState(State state)
         {
-            States.Add(state);
+            States.Add(state switch
+            {
+                CurrentPointState s => new AStarRenderNew().RenderState(s),
+                CandidateToPrepareState s => new AStarRenderNew().RenderState(s),
+                ResultPathState s => new AStarRenderNew().RenderState(s),
+                _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
+            });
             statesCount++;
         }
 
@@ -35,12 +42,9 @@ namespace PathFinder.Domain.Models.Renders
 
         public AlgorithmExecutionInfo GetInfo()
         {
-            var resultState = States.TakeLast(1).FirstOrDefault();
-            return new AlgorithmExecutionInfo
+            return new()
             {
-                States = States.SkipLast(1),
-                ResultPath = resultState?.ResultPath,
-                Stat = CreateReportState(resultState),
+                RenderedStates = States
             };
         }
     }
