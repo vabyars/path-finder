@@ -6,11 +6,10 @@ using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Interfaces
 {
-    public interface IAlgorithm<out T> 
-        where T : State
+    public interface IAlgorithm
     {
         string Name { get; }
-        IEnumerable<T> Run(IGrid grid, IParameters parameters);
+        IEnumerable<IState> Run(IGrid grid, IParameters parameters);
 
         public Type GetParametersType() => typeof(Parameters);
     }

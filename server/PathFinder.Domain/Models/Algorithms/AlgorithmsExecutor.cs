@@ -7,16 +7,9 @@ namespace PathFinder.Domain.Models.Algorithms
 {
     public class AlgorithmsExecutor : IAlgorithmsExecutor
     {
-        private readonly RenderProvider renderProvider;
-
-        public AlgorithmsExecutor(RenderProvider renderProvider)
+        public IAlgorithmReport Execute(IAlgorithm algorithm, IGrid grid, IParameters parameters)
         {
-            this.renderProvider = renderProvider;
-        }
-
-        public AlgorithmExecutionInfo Execute(IAlgorithm<State> algorithm, IGrid grid, IParameters parameters)
-        {
-            var render = ((AStarAlgorithm) algorithm).Render;//renderProvider.GetRender(algorithm);
+            var render = ((AStarAlgorithm) algorithm).Render;
             var ex = algorithm.Run(grid, parameters);
 
             foreach (var state in ex)
@@ -24,7 +17,7 @@ namespace PathFinder.Domain.Models.Algorithms
                 render.RenderState(state);
             }
 
-            return new AlgorithmExecutionInfo {RenderedStates = render.States};
+            return render.GetReport();
         }
     }
 }

@@ -4,7 +4,6 @@ using PathFinder.Domain;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Metrics;
-using PathFinder.Domain.Models.States;
 using PathFinder.Infrastructure;
 
 namespace PathFinder.Api.Controllers
@@ -24,7 +23,7 @@ namespace PathFinder.Api.Controllers
         
         [HttpPost]
         [Route("execute")]
-        public ActionResult<AlgorithmExecutionInfo> Execute(ExecuteAlgorithmRequest req)
+        public ActionResult<IAlgorithmReport> Execute(ExecuteAlgorithmRequest req)
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
@@ -40,7 +39,7 @@ namespace PathFinder.Api.Controllers
             
             if (algorithmResult == null)
                 return BadRequest($"algorithm {req.Name} was not found");
-            return algorithmResult;
+            return Ok(algorithmResult);
         }
     }
 }

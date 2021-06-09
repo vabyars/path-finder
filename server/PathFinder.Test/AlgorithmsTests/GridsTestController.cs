@@ -6,9 +6,7 @@ using NUnit.Framework;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models;
 using PathFinder.Domain.Models.Metrics;
-using PathFinder.Domain.Models.States;
-using PathFinder.Infrastructure;
-using PathFinder.Infrastructure.Interfaces;
+using PathFinder.Domain.Models.States.ResultPath;
 using PathFinder.Test.AlgorithmsTests.TestGrids;
 
 namespace PathFinder.Test.AlgorithmsTests
@@ -25,9 +23,7 @@ namespace PathFinder.Test.AlgorithmsTests
             new TestGridToCheckShortestPath2(),
         };
         
-        private IPriorityQueueProvider<Point> queueProvider => new PriorityQueueProvider<Point>();
-        
-        public void Run(IAlgorithm<State> algorithm,
+        public void Run(IAlgorithm algorithm,
             bool findsMinPath, bool worksOnlyWithDiagonal, MetricName metricName)
         {
             var metric = new MetricFactory().GetMetric(metricName);
@@ -38,7 +34,9 @@ namespace PathFinder.Test.AlgorithmsTests
                     var algorithmResultWithoutDiagonal = algorithm.Run(testGrid.Grid,
                         new Parameters(testGrid.Start, testGrid.Goal, false, metric));
                     
-                    AssertResultPath(algorithmResultWithoutDiagonal.Last().ResultPath, testGrid, findsMinPath, 
+                    var lastState = algorithmResultWithoutDiagonal.Last() as ResultPathState;
+                    Assert.NotNull(lastState, "last state of the algorithm must be \"ResultPathState\"");
+                    AssertResultPath(lastState.Path, testGrid, findsMinPath, 
                         () => path.MinPathLength, () => path.MinPath, path.OnlyOneShortestPath);
                 }
                 
@@ -46,8 +44,9 @@ namespace PathFinder.Test.AlgorithmsTests
                 {
                     var algorithmResultWithDiagonal = algorithm.Run(testGrid.Grid,
                         new Parameters(testGrid.Start, testGrid.Goal, true, metric));
-                    
-                    AssertResultPath(algorithmResultWithDiagonal.Last().ResultPath, testGrid, findsMinPath, 
+                    var lastState = algorithmResultWithDiagonal.Last() as ResultPathState;
+                    Assert.NotNull(lastState, "last state of the algorithm must be \"ResultPathState\"");
+                    AssertResultPath(lastState.Path, testGrid, findsMinPath, 
                         () => diagonalPath.MinPathLengthWithDiagonal,
                         () => diagonalPath.MinPathWithDiagonal, diagonalPath.OnlyOneShortestDiagonalPath);
                 }

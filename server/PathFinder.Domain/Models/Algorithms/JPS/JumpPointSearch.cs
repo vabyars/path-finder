@@ -7,7 +7,7 @@ using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
 {
-    public class JpsDiagonal : IAlgorithm<JumpPointSearchState>, IHasOwnParameters
+    public class JpsDiagonal : IAlgorithm, IHasOwnParameters
     {
         private readonly IPriorityQueueProvider<Point> queueProvider;
         private Dictionary<Point, double> distanceToStart = new();
@@ -38,7 +38,7 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
             closed = new HashSet<Point>();
         }
 
-        public IEnumerable<JumpPointSearchState> Run(IGrid grid, IParameters parameters)
+        public IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
             Init(parameters);
             goalNeighbours = grid.GetNeighbors(goal, parameters.AllowDiagonal).ToHashSet();
@@ -56,22 +56,22 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
 
                 if (goalNeighbours.Contains(current))
                 {
-                    yield return new JumpPointSearchState
+                    /*yield return new JumpPointSearchState
                     {
                         ResultPath = Backtrace(current),
                         Name = "result"
-                    };
+                    };*/
                     yield break;
                 }
 
                 var currentJumpPoints = IdentifySuccessors(current, grid);
                 foreach (var jumpPoint in currentJumpPoints)
                 {
-                    yield return new JumpPointSearchState
+                    /*yield return new JumpPointSearchState
                     {
                         Point = jumpPoint,
                         Name = "jump point"
-                    };
+                    };*/
                 }
             }
         }

@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Models.Algorithms
 {
     public class DomainAlgorithmsController // TODO поменять название
     {
-        private readonly IEnumerable<IAlgorithm<State>> algorithms;
+        private readonly IEnumerable<IAlgorithm> algorithms;
         private readonly IAlgorithmsExecutor algorithmsExecutor;
 
-        public DomainAlgorithmsController(IEnumerable<IAlgorithm<State>> algorithms, IAlgorithmsExecutor algorithmsExecutor)
+        public DomainAlgorithmsController(IEnumerable<IAlgorithm> algorithms, IAlgorithmsExecutor algorithmsExecutor)
         {
             this.algorithms = algorithms;
             this.algorithmsExecutor = algorithmsExecutor;
@@ -37,7 +38,7 @@ namespace PathFinder.Domain.Models.Algorithms
             }
         }
 
-        public AlgorithmExecutionInfo ExecuteAlgorithm(string name, IGrid grid, IParameters parameters)
+        public IAlgorithmReport ExecuteAlgorithm(string name, IGrid grid, IParameters parameters)
         {
             var algorithm = algorithms.FirstOrDefault(x => x.Name == name);
             if (algorithm == null)

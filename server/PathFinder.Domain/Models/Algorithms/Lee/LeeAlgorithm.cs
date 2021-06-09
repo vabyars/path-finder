@@ -5,10 +5,10 @@ using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.Lee
 {
-    public class LeeAlgorithm : IAlgorithm<LeeState>
+    public class LeeAlgorithm : IAlgorithm
     {
         public string Name => "Lee";
-        public IEnumerable<LeeState> Run(IGrid grid, IParameters parameters)
+        public IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
             var queue = new Queue<LeeNode>();
             var visited = new HashSet<Point> {parameters.Start};
@@ -19,11 +19,11 @@ namespace PathFinder.Domain.Models.Algorithms.Lee
                 var current = queue.Dequeue();
                 if (current.Point == parameters.End)
                 {
-                    yield return new LeeState
+                    /*yield return new LeeState
                     {
                         ResultPath = GetResultPath(current).ToList(),
                         Cost = current.CostFromStart
-                    };
+                    };*/
                     yield break;
                 }
 
@@ -33,11 +33,11 @@ namespace PathFinder.Domain.Models.Algorithms.Lee
                         continue;
                     visited.Add(neighbor);
                     queue.Enqueue(new LeeNode(neighbor, current.CostFromStart+ 1, current));
-                    yield return new LeeState
+                    /*yield return new LeeState
                     {
                         Point = neighbor,
                         Cost = current.CostFromStart + 1
-                    };
+                    };*/
                 }
             }
         }

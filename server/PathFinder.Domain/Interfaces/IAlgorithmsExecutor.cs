@@ -1,9 +1,11 @@
-﻿using PathFinder.Domain.Models.States;
+﻿using PathFinder.Domain.Models.Algorithms;
+using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Interfaces
 {
     public interface IAlgorithmsExecutor
     {
-        AlgorithmExecutionInfo Execute(IAlgorithm<State> name, IGrid grid, IParameters parameters);
+        IAlgorithmReport Execute(IAlgorithm name, IGrid grid, IParameters parameters);
     }
 }

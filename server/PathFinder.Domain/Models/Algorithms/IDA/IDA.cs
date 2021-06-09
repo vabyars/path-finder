@@ -7,7 +7,7 @@ using PathFinder.Infrastructure;
 
 namespace PathFinder.Domain.Models.Algorithms.IDA
 {
-    public class IDA : IAlgorithm<IDAState>
+    public class IDA : IAlgorithm
     {
         private Dictionary<Point, Point> parentMap = new();
         private Func<Point, Point, double> metric;
@@ -18,7 +18,7 @@ namespace PathFinder.Domain.Models.Algorithms.IDA
 
         public string Name => "IDA*";
 
-        public IEnumerable<IDAState> Run(IGrid grid, IParameters parameters)
+        public IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
             start = parameters.Start;
             goal = parameters.End;
@@ -28,11 +28,12 @@ namespace PathFinder.Domain.Models.Algorithms.IDA
             this.grid = grid;
             var path = GetPath().ToList();
             path.Reverse();
-            yield return new IDAState
+            yield break;
+            /*yield return new IDAState
             {
                 ResultPath = path,
                 Name = "result"
-            };
+            };*/
         }
 
         private IEnumerable<Point> GetPath()

@@ -1,9 +1,7 @@
 using System;
-using System.ComponentModel.Design;
 using System.Drawing;
 using Autofac;
 using Autofac.Core;
-using Autofac.Core.Activators.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,7 +45,6 @@ namespace PathFinder.Api
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             services.AddControllers().AddNewtonsoftJson();
             services.AddCors(options =>
             {
@@ -79,9 +76,9 @@ namespace PathFinder.Api
             
             //services.AddTransient<IRender, AStarRenderNew>();
             //services.AddTransient<IAlgorithm<State>, AStarAlgorithm>();
-            services.AddTransient<IAlgorithm<State>, JpsDiagonal>();
-            services.AddTransient<IAlgorithm<State>, LeeAlgorithm>();
-            services.AddTransient<IAlgorithm<State>, IDA>();
+            services.AddTransient<IAlgorithm, JpsDiagonal>();
+            services.AddTransient<IAlgorithm, LeeAlgorithm>();
+            services.AddTransient<IAlgorithm, IDA>();
             
             services.AddTransient<IMazeGenerator, Kruskal>();
 
@@ -94,7 +91,6 @@ namespace PathFinder.Api
 
             services.AddScoped<IMazeCreationFactory, MazeCreationFactory>();
 
-            services.AddScoped<RenderProvider>();
             
             services.AddDbContext<MazeContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -127,8 +123,9 @@ namespace PathFinder.Api
 
         private void RegisterAlgorithms(ContainerBuilder builder)
         {
-            builder.RegisterType<AStarRenderNew>().Named<IRender>("AStar");
-            builder.RegisterType<AStarAlgorithm>().WithParameter(ResolvedParameter.ForNamed<IRender>("AStar"));
+            builder.RegisterType<AStarRender>().Named<IRender>("AStar");
+            builder.RegisterType<AStarAlgorithm>().As<IAlgorithm>()
+                .WithParameter(ResolvedParameter.ForNamed<IRender>("AStar"));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
