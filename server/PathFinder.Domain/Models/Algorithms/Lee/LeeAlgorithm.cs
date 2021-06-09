@@ -2,13 +2,20 @@
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.Renders;
 
 namespace PathFinder.Domain.Models.Algorithms.Lee
 {
-    public class LeeAlgorithm : IAlgorithm
+    public class LeeAlgorithm : AbstractAlgorithm
     {
-        public string Name => "Lee";
-        public IEnumerable<IState> Run(IGrid grid, IParameters parameters)
+        public override string Name => "Lee";
+
+        public LeeAlgorithm(IRender render) : base(render)
+        {
+            
+        }
+        public override IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
             var queue = new Queue<LeeNode>();
             var visited = new HashSet<Point> {parameters.Start};

@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models.Renders;
-using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.CandidateToPrepare;
 using PathFinder.Domain.Models.States.PreparedPoint;
 using PathFinder.Domain.Models.States.ResultPath;
@@ -12,10 +11,21 @@ using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.AStar
 {
-    public class AStarAlgorithm : IAlgorithm
+    public abstract class AbstractAlgorithm : IAlgorithm
     {
         public IRender Render { get; }
-        public string Name => "A*";
+
+        protected AbstractAlgorithm(IRender render)
+        {
+            Render = render;
+        }
+        
+        public abstract string Name { get; }
+        public abstract IEnumerable<IState> Run(IGrid grid, IParameters parameters);
+    }
+    public class AStarAlgorithm : AbstractAlgorithm
+    {
+        public override string Name => "A*";
 
         private IPriorityQueue<Point> queue;
         private readonly IPriorityQueueProvider<Point> queueProvider;
@@ -26,9 +36,8 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         private Point start;
         private Point goal;
 
-        public AStarAlgorithm(IRender render, IPriorityQueueProvider<Point> queueProvider)
+        public AStarAlgorithm(IRender render, IPriorityQueueProvider<Point> queueProvider) : base(render)
         {
-            Render = render;
             this.queueProvider = queueProvider;
         }
 
@@ -42,7 +51,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         }
         
 
-        public IEnumerable<IState> Run(IGrid grid, IParameters parameters)
+        public override IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
             Init(parameters);
             queue.Add(start, 0);
@@ -98,7 +107,6 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
                 path.Add(current);
                 current = cameFrom[current];
             }
-
             path.Add(start);
             path.Reverse();
             return path;

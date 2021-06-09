@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.Renders;
 using PathFinder.Infrastructure;
 
 namespace PathFinder.Domain.Models.Algorithms.IDA
 {
-    public class IDA : IAlgorithm
+    public class IDA : AbstractAlgorithm
     {
         private Dictionary<Point, Point> parentMap = new();
         private Func<Point, Point, double> metric;
@@ -16,9 +18,14 @@ namespace PathFinder.Domain.Models.Algorithms.IDA
         private Point start;
         private Point goal;
 
-        public string Name => "IDA*";
+        public override string Name => "IDA*";
 
-        public IEnumerable<IState> Run(IGrid grid, IParameters parameters)
+        public IDA(IRender render) : base(render)
+        {
+            
+        }
+
+        public override IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
             start = parameters.Start;
             goal = parameters.End;

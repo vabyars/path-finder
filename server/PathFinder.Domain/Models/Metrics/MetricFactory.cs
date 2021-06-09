@@ -13,12 +13,11 @@ namespace PathFinder.Domain.Models.Metrics
             {MetricName.Manhattan, (from, to) => Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y)}
         };
 
-        public IEnumerable<string> GetAvailableMetricNames() => Euristics.Keys.Select(x => x.ToString());
+        public IEnumerable<string> GetAvailableMetricNames()
+            => Euristics.Keys.Select(x => x.ToString());
         
         public Func<Point, Point, double> GetMetric(MetricName name)
-        {
-            return !Euristics.TryGetValue(name, out var metric) ? null : metric;
-        }
+            => !Euristics.TryGetValue(name, out var metric) ? null : metric;
 
         private static double EuclideanMetric(Point from, Point to)
         {

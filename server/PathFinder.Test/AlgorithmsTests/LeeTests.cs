@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
 using PathFinder.Domain.Models.Algorithms.Lee;
 using PathFinder.Domain.Models.Metrics;
+using PathFinder.Domain.Models.Renders;
 
 namespace PathFinder.Test.AlgorithmsTests
 {
@@ -10,7 +12,7 @@ namespace PathFinder.Test.AlgorithmsTests
         public void LeeTest()
         {
             new GridsTestController()
-                .Run(new LeeAlgorithm(), true, false, MetricName.Euclidean);
+                .Run(new LeeAlgorithm(new Mock<IRender>().Object), true, false, MetricName.Euclidean);
         }
     }
 }

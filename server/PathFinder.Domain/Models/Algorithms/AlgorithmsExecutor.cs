@@ -9,7 +9,7 @@ namespace PathFinder.Domain.Models.Algorithms
     {
         public IAlgorithmReport Execute(IAlgorithm algorithm, IGrid grid, IParameters parameters)
         {
-            var render = ((AStarAlgorithm) algorithm).Render;
+            var render = algorithm.Render;
             var ex = algorithm.Run(grid, parameters);
 
             foreach (var state in ex)

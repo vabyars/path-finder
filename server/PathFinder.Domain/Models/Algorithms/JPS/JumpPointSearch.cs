@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Models.Algorithms.AStar;
+using PathFinder.Domain.Models.Renders;
 using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
 {
-    public class JpsDiagonal : IAlgorithm, IHasOwnParameters
+    public class JpsDiagonal : AbstractAlgorithm, IHasOwnParameters
     {
         private readonly IPriorityQueueProvider<Point> queueProvider;
         private Dictionary<Point, double> distanceToStart = new();
@@ -18,9 +20,9 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
         private Func<Point, Point, double> metric;
         private IPriorityQueue<Point> priorityQueue;
         private HashSet<Point> closed = new();
-        public string Name => "JPS";
+        public override string Name => "JPS";
 
-        public JpsDiagonal(IPriorityQueueProvider<Point> queueProvider)
+        public JpsDiagonal(IRender render, IPriorityQueueProvider<Point> queueProvider) : base(render)
         {
             this.queueProvider = queueProvider;
         }
@@ -38,7 +40,7 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
             closed = new HashSet<Point>();
         }
 
-        public IEnumerable<IState> Run(IGrid grid, IParameters parameters)
+        public override IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
             Init(parameters);
             goalNeighbours = grid.GetNeighbors(goal, parameters.AllowDiagonal).ToHashSet();
