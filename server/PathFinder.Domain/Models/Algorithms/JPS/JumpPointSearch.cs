@@ -5,6 +5,9 @@ using System.Linq;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.Renders;
+using PathFinder.Domain.Models.States.CandidateToPrepare;
+using PathFinder.Domain.Models.States.PreparedPoint;
+using PathFinder.Domain.Models.States.ResultPath;
 using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.JPS
@@ -58,22 +61,15 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
 
                 if (goalNeighbours.Contains(current))
                 {
-                    /*yield return new JumpPointSearchState
-                    {
-                        ResultPath = Backtrace(current),
-                        Name = "result"
-                    };*/
+                    yield return new ResultPathState { Path = Backtrace(current) };
                     yield break;
                 }
 
-                var currentJumpPoints = IdentifySuccessors(current, grid);
-                foreach (var jumpPoint in currentJumpPoints)
+                yield return new CurrentPointState {PreparedPoint = current };
+
+                foreach (var jumpPoint in IdentifySuccessors(current, grid))
                 {
-                    /*yield return new JumpPointSearchState
-                    {
-                        Point = jumpPoint,
-                        Name = "jump point"
-                    };*/
+                    yield return new CandidateToPrepareState { Candidate = jumpPoint };
                 }
             }
         }
@@ -84,12 +80,14 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
             foreach (var neighbor in FindNeighbors(point, grid))
             {
                 var rawJumpPoint = Jump(neighbor, point, grid);
-                
+
                 if (rawJumpPoint == null || closed.Contains(rawJumpPoint.Value))
                     continue;
                 var jumpPoint = rawJumpPoint.Value;
-                
-                var distance = distanceToStart.ContainsKey(point) ? distanceToStart[point] : 0 + metric(jumpPoint, point);
+
+                var distance = distanceToStart.ContainsKey(point)
+                    ? distanceToStart[point]
+                    : 0 + metric(jumpPoint, point);
 
                 if (priorityQueue.TryGetValue(jumpPoint, out _) && !(distance < distanceToStart[jumpPoint])) continue;
                 distanceToStart[jumpPoint] = distance;
@@ -112,76 +110,78 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
                 var dx = GetNormalizedDirection(x, parent.X);
                 var dy = GetNormalizedDirection(y, parent.Y);
 
-                if (dx != 0 && dy != 0) {
-                    if (grid.IsPassable(x, y + dy)) 
+                if (dx != 0 && dy != 0)
+                {
+                    if (grid.IsPassable(x, y + dy))
                         yield return new Point(x, y + dy);
-                    
-                    if (grid.IsPassable(x + dx, y)) 
+
+                    if (grid.IsPassable(x + dx, y))
                         yield return new Point(x + dx, y);
-                    
-                    if (grid.IsPassable(x, y + dy) || grid.IsPassable(x + dx, y)) 
+
+                    if (grid.IsPassable(x, y + dy) || grid.IsPassable(x + dx, y))
                         yield return new Point(x + dx, y + dy);
-                    
-                    if (!grid.IsPassable(x - dx, y) && grid.IsPassable(x, y + dy)) 
+
+                    if (!grid.IsPassable(x - dx, y) && grid.IsPassable(x, y + dy))
                         yield return new Point(x - dx, y + dy);
-                    
-                    if (!grid.IsPassable(x, y - dy) && grid.IsPassable(x + dx, y)) 
+
+                    if (!grid.IsPassable(x, y - dy) && grid.IsPassable(x + dx, y))
                         yield return new Point(x + dx, y - dy);
-                    
                 }
-                else {
+                else
+                {
                     if (dx == 0)
                     {
-                        if (!grid.IsPassable(x, y + dy)) 
+                        if (!grid.IsPassable(x, y + dy))
                             yield break;
                         yield return new Point(x, y + dy);
-                        if (!grid.IsPassable(x + 1, y)) 
+                        if (!grid.IsPassable(x + 1, y))
                             yield return new Point(x + 1, y + dy);
-                        if (!grid.IsPassable(x - 1, y)) 
+                        if (!grid.IsPassable(x - 1, y))
                             yield return new Point(x - 1, y + dy);
                     }
                     else
                     {
-                        if (!grid.IsPassable(x + dx, y)) 
+                        if (!grid.IsPassable(x + dx, y))
                             yield break;
                         yield return new Point(x + dx, y);
-                        if (!grid.IsPassable(x, y + 1)) 
+                        if (!grid.IsPassable(x, y + 1))
                             yield return new Point(x + dx, y + 1);
                         if (!grid.IsPassable(x, y - 1))
                             yield return new Point(x + dx, y - 1);
                     }
                 }
             }
-            else {
+            else
+            {
                 foreach (var neighbor in GetNeighbors(point, grid))
                     yield return neighbor;
             }
         }
-        
+
         private IEnumerable<Point> GetNeighbors(Point point, IGrid grid)
         {
             var (x, y) = (point.X, point.Y);
             var (walkedUp, walkedRight, walkedDown, walkedLeft) = (false, false, false, false);
 
-            if (grid.IsPassable(x, y - 1)) 
+            if (grid.IsPassable(x, y - 1))
             {
                 yield return new Point(x, y - 1);
                 walkedUp = true;
             }
 
-            if (grid.IsPassable(x + 1, y)) 
+            if (grid.IsPassable(x + 1, y))
             {
                 yield return new Point(x + 1, y);
                 walkedRight = true;
             }
 
-            if (grid.IsPassable(x, y + 1)) 
+            if (grid.IsPassable(x, y + 1))
             {
                 yield return new Point(x, y + 1);
                 walkedDown = true;
             }
 
-            if (grid.IsPassable(x - 1, y)) 
+            if (grid.IsPassable(x - 1, y))
             {
                 yield return new Point(x - 1, y);
                 walkedLeft = true;
@@ -189,12 +189,12 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
 
             var walked = new[]
             {
-                walkedLeft || walkedUp, walkedUp || walkedRight, 
+                walkedLeft || walkedUp, walkedUp || walkedRight,
                 walkedRight || walkedDown, walkedDown || walkedLeft
             };
             var walkedPoints = new Point[]
             {
-                new(x - 1, y - 1), new(x + 1, y - 1), 
+                new(x - 1, y - 1), new(x + 1, y - 1),
                 new(x + 1, y + 1), new(x - 1, y + 1)
             };
             foreach (var (isWalked, direction) in walked.Zip(walkedPoints))
@@ -219,14 +219,14 @@ namespace PathFinder.Domain.Models.Algorithms.JPS
             }
             else
             {
-                if (dx != 0) 
+                if (dx != 0)
                 {
-                    if (IsWalkableHorizontal(grid, x, y, dx)) 
+                    if (IsWalkableHorizontal(grid, x, y, dx))
                         return point;
                 }
-                else 
+                else
                 {
-                    if (IsWalkableVertical(grid, x, y, dy)) 
+                    if (IsWalkableVertical(grid, x, y, dy))
                         return point;
                 }
             }

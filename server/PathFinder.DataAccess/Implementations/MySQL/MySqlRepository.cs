@@ -35,11 +35,5 @@ namespace PathFinder.DataAccess1.Implementations.MySQL
         {
             return context.Grids.FirstOrDefault(x => x.Name == name)?.Maze;
         }
-
-        public bool TryGetValue(string name, out int[,] value)
-        {
-            value = Get(name);
-            return value != null;
-        }
     }
 }

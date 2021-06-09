@@ -17,10 +17,5 @@ namespace PathFinder.DataAccess1.Implementations
         }
 
         public IEnumerable<string> GetMazesNames() => grids.Keys;
-
-        public bool TryGetValue(string name, out int[,] value)
-        {
-            return grids.TryGetValue(name, out value);
-        }
     }
 }

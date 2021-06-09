@@ -27,8 +27,7 @@ namespace PathFinder.Api
             services.AddScoped<IMazeRepository, MySqlRepository>();
             services.AddScoped<IMazeService, MazeService>();
             services.AddSingleton<IMetricFactory, MetricFactory>();
-            
-            
+
             services.AddScoped<IMazeGenerator, Kruskal>();
 
             services.AddScoped<SettingsProvider>();

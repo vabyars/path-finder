@@ -20,12 +20,16 @@ namespace PathFinder.Api
         public static void RegisterAlgorithmsAndRenders(this ContainerBuilder builder)
         {
             builder.RegisterType<AStarRender>().Named<IRender>("AStar");
+            builder.RegisterType<JpsRender>().Named<IRender>("JPS");
+            
             builder.RegisterType<AStarRender>().As<IRender>();
 
             builder.RegisterType<AStarAlgorithm>().As<IAlgorithm>()
                 .WithParameter(ResolvedParameter.ForNamed<IRender>("AStar"));
+
+            builder.RegisterType<JpsDiagonal>().As<IAlgorithm>()
+                .WithParameter(ResolvedParameter.ForNamed<IRender>("JPS"));
             
-            builder.RegisterType<JpsDiagonal>().As<IAlgorithm>();
             builder.RegisterType<LeeAlgorithm>().As<IAlgorithm>();
             builder.RegisterType<IDA>().As<IAlgorithm>();
         }
