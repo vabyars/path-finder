@@ -1,6 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using PathFinder.Domain.Models.Algorithms.Lee;
+using PathFinder.Domain.Models.Algorithms.Realizations.Lee;
 using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Renders;
 

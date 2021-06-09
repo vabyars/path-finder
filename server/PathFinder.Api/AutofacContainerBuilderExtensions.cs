@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using Autofac.Core;
-using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models.Algorithms.AStar;
-using PathFinder.Domain.Models.Algorithms.IDA;
-using PathFinder.Domain.Models.Algorithms.JPS;
-using PathFinder.Domain.Models.Algorithms.Lee;
+using PathFinder.Domain.Models.Algorithms;
+using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
+using PathFinder.Domain.Models.Algorithms.Realizations.IDA;
+using PathFinder.Domain.Models.Algorithms.Realizations.JPS;
+using PathFinder.Domain.Models.Algorithms.Realizations.Lee;
 using PathFinder.Domain.Models.Renders;
 
 namespace PathFinder.Api

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
-using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models;
+using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Metrics;
+using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.States.ResultPath;
 using PathFinder.Test.AlgorithmsTests.TestGrids;
 

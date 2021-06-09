@@ -5,15 +5,16 @@ using Microsoft.Extensions.DependencyInjection;
 using PathFinder.Api.Models;
 using PathFinder.DataAccess1;
 using PathFinder.DataAccess1.Implementations.MySQL;
-using PathFinder.Domain;
-using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models;
-using PathFinder.Domain.Models.Algorithms;
-using PathFinder.Domain.Models.MazeGenerators;
+using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
+using PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor;
+using PathFinder.Domain.Models.GridFolder;
+using PathFinder.Domain.Models.MazeCreation;
+using PathFinder.Domain.Models.MazeCreation.MazeGenerators;
 using PathFinder.Domain.Models.Metrics;
-using PathFinder.Domain.Services;
+using PathFinder.Domain.Services.MazeService;
 using PathFinder.Infrastructure;
-using PathFinder.Infrastructure.Interfaces;
+using PathFinder.Infrastructure.PriorityQueue;
+using PathFinder.Infrastructure.PriorityQueue.Realizations;
 
 namespace PathFinder.Api
 {

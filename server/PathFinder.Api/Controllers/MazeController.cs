@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using PathFinder.Api.Models;
-using PathFinder.Domain.Interfaces;
+using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Api.Controllers
 {

@@ -1,7 +1,5 @@
 ﻿using System;
-using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models.Algorithms;
-using PathFinder.Domain.Models.Algorithms.AStar;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.CandidateToPrepare;
 using PathFinder.Domain.Models.States.PreparedPoint;

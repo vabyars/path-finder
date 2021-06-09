@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using PathFinder.Infrastructure;
+using PathFinder.Infrastructure.PriorityQueue.Realizations;
 
 namespace PathFinder.Test.InfrastructureTest
 {

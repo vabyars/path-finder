@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using PathFinder.Domain;
-using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models.Algorithms;
+using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
+using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.Metrics;
+using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Api.Models
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using PathFinder.Domain;
+using PathFinder.Domain.Models.GridFolder;
 
 
 namespace PathFinder.Test.AlgorithmsTests.TestGrids

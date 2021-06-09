@@ -9,4 +9,8 @@
       <ProjectReference Include="..\PathFinder.Infrastructure\PathFinder.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Models\Algorithms\Realizations" />
+    </ItemGroup>
+
 </Project>

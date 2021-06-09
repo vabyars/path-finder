@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Domain.Models.States.CandidateToPrepare
 {

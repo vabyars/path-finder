@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using PathFinder.Domain.Interfaces;
 
 namespace PathFinder.Domain.Models.States.ResultPath
 {
