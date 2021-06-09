@@ -22,11 +22,11 @@ namespace PathFinder.Domain.Models.Renders
             };
         }
 
-        public abstract RenderedState RenderState(ResultPathState state);
+        protected abstract RenderedState RenderState(ResultPathState state);
 
-        public abstract RenderedState RenderState(CurrentPointState state);
+        protected abstract RenderedState RenderState(CurrentPointState state);
 
-        public abstract RenderedState RenderState(CandidateToPrepareState state);
+        protected abstract RenderedState RenderState(CandidateToPrepareState state);
 
         public abstract IAlgorithmReport GetReport();
     }

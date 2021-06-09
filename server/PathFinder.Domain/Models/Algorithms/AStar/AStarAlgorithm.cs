@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States.CandidateToPrepare;
@@ -11,18 +9,6 @@ using PathFinder.Infrastructure.Interfaces;
 
 namespace PathFinder.Domain.Models.Algorithms.AStar
 {
-    public abstract class AbstractAlgorithm : IAlgorithm
-    {
-        public IRender Render { get; }
-
-        protected AbstractAlgorithm(IRender render)
-        {
-            Render = render;
-        }
-        
-        public abstract string Name { get; }
-        public abstract IEnumerable<IState> Run(IGrid grid, IParameters parameters);
-    }
     public class AStarAlgorithm : AbstractAlgorithm
     {
         public override string Name => "A*";

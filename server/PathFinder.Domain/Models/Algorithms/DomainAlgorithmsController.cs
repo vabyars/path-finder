@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using PathFinder.Domain.Interfaces;
-using PathFinder.Domain.Models.Algorithms.AStar;
-using PathFinder.Domain.Models.States;
 
 namespace PathFinder.Domain.Models.Algorithms
 {

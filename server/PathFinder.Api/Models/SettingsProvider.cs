@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
 using PathFinder.Domain;
 using PathFinder.Domain.Interfaces;
 using PathFinder.Domain.Models.Algorithms;

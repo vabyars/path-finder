@@ -29,9 +29,9 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
         }
 
         public override IAlgorithmReport GetReport()
-            => new AStarAlgorithmReport() {RenderedStates = states};
+            => new AStarAlgorithmReport {RenderedStates = states};
 
-        public override RenderedState RenderState(ResultPathState state)
+        protected override RenderedState RenderState(ResultPathState state)
         {
             return new RenderedPathState
             {
@@ -40,7 +40,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
             };
         }
 
-        public override RenderedState RenderState(CurrentPointState state)
+        protected override RenderedState RenderState(CurrentPointState state)
         {
             index = 0;
             return new RenderedPreparedPointState
@@ -51,7 +51,7 @@ namespace PathFinder.Domain.Models.Algorithms.AStar
             };
         }
 
-        public override RenderedState RenderState(CandidateToPrepareState state)
+        protected override RenderedState RenderState(CandidateToPrepareState state)
         {
             return new RenderedCandidateState
             {
