@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PathFinder.DataAccess1.Implementations
 {
@@ -6,6 +7,8 @@ namespace PathFinder.DataAccess1.Implementations
     {
         private readonly Dictionary<string, int[,]> grids = new();
         
+        public IEnumerable<string> GetMazesNames() => grids.Keys;
+
         public void Add(string name, int[,] grid)
         {
             grids.Add(name, grid);
@@ -15,7 +18,15 @@ namespace PathFinder.DataAccess1.Implementations
         {
             return grids[name];
         }
+        
+        public async Task AddAsync(string name, int[,] grid)
+        {
+            await Task.Run(() => grids.Add(name, grid));
+        }
 
-        public IEnumerable<string> GetMazesNames() => grids.Keys;
+        public async Task<int[,]> GetAsync(string name)
+        {
+            return await Task.Run(() => grids[name]);
+        }
     }
 }

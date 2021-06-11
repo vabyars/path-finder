@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using PathFinder.DataAccess1;
 using PathFinder.Domain.Models.MazeCreation;
 
@@ -21,7 +22,7 @@ namespace PathFinder.Domain.Services.MazeService
         {
             if (MazeExists(name))
                 throw new ArgumentException($"maze with name \"{name}\" has already exists");
-            repository.Add(name, grid);
+            repository.AddAsync(name, grid);
         }
 
         private bool MazeExists(string name)
@@ -45,6 +46,17 @@ namespace PathFinder.Domain.Services.MazeService
         {
             return mazeCreationFactory.GetAvailableNames()
                 .Concat(repository.GetMazesNames());
+        }
+        
+        public async Task<int[,]> GetAsync(string name)
+        {
+            int[,] maze = { };
+            if (await repository.TryGetValueAsync(name, value => maze = value))
+                return maze;
+            var generatedMaze = mazeCreationFactory.Create(name);
+            if (generatedMaze != null)
+                return generatedMaze;
+            throw new ArgumentException($"maze not found {name}");
         }
     }
 }

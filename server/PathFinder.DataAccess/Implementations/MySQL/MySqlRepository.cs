@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PathFinder.DataAccess1.Entities;
 
 namespace PathFinder.DataAccess1.Implementations.MySQL
@@ -21,8 +23,6 @@ namespace PathFinder.DataAccess1.Implementations.MySQL
 
         public void Add(string name, int[,] grid)
         {
-            if (context.Grids.Any(x => x.Name == name))
-                throw new ArgumentException($"maze with name {name} already exists");
             context.Grids.Add(new Grid
             {
                 Name = name,
@@ -34,6 +34,22 @@ namespace PathFinder.DataAccess1.Implementations.MySQL
         public int[,] Get(string name)
         {
             return context.Grids.FirstOrDefault(x => x.Name == name)?.Maze;
+        }
+
+        public async Task AddAsync(string name, int[,] grid)
+        {
+            await context.Grids.AddAsync(new Grid
+            {
+                Name = name,
+                Maze = grid
+            });
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<int[,]> GetAsync(string name)
+        {
+            var maze = await context.Grids.FirstOrDefaultAsync(x => x.Name == name);
+            return maze?.Maze;
         }
     }
 }

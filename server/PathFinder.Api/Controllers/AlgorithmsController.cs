@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using PathFinder.Api.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
@@ -24,7 +25,7 @@ namespace PathFinder.Api.Controllers
         
         [HttpPost]
         [Route("execute")]
-        public ActionResult<IAlgorithmReport> Execute(ExecuteAlgorithmRequest req)
+        public async Task<ActionResult<IAlgorithmReport>> Execute(ExecuteAlgorithmRequest req)
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
