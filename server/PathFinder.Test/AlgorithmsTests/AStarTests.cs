@@ -4,7 +4,6 @@ using NUnit.Framework;
 using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
 using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Renders;
-using PathFinder.Infrastructure;
 using PathFinder.Infrastructure.PriorityQueue;
 using PathFinder.Infrastructure.PriorityQueue.Realizations;
 

@@ -13,12 +13,12 @@ namespace PathFinder.Api.Controllers
     [Route("algorithm")]
     public class AlgorithmsController : Controller
     {
-        private readonly DomainAlgorithmsController algorithmsController;
+        private readonly AlgorithmsHandler algorithmsHandler;
         private readonly IMetricFactory metricFactory;
 
-        public AlgorithmsController(DomainAlgorithmsController algorithmsController, IMetricFactory metricFactory)
+        public AlgorithmsController(AlgorithmsHandler algorithmsHandler, IMetricFactory metricFactory)
         {
-            this.algorithmsController = algorithmsController;
+            this.algorithmsHandler = algorithmsHandler;
             this.metricFactory = metricFactory;
         }
         
@@ -31,7 +31,7 @@ namespace PathFinder.Api.Controllers
             var metric = metricFactory.GetMetric(req.MetricName);
             if (metric == null)
                 return BadRequest($"metric {req.MetricName} was not found");
-            var algorithmResult = algorithmsController.ExecuteAlgorithm(req.Name, 
+            var algorithmResult = algorithmsHandler.ExecuteAlgorithm(req.Name, 
                 new Grid(req.Grid),
                 new Parameters(start,
                     goal,

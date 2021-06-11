@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
@@ -12,7 +11,5 @@ namespace PathFinder.Domain.Models.Algorithms
         public IRender Render { get; }
         string Name { get; }
         IEnumerable<IState> Run(IGrid grid, IParameters parameters);
-
-        public Type GetParametersType() => typeof(Parameters.Parameters);
     }
 }

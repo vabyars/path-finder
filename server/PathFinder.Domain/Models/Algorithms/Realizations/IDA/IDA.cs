@@ -6,7 +6,6 @@ using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
-using PathFinder.Infrastructure;
 using PathFinder.Infrastructure.PriorityQueue.Realizations;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA

@@ -31,8 +31,6 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
             this.queueProvider = queueProvider;
         }
 
-        public Type GetParametersType() => typeof(JpsParameters);
-
         private void Init(IParameters parameters)
         {
             start = parameters.Start;
