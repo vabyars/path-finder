@@ -22,9 +22,8 @@ namespace PathFinder.Domain.Models.Algorithms.AlgorithmsController
 
         public IAlgorithmReport ExecuteAlgorithm(string name, IGrid grid, IParameters parameters)
         {
-            var algorithm = algorithms.FirstOrDefault(x => x.Name == name);
-            if (algorithm == null)
-                throw new ArgumentException($"algorithm not found: {name}");
+            var algorithm = algorithms.FirstOrDefault(x => x.Name == name)
+                ?? throw new ArgumentException($"algorithm not found: {name}");
             return algorithmsExecutor.Execute(algorithm, grid, parameters);
         }
     }

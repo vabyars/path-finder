@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System.ComponentModel.Design;
+using Autofac;
+using Autofac.Builder;
 using Autofac.Core;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
@@ -13,25 +15,28 @@ namespace PathFinder.Api
     {
         /// <summary>
         /// Registers algorithms and renders to builder.
-        /// To add algorithm with custom render use "WithParameter" method.
+        /// To add algorithm with custom render use "RegisterAlgorithmWithRender" method.
         /// The default is AStarRender
         /// </summary>
         /// <param name="builder"></param>
         public static void RegisterAlgorithmsAndRenders(this ContainerBuilder builder)
         {
-            builder.RegisterType<AStarRender>().Named<IRender>("AStar");
-            builder.RegisterType<JpsRender>().Named<IRender>("JPS");
-            
             builder.RegisterType<AStarRender>().As<IRender>();
 
-            builder.RegisterType<AStarAlgorithm>().As<IAlgorithm>()
-                .WithParameter(ResolvedParameter.ForNamed<IRender>("AStar"));
+            builder.RegisterAlgorithmWithRender<AStarAlgorithm, AStarRender>();
+            builder.RegisterAlgorithmWithRender<JpsDiagonal, JpsRender>();
 
-            builder.RegisterType<JpsDiagonal>().As<IAlgorithm>()
-                .WithParameter(ResolvedParameter.ForNamed<IRender>("JPS"));
-            
             builder.RegisterType<LeeAlgorithm>().As<IAlgorithm>();
             builder.RegisterType<IDA>().As<IAlgorithm>();
+        }
+
+        private static void RegisterAlgorithmWithRender<TAlgorithm, TRender>(this ContainerBuilder builder)
+            where TAlgorithm : IAlgorithm
+            where TRender : IRender
+        {
+            builder.RegisterType<TRender>().Named<IRender>(nameof(TRender));
+            builder.RegisterType<TAlgorithm>().As<IAlgorithm>()
+                .WithParameter(ResolvedParameter.ForNamed<IRender>(nameof(TRender)));
         }
     }
 }
