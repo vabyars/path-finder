@@ -10,6 +10,6 @@ namespace PathFinder.Domain.Models.Algorithms
     {
         public IRender Render { get; }
         string Name { get; }
-        IEnumerable<IState> Run(IGrid grid, IParameters parameters);
+        IAsyncEnumerable<IState> Run(IGrid grid, IParameters parameters);
     }
 }

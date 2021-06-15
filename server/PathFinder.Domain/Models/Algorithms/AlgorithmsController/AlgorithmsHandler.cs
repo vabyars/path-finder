@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.Parameters;
@@ -20,12 +21,12 @@ namespace PathFinder.Domain.Models.Algorithms.AlgorithmsController
 
         public IEnumerable<string> GetAvailableAlgorithmNames() => algorithms.Select(x => x.Name);
 
-        public IAlgorithmReport ExecuteAlgorithm(string name, IGrid grid, IParameters parameters)
+        public async Task<IAlgorithmReport> ExecuteAlgorithm(string name, IGrid grid, IParameters parameters)
         {
             var algorithm = algorithms.FirstOrDefault(x => x.Name == name);
             if (algorithm == null)
                 throw new ArgumentException($"algorithm not found: {name}");
-            return algorithmsExecutor.Execute(algorithm, grid, parameters);
+            return await algorithmsExecutor.Execute(algorithm, grid, parameters);
         }
     }
 }
