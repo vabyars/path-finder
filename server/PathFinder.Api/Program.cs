@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
@@ -12,6 +13,15 @@ namespace PathFinder.Api
 
         public static IWebHostBuilder  CreateHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls($"http://+{HostPort}")
                 .UseStartup<Startup>();
+        
+        private static bool IsDevelopment =>
+            Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        
+        public static string HostPort =>
+            IsDevelopment
+                ? "5000"
+                : Environment.GetEnvironmentVariable("PORT");
     }
 }

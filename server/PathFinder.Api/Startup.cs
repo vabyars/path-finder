@@ -19,6 +19,7 @@ namespace PathFinder.Api
         }
 
         public IConfiguration Configuration { get; }
+        private bool IsDevelopment { get; set; }
         public IContainer ApplicationContainer { get; private set; }
         private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -29,7 +30,7 @@ namespace PathFinder.Api
 
             services.RegisterConfigurations(Configuration);
             services.RegisterDependencies();
-            services.RegisterDatabase(Configuration.GetConnectionString("DefaultConnection"));
+            services.RegisterDatabase(GetHerokuConnectionString());
             
             services.AddSwaggerGen(c =>
             {
@@ -57,8 +58,24 @@ namespace PathFinder.Api
             #endregion
         }
 
+        private string GetHerokuConnectionString()
+        {
+            var connectionUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+            var databaseUri = new Uri(connectionUrl);
+            var db = databaseUri.LocalPath.TrimStart('/');
+            var userInfo = databaseUri.UserInfo.Split(':', StringSplitOptions.RemoveEmptyEntries);
+            return $"User ID={userInfo[0]};Password={userInfo[1]};Host={databaseUri.Host};Port={databaseUri.Port};Database={db};Pooling=true;SSL Mode=Require;Trust Server Certificate=True;";
+        }
+        
+        public string DatabaseConnectionString =>
+            IsDevelopment
+                ? Configuration.GetConnectionString("DefaultConnection")
+                : GetHerokuConnectionString();
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            IsDevelopment = env.IsDevelopment();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -85,5 +102,7 @@ namespace PathFinder.Api
                     spa.UseReactDevelopmentServer("start");
             });
         }
+
+       
     }
 }
