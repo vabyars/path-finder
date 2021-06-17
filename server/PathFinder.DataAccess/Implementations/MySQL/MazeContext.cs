@@ -21,7 +21,6 @@ namespace PathFinder.DataAccess1.Implementations.MySQL
                 .Entity<Grid>()
                 .Property(e => e.Maze)
                 .HasConversion(intValueConverter);
-
         }
     }
 }

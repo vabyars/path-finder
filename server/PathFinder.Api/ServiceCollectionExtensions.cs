@@ -64,7 +64,7 @@ namespace PathFinder.Api
         public static void RegisterDatabase(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<MazeContext>(opt =>
-                opt.UseSqlServer(connectionString));
+                opt.UseNpgsql(connectionString));
         }
     }
 }
