@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PathFinder.Api.Models;
 using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Implementations.MySQL;
+using PathFinder.DataAccess1.Implementations.Database;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor;
 using PathFinder.Domain.Models.GridFolder;
@@ -24,7 +24,7 @@ namespace PathFinder.Api
             services.AddScoped<IPriorityQueue<Point>, HeapPriorityQueue<Point>>();
             services.AddScoped<IPriorityQueueProvider<Point>, PriorityQueueProvider<Point>>();
             
-            services.AddScoped<IMazeRepository, MySqlRepository>();
+            services.AddScoped<IMazeRepository, DatabaseRepository>();
             services.AddScoped<IMazeService, MazeService>();
             services.AddSingleton<IMetricFactory, MetricFactory>();
 
