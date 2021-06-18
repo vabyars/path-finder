@@ -19,7 +19,7 @@ namespace PathFinder.Test.AlgorithmsTests
             pq.Setup(x => x.Create())
                 .Returns(() => new HeapPriorityQueue<Point>());
             new GridsTestController() 
-                .Run(new AStarAlgorithm(new Mock<IRender>().Object, pq.Object), true, false, MetricName.Euclidean);
+                .Run(new AStarAlgorithm(new Mock<IRender>().Object, pq.Object), true, false, Metric.Euclidean);
         }
     }
 }

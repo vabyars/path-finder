@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Domain.Models.Parameters
 {
@@ -8,6 +9,6 @@ namespace PathFinder.Domain.Models.Parameters
         Point Start { get; }
         Point End { get; }
         bool AllowDiagonal { get; }
-        Func<Point, Point, double> Metric { get; }
+        Metric Metric { get; }
     }
 }

@@ -14,13 +14,12 @@ namespace PathFinder.Api.Models
         private readonly IEnumerable<string> metricsNames;
         private readonly IMazeService mazeService;
 
-        public SettingsProvider(IMazeService mazeService, AlgorithmsHandler algorithmsHandler, IMetricFactory metricFactory,
-            GridConfigurationParameters mazeParameters)
+        public SettingsProvider(IMazeService mazeService, AlgorithmsHandler algorithmsHandler, GridConfigurationParameters mazeParameters)
         {
             width = mazeParameters.Width;
             height = mazeParameters.Height;
             algorithms = algorithmsHandler.GetAvailableAlgorithmNames();
-            metricsNames = metricFactory.GetAvailableMetricNames();
+            metricsNames = MetricExtensions.AvailableNames();
             this.mazeService = mazeService;
         }
 

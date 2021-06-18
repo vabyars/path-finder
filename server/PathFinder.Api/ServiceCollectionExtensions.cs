@@ -10,7 +10,6 @@ using PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.MazeCreation;
 using PathFinder.Domain.Models.MazeCreation.MazeGenerators;
-using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Services.MazeService;
 using PathFinder.Infrastructure.PriorityQueue;
 using PathFinder.Infrastructure.PriorityQueue.Realizations;
@@ -26,7 +25,6 @@ namespace PathFinder.Api
             
             services.AddScoped<IMazeRepository, DatabaseRepository>();
             services.AddScoped<IMazeService, MazeService>();
-            services.AddSingleton<IMetricFactory, MetricFactory>();
 
             services.AddScoped<IMazeGenerator, Kruskal>();
 

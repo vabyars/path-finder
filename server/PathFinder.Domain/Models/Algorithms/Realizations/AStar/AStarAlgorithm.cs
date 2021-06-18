@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using PathFinder.Domain.Models.GridFolder;
+using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
@@ -70,7 +71,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
                     {
                         cost[neighbor] = newCost;
                         cameFrom[neighbor] = current;
-                        queue.UpdateOrAdd(neighbor, newCost + parameters.Metric(neighbor, goal));
+                        queue.UpdateOrAdd(neighbor, newCost + parameters.Metric.Call(neighbor, goal));
                         yield return new CandidateToPrepareState
                         {
                             Candidate = neighbor
