@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using PathFinder.Api.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
@@ -27,16 +28,20 @@ namespace PathFinder.Api.Controllers
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
             var metric = req.Metric;
-            var algorithmResult = algorithmsHandler.ExecuteAlgorithm(req.Name, 
-                new Grid(req.Grid),
-                new Parameters(start,
-                    goal,
-                    req.AllowDiagonal,
-                    metric));
-            
-            if (algorithmResult == null)
+            try
+            {
+                var algorithmResult = algorithmsHandler.ExecuteAlgorithm(req.Name, 
+                    new Grid(req.Grid),
+                    new Parameters(start,
+                        goal,
+                        req.AllowDiagonal,
+                        metric));
+                return Ok(algorithmResult);
+            }
+            catch (Exception)
+            {
                 return BadRequest($"algorithm {req.Name} was not found");
-            return Ok(algorithmResult);
+            }
         }
     }
 }
