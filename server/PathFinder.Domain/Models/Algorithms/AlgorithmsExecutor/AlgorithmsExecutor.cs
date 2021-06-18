@@ -6,11 +6,11 @@ namespace PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor
 {
     public class AlgorithmsExecutor : IAlgorithmsExecutor
     {
-        public async Task<IAlgorithmReport> Execute(IAlgorithm algorithm, IGrid grid, IParameters parameters)
+        public IAlgorithmReport Execute(IAlgorithm algorithm, IGrid grid, IParameters parameters)
         {
             var render = algorithm.Render;
 
-            await foreach (var state in algorithm.Run(grid, parameters))
+            foreach (var state in algorithm.Run(grid, parameters))
             {
                 render.RenderState(state);
             }

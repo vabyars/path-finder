@@ -21,12 +21,12 @@ namespace PathFinder.Domain.Models.Algorithms.AlgorithmsController
 
         public IEnumerable<string> GetAvailableAlgorithmNames() => algorithms.Select(x => x.Name);
 
-        public async Task<IAlgorithmReport> ExecuteAlgorithm(string name, IGrid grid, IParameters parameters)
+        public IAlgorithmReport ExecuteAlgorithm(string name, IGrid grid, IParameters parameters)
         {
             var algorithm = algorithms.FirstOrDefault(x => x.Name == name);
             if (algorithm == null)
                 throw new ArgumentException($"algorithm not found: {name}");
-            return await algorithmsExecutor.Execute(algorithm, grid, parameters);
+            return algorithmsExecutor.Execute(algorithm, grid, parameters);
         }
     }
 }

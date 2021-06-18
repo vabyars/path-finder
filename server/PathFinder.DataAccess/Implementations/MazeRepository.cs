@@ -28,5 +28,10 @@ namespace PathFinder.DataAccess1.Implementations
         {
             return await Task.Run(() => grids[name]);
         }
+        
+        public async Task<IEnumerable<string>> GetMazesNamesAsync()
+        {
+            return await Task.Run(() => grids.Keys);
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         }
         
 
-        public override IAsyncEnumerable<IState> Run(IGrid grid, IParameters parameters)
+        public override IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
             Init(parameters);
             queue.Add(start, 0);

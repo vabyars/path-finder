@@ -48,6 +48,20 @@ namespace PathFinder.Domain.Services.MazeService
                 .Concat(repository.GetMazesNames());
         }
         
+        public async Task AddAsync(string name, int[,] grid)
+        {
+            if (await MazeExistsAsync(name))
+                throw new ArgumentException($"maze with name \"{name}\" has already exists");
+            await repository.AddAsync(name, grid);
+        }
+        
+        private async Task<bool> MazeExistsAsync(string name)
+        {
+            var existsInRepository = await repository.TryGetValueAsync(name, _ => { });
+            var existsInFactory = mazeCreationFactory.GetAvailableNames().Contains(name);
+            return existsInRepository || existsInFactory;
+        }
+        
         public async Task<int[,]> GetAsync(string name)
         {
             int[,] maze = { };
@@ -57,6 +71,12 @@ namespace PathFinder.Domain.Services.MazeService
             if (generatedMaze != null)
                 return generatedMaze;
             throw new ArgumentException($"maze not found {name}");
+        }
+        
+        public async Task<IEnumerable<string>> GetAvailableNamesAsync()
+        {
+            return mazeCreationFactory.GetAvailableNames()
+                .Concat(await repository.GetMazesNamesAsync());
         }
     }
 }

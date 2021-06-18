@@ -25,14 +25,14 @@ namespace PathFinder.Api.Controllers
         
         [HttpPost]
         [Route("execute")]
-        public async Task<ActionResult<IAlgorithmReport>> Execute(ExecuteAlgorithmRequest req)
+        public ActionResult<IAlgorithmReport> Execute(ExecuteAlgorithmRequest req)
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
             var metric = metricFactory.GetMetric(req.MetricName);
             if (metric == null)
                 return BadRequest($"metric {req.MetricName} was not found");
-            var algorithmResult = await algorithmsHandler.ExecuteAlgorithm(req.Name, 
+            var algorithmResult = algorithmsHandler.ExecuteAlgorithm(req.Name, 
                 new Grid(req.Grid),
                 new Parameters(start,
                     goal,

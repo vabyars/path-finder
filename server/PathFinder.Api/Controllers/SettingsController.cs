@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PathFinder.Api.Models;
 
@@ -15,9 +16,10 @@ namespace PathFinder.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<string> GetSettings()
+        public async Task<ActionResult<string>> GetSettings()
         {
-            return JsonConvert.SerializeObject(settingsProvider.GetSettings(), Formatting.Indented);
+            var settings = await settingsProvider.GetSettings();
+            return JsonConvert.SerializeObject(settings, Formatting.Indented);
         }
     }
 }

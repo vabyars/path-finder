@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.Metrics;
@@ -24,11 +25,11 @@ namespace PathFinder.Api.Models
             this.mazeService = mazeService;
         }
 
-        public object GetSettings()
+        public async Task<object> GetSettings()
         {
             return new
             {
-                mazes = mazeService.GetAvailableNames(),
+                mazes = await mazeService.GetAvailableNamesAsync(),
                 algorithms,
                 width,
                 height,

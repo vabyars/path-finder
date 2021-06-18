@@ -8,8 +8,8 @@ namespace PathFinder.DataAccess1
         IEnumerable<string> GetMazesNames();
         void Add(string name, int[,] grid);
         int[,] Get(string name);
-        
         Task AddAsync(string name, int[,] grid);
         Task<int[,]> GetAsync(string name);
+        Task<IEnumerable<string>> GetMazesNamesAsync();
     }
 }

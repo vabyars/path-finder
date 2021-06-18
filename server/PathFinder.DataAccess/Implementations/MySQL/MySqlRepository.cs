@@ -51,5 +51,10 @@ namespace PathFinder.DataAccess1.Implementations.MySQL
             var maze = await context.Grids.FirstOrDefaultAsync(x => x.Name == name);
             return maze?.Maze;
         }
+        
+        public async Task<IEnumerable<string>> GetMazesNamesAsync()
+        {
+            return await context.Grids.Select(x => x.Name).ToListAsync();
+        }
     }
 }

@@ -6,6 +6,6 @@ namespace PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor
 {
     public interface IAlgorithmsExecutor
     {
-        Task<IAlgorithmReport> Execute(IAlgorithm name, IGrid grid, IParameters parameters);
+        IAlgorithmReport Execute(IAlgorithm name, IGrid grid, IParameters parameters);
     }
 }
