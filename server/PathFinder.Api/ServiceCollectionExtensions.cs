@@ -29,10 +29,10 @@ namespace PathFinder.Api
             services.AddScoped<IMazeGenerator, Kruskal>();
 
             services.AddScoped<SettingsProvider>();
-            services.AddSingleton<AlgorithmsHandler>();
-            services.AddSingleton<IAlgorithmsExecutor, AlgorithmsExecutor>();
+            services.AddScoped<AlgorithmsHandler>();
+            services.AddScoped<IAlgorithmsExecutor, AlgorithmsExecutor>();
 
-            services.AddSingleton<IMazeCreationFactory, MazeCreationFactory>();
+            services.AddScoped<IMazeCreationFactory, MazeCreationFactory>();
         }
 
         public static void RegisterConfigurations(this IServiceCollection services, IConfiguration configuration)
