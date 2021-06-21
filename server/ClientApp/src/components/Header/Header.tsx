@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button} from '@skbkontur/react-ui'
+import {Button, Input, Modal} from '@skbkontur/react-ui'
 import './Header.css'
 import Select from 'react-select';
 import {CellData, HeaderProps, SelectData} from "../Extentions/Interfaces";
@@ -16,6 +16,8 @@ function Header(props: HeaderProps){
     const [currentAlgorithm, setAlgorithm] = useState<SelectData>()
     const [mazes, setMazes] = useState<SelectData[]>([])
     const [currentMaze, setMaze] = useState<SelectData>()
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [name, setName] = useState("")
 
   async function loadMazesAndAlgorithms(){
     let data = await( await fetch("/settings")).json()
@@ -52,6 +54,7 @@ function Header(props: HeaderProps){
               fetch(`/maze/${value.label}`)
                   .then((res) => res.json()
                       .then((data: number[][]) => {
+                        console.log(data)
                         let field: CellData[][] = []
                         for (let i = 0; i < data.length; i++) {
                           for (let j = 0; j < data[i].length; j++) {
@@ -60,7 +63,7 @@ function Header(props: HeaderProps){
                             field[i][j] = {
                               value: data[i][j],
                               state: data[i][j] === -1 ? 'wall' : 'empty',
-                              mainColor: "black"
+                              mainColor: data[i][j] === -1 ? "black" : "white"
                             }
                           }
                         }
@@ -70,11 +73,31 @@ function Header(props: HeaderProps){
                   .catch((e) => console.log(e))
             }} />}
 
-          <Button className="flex-elem" onClick={() => props.saveMaze( 'asdf')}> Save maze</Button>
+          <Button className="flex-elem" onClick={() => setIsModalOpen(true)}> Save maze</Button>
+          {isModalOpen && MyModal(props.saveMaze,() => setIsModalOpen(false), setName, () => name)}
         </div>        
     )
 }
 
+
+function MyModal(saveMaze: (name: string) => void, onClose: () => void, setName: any, name: () => string ){
+
+  return (
+      <Modal onClose={() => onClose()} >
+        <Modal.Header>User has been saved</Modal.Header>
+        <Modal.Body>
+          <label>Введите название</label>
+          <Input onChange={(event) =>  setName(event.target.value)}/>
+
+        </Modal.Body>
+        <Modal.Footer>
+          <Button use="pay" size="medium" onClick={() => {
+            saveMaze(name())
+          }}>Save</Button>
+        </Modal.Footer>
+      </Modal>
+  );
+}
 
 
 export default Header

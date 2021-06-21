@@ -32,7 +32,7 @@ namespace PathFinder.Domain.Models.MazeCreation.MazeGenerators
                 if (grid.InBounds(neighbor) && ValuesNotEqual(wall, neighbor))
                 {
                     ChangeNeighborValue(wall, neighbor);
-                    mazeGrid[wall.X, wall.Y] = grid[wall.X, wall.Y];
+                    mazeGrid[wall.X, wall.Y] = 1;
                 }
             }
             return mazeGrid;

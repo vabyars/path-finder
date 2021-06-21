@@ -19,7 +19,7 @@ function App() {
 
   function executeAlgorithm(name: string) {
     let a =  parseCellsDataToNumbers(field.field)
-    console.log(a.length)
+    console.log(a)
     fetch("/algorithm/execute", {
       method: "POST",
       headers: {
@@ -82,7 +82,6 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
   for(let i = 0; i < states.length - 1; i++){
     let pointData = states[i]
     let c = `rgb(${pointData.color})`
-    console.log(c)
     let indexes = getCellIndex(pointData.renderedPoint)
     let newField = field.field.slice()
     if (UNCLICKABLE_CELL_TYPES.includes(newField[indexes.x][indexes.y].state))
@@ -116,16 +115,29 @@ function getFieldWithoutExecuteVisualize(field: Field) {
 
 
 function saveMaze(field: CellData[][], name: string) {
-  fetch("/maze/add", {
-    method: "POST",
+  fetch('/maze', {
+    method: 'PUT', // Method itself
     headers: {
-      'Content-Type': 'application/json',
+      'Content-type': 'application/json; charset=UTF-8' // Indicates the content
     },
     body: JSON.stringify({
       name: name,
       grid: parseCellsDataToNumbers(field)
-    })
-  })
+    }) // We send data in JSON format
+  }).catch((e) => console.log(e))
+
+
+
+  // fetch("/maze", {
+  //   method: "PUT",
+  //   headers: {
+  //     'Content-Type': 'application/json-patch+json',
+  //   },
+  //   body: JSON.stringify({
+  //     name: name,
+  //     grid: parseCellsDataToNumbers(field)
+  //   })
+  // })
 }
 
 function getUpdatedField(x: number, y: number, data: CellData, field: Field) {

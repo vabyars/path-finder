@@ -77,21 +77,25 @@ function Grid(props: GridProps) {
 function getNewCellDataOnClick(cellData: CellData, start: boolean, end: boolean) {
     if (start)
         return {
+            mainColor: 'red',
             state: 'start',
             value: 1
         }
     if (end)
         return {
+            mainColor: '#19c43c',
             state: 'end',
             value: 1
         }
     if (cellData.state === 'wall')
         return {
+            mainColor: "white",
             state: 'empty',
             value: 1
         }
 
     return {
+        mainColor: "black",
         state: 'wall',
         value: -1
     }
