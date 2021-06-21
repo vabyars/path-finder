@@ -9,7 +9,7 @@ namespace PathFinder.Api.Models
         public string Goal { get; set; }
         public bool AllowDiagonal { get; set; }
 
-        public MetricName MetricName { get; set; } = MetricName.Euclidean;
+        public Metric Metric { get; set; } = Metric.Euclidean;
         public int[,] Grid { get; set; }
     }
 }

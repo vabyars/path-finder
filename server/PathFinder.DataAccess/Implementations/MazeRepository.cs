@@ -13,7 +13,7 @@ namespace PathFinder.DataAccess1.Implementations
 
         public int[,] Get(string name)
         {
-            return grids[name];
+            return grids.TryGetValue(name, out var res) ? res : null;
         }
 
         public IEnumerable<string> GetMazesNames() => grids.Keys;

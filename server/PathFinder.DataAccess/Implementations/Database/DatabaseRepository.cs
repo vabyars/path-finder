@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using PathFinder.DataAccess1.Entities;
 
-namespace PathFinder.DataAccess1.Implementations.MySQL
+namespace PathFinder.DataAccess1.Implementations.Database
 {
-    public class MySqlRepository : IMazeRepository
+    public class DatabaseRepository : IMazeRepository
     {
         private readonly MazeContext context;
 
-        public MySqlRepository(MazeContext context)
+        public DatabaseRepository(MazeContext context)
         {
             this.context = context;
         }

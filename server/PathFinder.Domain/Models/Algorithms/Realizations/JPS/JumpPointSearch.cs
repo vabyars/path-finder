@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Models.GridFolder;
+using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
@@ -21,7 +22,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         private Point goal;
         private HashSet<Point> goalNeighbours = new();
         private Point start;
-        private Func<Point, Point, double> metric;
+        private Metric metric;
         private IPriorityQueue<Point> priorityQueue;
         private HashSet<Point> closed = new();
         public override string Name => "JPS";
@@ -86,11 +87,11 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
 
                 var distance = distanceToStart.ContainsKey(point)
                     ? distanceToStart[point]
-                    : 0 + metric(jumpPoint, point);
+                    : 0 + metric.Call(jumpPoint, point);
 
                 if (priorityQueue.TryGetValue(jumpPoint, out _) && !(distance < distanceToStart[jumpPoint])) continue;
                 distanceToStart[jumpPoint] = distance;
-                var distanceToStartAndEstimateToEnd = distanceToStart[jumpPoint] + metric(jumpPoint, goal);
+                var distanceToStartAndEstimateToEnd = distanceToStart[jumpPoint] + metric.Call(jumpPoint, goal);
                 parentMap[jumpPoint] = point;
                 jumpPoints.Add(jumpPoint);
                 if (!priorityQueue.TryGetValue(jumpPoint, out _))

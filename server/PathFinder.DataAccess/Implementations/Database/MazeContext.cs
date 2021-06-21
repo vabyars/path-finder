@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PathFinder.DataAccess1.Entities;
 
-namespace PathFinder.DataAccess1.Implementations.MySQL
+namespace PathFinder.DataAccess1.Implementations.Database
 {
     public class MazeContext : DbContext
     {

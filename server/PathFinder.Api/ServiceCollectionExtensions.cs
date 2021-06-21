@@ -4,13 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PathFinder.Api.Models;
 using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Implementations.MySQL;
+using PathFinder.DataAccess1.Implementations.Database;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.MazeCreation;
 using PathFinder.Domain.Models.MazeCreation.MazeGenerators;
-using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Services.MazeService;
 using PathFinder.Infrastructure.PriorityQueue;
 using PathFinder.Infrastructure.PriorityQueue.Realizations;
@@ -24,17 +23,16 @@ namespace PathFinder.Api
             services.AddScoped<IPriorityQueue<Point>, HeapPriorityQueue<Point>>();
             services.AddScoped<IPriorityQueueProvider<Point>, PriorityQueueProvider<Point>>();
             
-            services.AddScoped<IMazeRepository, MySqlRepository>();
+            services.AddScoped<IMazeRepository, DatabaseRepository>();
             services.AddScoped<IMazeService, MazeService>();
-            services.AddSingleton<IMetricFactory, MetricFactory>();
 
             services.AddScoped<IMazeGenerator, Kruskal>();
 
             services.AddScoped<SettingsProvider>();
-            services.AddSingleton<AlgorithmsHandler>();
-            services.AddSingleton<IAlgorithmsExecutor, AlgorithmsExecutor>();
+            services.AddScoped<AlgorithmsHandler>();
+            services.AddScoped<IAlgorithmsExecutor, AlgorithmsExecutor>();
 
-            services.AddSingleton<IMazeCreationFactory, MazeCreationFactory>();
+            services.AddScoped<IMazeCreationFactory, MazeCreationFactory>();
         }
 
         public static void RegisterConfigurations(this IServiceCollection services, IConfiguration configuration)

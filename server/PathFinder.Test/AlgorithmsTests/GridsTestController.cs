@@ -24,9 +24,8 @@ namespace PathFinder.Test.AlgorithmsTests
         };
         
         public void Run(IAlgorithm algorithm,
-            bool findsMinPath, bool worksOnlyWithDiagonal, MetricName metricName)
+            bool findsMinPath, bool worksOnlyWithDiagonal, Metric metric)
         {
-            var metric = new MetricFactory().GetMetric(metricName);
             foreach (var testGrid in testGrids)
             {
                 if (testGrid is IHasPath path && !worksOnlyWithDiagonal)
