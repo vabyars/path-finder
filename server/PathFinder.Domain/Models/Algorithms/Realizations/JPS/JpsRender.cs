@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Models.Renders;
@@ -33,7 +34,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         protected override RenderedState RenderState(CurrentPointState state)
         {
             pointsPrepared++;
-            currentPointRedValue += 10;
+            currentPointRedValue = Math.Min(currentPointRedValue + 10, 255);
             return new RenderedPreparedPointState
             {
                 RenderedPoint = state.PreparedPoint,
@@ -44,7 +45,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
 
         protected override RenderedState RenderState(CandidateToPrepareState state)
         {
-            candidatePointBlueValue += 5;
+            candidatePointBlueValue = Math.Min(candidatePointBlueValue + 5, 255);
             return new RenderedCandidateState
             {
                 RenderedPoint = state.Candidate,

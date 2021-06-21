@@ -22,13 +22,15 @@ function Grid(props: GridProps) {
             setIsEndSelect(true)
     }
 
-    for (let i = 0; i < props.rows; i++) {
+
+    for (let i = 0; i < props.field.length; i++) {
         let temp = []
-        for (let j = 0; j < props.columns; j++) {
+        for (let j = 0; j < props.field[i].length; j++) {
             let boxId = `${i}_${j}`;
             temp.push(
                 <Cell
                     key={boxId}
+                    color={props.field[i][j].mainColor}
                     className={getCellClass(props.field[i][j].state)}
                     onMouseDown={() => {
                         setIsMouseDown(true)

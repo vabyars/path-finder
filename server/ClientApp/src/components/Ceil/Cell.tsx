@@ -10,7 +10,7 @@ function Cell(props: CeilProps){
     return (
         <div 
             className={props.className }
-            style={{width: 20, height: 20}}
+            style={{width: 20, height: 20, backgroundColor: props.color}}
             onMouseDown={props.onMouseDown}
             onMouseOver={props.onMouseOver}
             onMouseLeave={props.onMouseLeave}

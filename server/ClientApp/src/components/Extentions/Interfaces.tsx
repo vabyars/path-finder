@@ -3,6 +3,7 @@ import {CellState} from "./CellState";
 export interface CellData {
   state: CellState
   value: number,
+  mainColor: string
 }
 
 export interface GridProps {
@@ -22,11 +23,27 @@ export interface CeilProps {
   onMouseDown: any
   onMouseOver: any
   onMouseLeave: any
+  color: string
 }
 
 export interface Field {
   start: CellIndex
   end: CellIndex
   field: CellData[][]
+}
 
+export interface HeaderProps {
+  initField:(rows: number, columns: number) =>  void,
+  clearField: () => void,
+  executeAlgorithm: (name: string) => void,
+  clearPath: () => void,
+  setPrebuildField: (field: CellData[][]) => void
+  saveMaze: (name: string) => void
+}
+
+
+
+export interface SelectData{
+  label: string,
+  value: number
 }
