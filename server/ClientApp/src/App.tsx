@@ -40,7 +40,7 @@ function App() {
               setField(getFieldWithoutExecuteVisualize(field))
               let visitedPromises = getVisitedPrintPromises(data.renderedStates, field, setField)
               Promise.all(visitedPromises).then((res) => {
-                // printPath(data.resultPath.slice(), field, setField)
+                printPath(data.result.path, field, setField, data.result.color)
               })
             }))
         .catch((e) => console.log(e))
@@ -63,13 +63,13 @@ function App() {
 }
 
 
-function printPath(pathData: string[], field: Field, setField: (f: Field) => void) {
+function printPath(pathData: string[], field: Field, setField: (f: Field) => void, color: string) {
   let indexes = getCellsIndexes(pathData.splice(1, pathData.length - 2))
   let newField = field.field.slice()
   for (let i = 0; i < indexes.length; i++) {
     let index = indexes[i]
     setTimeout(() =>{
-      newField[index.x][index.y] = {...newField[index.x][index.y], state: 'path'}
+      newField[index.x][index.y] = {...newField[index.x][index.y], state: 'path', mainColor: color}
       setField({
         ...field, field: newField
       })}, 1 * i)
@@ -81,7 +81,6 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
   let visitedPromises = []
   for(let i = 0; i < states.length - 1; i++){
     let pointData = states[i]
-    let c = `rgb(${pointData.color})`
     let indexes = getCellIndex(pointData.renderedPoint)
     let newField = field.field.slice()
     if (UNCLICKABLE_CELL_TYPES.includes(newField[indexes.x][indexes.y].state))
@@ -90,7 +89,7 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
     visitedPromises.push( new Promise((resolve, reject) => setTimeout(() =>{
       newField[indexes.x][indexes.y] = {...newField[indexes.x][indexes.y],
         state: 'visited',
-        mainColor: c }
+        mainColor: pointData.color }
       resolve(setField({
         ...field, field: newField
       }))}, 60 * i)))
