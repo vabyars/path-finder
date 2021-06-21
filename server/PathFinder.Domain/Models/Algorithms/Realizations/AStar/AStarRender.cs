@@ -11,7 +11,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
     public class AStarRender : AbstractRender
     {
         private readonly List<RenderedState> states = new ();
-        private static readonly Color DefaultCurrentPointColor = Color.Aqua;
+        private static readonly string DefaultCurrentPointColor = Color.Blue.ToHex();
         
         private int index;
         private static readonly List<Color> ColorsToNeighbors = new()
@@ -28,13 +28,13 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         }
 
         public override IAlgorithmReport GetReport()
-            => new AStarAlgorithmReport {RenderedStates = states};
+            => new AlgorithmReport(states);
 
         protected override RenderedState RenderState(ResultPathState state)
         {
             return new RenderedPathState
             {
-                Color = Color.Yellow,
+                Color = Color.Blue.ToHex(),
                 Path = state.Path
             };
         }
@@ -45,7 +45,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
             return new RenderedPreparedPointState
             {
                 Color = DefaultCurrentPointColor,
-                SecondColor = Color.Bisque,
+                SecondColor = Color.Yellow.ToHex(),
                 RenderedPoint = state.PreparedPoint
             };
         }
@@ -54,10 +54,16 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         {
             return new RenderedCandidateState
             {
-                Color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count],
+                Color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count].ToHex(),
                 RenderedPoint = state.Candidate,
-                SecondColor = Color.Purple
+                SecondColor = Color.Blue.ToHex()
             };
         }
+    }
+    
+    public static class ColorExtensions
+    {
+        public static string ToHex(this Color c) 
+            => "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
     }
 }
