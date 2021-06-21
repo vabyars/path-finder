@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.CandidateToPrepare;
@@ -25,10 +26,15 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
             states.Add(renderedState);
             return renderedState;
         }
+        
         protected override RenderedState RenderState(ResultPathState state)
         {
             pathLength = state.Path.Count();
-            return new RenderedPathState {Color = Color.Pink, Path = state.Path};
+            return new RenderedPathState
+            {
+                Color = Color.Pink.ToHex(), 
+                Path = state.Path
+            };
         }
 
         protected override RenderedState RenderState(CurrentPointState state)
@@ -38,30 +44,23 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
             return new RenderedPreparedPointState
             {
                 RenderedPoint = state.PreparedPoint,
-                Color = Color.FromArgb(currentPointRedValue, 0, 255),
-                SecondColor = Color.Blue
+                Color = Color.FromArgb(currentPointRedValue, 0, 255).ToHex(),
+                SecondColor = Color.Blue.ToHex()
             };
         }
-
+        
         protected override RenderedState RenderState(CandidateToPrepareState state)
         {
             candidatePointBlueValue = Math.Min(candidatePointBlueValue + 5, 255);
             return new RenderedCandidateState
             {
                 RenderedPoint = state.Candidate,
-                Color = Color.FromArgb(0, 255, candidatePointBlueValue),
-                SecondColor = Color.Chocolate
+                Color = Color.FromArgb(0, 255, candidatePointBlueValue).ToHex(),
+                SecondColor = Color.Chocolate.ToHex()
             };
         }
 
         public override IAlgorithmReport GetReport()
-        {
-            return new JpsReport
-            {
-                RenderedStates = states,
-                PathLength = pathLength,
-                PointsPrepared = pointsPrepared
-            };
-        }
+            => new AlgorithmReport(states);
     }
 }
