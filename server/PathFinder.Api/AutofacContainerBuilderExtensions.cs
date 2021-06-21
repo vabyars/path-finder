@@ -21,22 +21,31 @@ namespace PathFinder.Api
         /// <param name="builder"></param>
         public static void RegisterAlgorithmsAndRenders(this ContainerBuilder builder)
         {
-            builder.RegisterType<AStarRender>().As<IRender>();
+            builder.RegisterScoped<AStarRender, IRender>();
 
             builder.RegisterAlgorithmWithRender<AStarAlgorithm, AStarRender>();
             builder.RegisterAlgorithmWithRender<JpsDiagonal, JpsRender>();
 
-            builder.RegisterType<LeeAlgorithm>().As<IAlgorithm>();
-            builder.RegisterType<IDA>().As<IAlgorithm>();
+            builder.RegisterScoped<LeeAlgorithm, IAlgorithm>();
+            builder.RegisterScoped<IDA, IAlgorithm>();
         }
 
         private static void RegisterAlgorithmWithRender<TAlgorithm, TRender>(this ContainerBuilder builder)
             where TAlgorithm : IAlgorithm
             where TRender : IRender
         {
-            builder.RegisterType<TRender>().Named<IRender>(nameof(TRender));
+            builder.RegisterType<TRender>().Named<IRender>(nameof(TRender))
+                .InstancePerLifetimeScope();
             builder.RegisterType<TAlgorithm>().As<IAlgorithm>()
-                .WithParameter(ResolvedParameter.ForNamed<IRender>(nameof(TRender)));
+                .WithParameter(ResolvedParameter.ForNamed<IRender>(nameof(TRender)))
+                .InstancePerLifetimeScope();
+        }
+        
+        private static void RegisterScoped<TFrom, TTo>(this ContainerBuilder builder)
+        {
+            builder.RegisterType<TFrom>()
+                .As<TTo>()
+                .InstancePerLifetimeScope();
         }
     }
 }

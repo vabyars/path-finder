@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using PathFinder.Api.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
@@ -14,12 +15,10 @@ namespace PathFinder.Api.Controllers
     public class AlgorithmsController : Controller
     {
         private readonly AlgorithmsHandler algorithmsHandler;
-        private readonly IMetricFactory metricFactory;
 
-        public AlgorithmsController(AlgorithmsHandler algorithmsHandler, IMetricFactory metricFactory)
+        public AlgorithmsController(AlgorithmsHandler algorithmsHandler)
         {
             this.algorithmsHandler = algorithmsHandler;
-            this.metricFactory = metricFactory;
         }
         
         [HttpPost]
@@ -28,19 +27,21 @@ namespace PathFinder.Api.Controllers
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
-            var metric = metricFactory.GetMetric(req.MetricName);
-            if (metric == null)
-                return BadRequest($"metric {req.MetricName} was not found");
-            var algorithmResult = algorithmsHandler.ExecuteAlgorithm(req.Name, 
-                new Grid(req.Grid),
-                new Parameters(start,
-                    goal,
-                    req.AllowDiagonal,
-                    metric));
-            
-            if (algorithmResult == null)
+            var metric = req.Metric;
+            try
+            {
+                var algorithmResult = algorithmsHandler.ExecuteAlgorithm(req.Name, 
+                    new Grid(req.Grid),
+                    new Parameters(start,
+                        goal,
+                        req.AllowDiagonal,
+                        metric));
+                return Ok(algorithmResult);
+            }
+            catch (Exception)
+            {
                 return BadRequest($"algorithm {req.Name} was not found");
-            return Ok(algorithmResult);
+            }
         }
     }
 }

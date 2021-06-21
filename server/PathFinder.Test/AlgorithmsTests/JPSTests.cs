@@ -18,7 +18,7 @@ namespace PathFinder.Test.AlgorithmsTests
             pq.Setup(x => x.Create())
                 .Returns(() => new HeapPriorityQueue<Point>());
             new GridsTestController()
-                .Run(new JpsDiagonal(new Mock<IRender>().Object, pq.Object), true, true, MetricName.Euclidean);
+                .Run(new JpsDiagonal(new Mock<IRender>().Object, pq.Object), true, true, Metric.Euclidean);
         }
     }
 }

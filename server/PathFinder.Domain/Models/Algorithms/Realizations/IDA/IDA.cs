@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Models.GridFolder;
+using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
@@ -13,7 +14,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
     public class IDA : AbstractAlgorithm
     {
         private Dictionary<Point, Point> parentMap = new();
-        private Func<Point, Point, double> metric;
+        private Metric metric;
         private IParameters parameters;
         private IGrid grid; 
         private Point start;
@@ -46,7 +47,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
 
         private IEnumerable<Point> GetPath()
         {
-            var bound = metric(start, goal);
+            var bound = metric.Call(start, goal);
             var path = new Stack<Point>();
             path.Push(start);
             do
@@ -63,7 +64,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
         private double Recursive(Stack<Point> path, double distance, double bound)
         {
             var node = path.Peek();
-            var estimate = distance + metric(node, goal);
+            var estimate = distance + metric.Call(node, goal);
             if (estimate > bound)
                 return estimate;
             if (node == goal)
@@ -74,7 +75,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
             
             foreach (var neighbor in neighbors)
             {
-                var priority = distance + grid.GetCost(neighbor, node) + metric(neighbor, goal);
+                var priority = distance + grid.GetCost(neighbor, node) + metric.Call(neighbor, goal);
                 queue.Add(neighbor, priority);
             }
 

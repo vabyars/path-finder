@@ -12,7 +12,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
     {
         private readonly List<RenderedState> states = new ();
         private static readonly Color DefaultCurrentPointColor = Color.Aqua;
-
+        
         private int index;
         private static readonly List<Color> ColorsToNeighbors = new()
         {
