@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using PathFinder.Domain.Models.Metrics;
 
 namespace PathFinder.Domain.Models.Parameters

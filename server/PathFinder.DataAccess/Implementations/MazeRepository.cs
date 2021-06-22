@@ -1,21 +1,24 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using PathFinder.DataAccess1.Entities;
 
 namespace PathFinder.DataAccess1.Implementations
 {
     public class MazeRepository: IMazeRepository
     {
-        private readonly Dictionary<string, int[,]> grids = new();
+
+        private readonly List<Grid> grids = new ();
+        public void Add(Grid grid) => grids.Add(grid);
+
+        public Grid Get(string name) => grids.FirstOrDefault(x => x.Name == name);
+
+        public IEnumerable<string> GetMazesNames() => grids.Select(x => x.Name);
         
-        public void Add(string name, int[,] grid)
-        {
-            grids.Add(name, grid);
-        }
+        public async Task AddAsync(Grid grid) => await Task.Run(() => grids.Add(grid));
 
-        public int[,] Get(string name)
-        {
-            return grids.TryGetValue(name, out var res) ? res : null;
-        }
+        public async Task<Grid> GetAsync(string name) => await Task.Run(() => grids.FirstOrDefault(x => x.Name == name));
 
-        public IEnumerable<string> GetMazesNames() => grids.Keys;
+        public async Task<IEnumerable<string>> GetMazesNamesAsync() => await Task.Run(() => grids.Select(x => x.Name));
     }
 }

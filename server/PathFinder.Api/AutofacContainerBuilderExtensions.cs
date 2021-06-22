@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.Design;
+﻿using System;
 using Autofac;
-using Autofac.Builder;
 using Autofac.Core;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
@@ -23,8 +22,8 @@ namespace PathFinder.Api
         {
             builder.RegisterScoped<AStarRender, IRender>();
 
-            builder.RegisterAlgorithmWithRender<AStarAlgorithm, AStarRender>();
             builder.RegisterAlgorithmWithRender<JpsDiagonal, JpsRender>();
+            builder.RegisterAlgorithmWithRender<AStarAlgorithm, AStarRender>();
 
             builder.RegisterScoped<LeeAlgorithm, IAlgorithm>();
             builder.RegisterScoped<IDA, IAlgorithm>();
@@ -34,10 +33,13 @@ namespace PathFinder.Api
             where TAlgorithm : IAlgorithm
             where TRender : IRender
         {
-            builder.RegisterType<TRender>().Named<IRender>(nameof(TRender))
+            var tempId = Guid.NewGuid().ToString();
+            builder.RegisterType<TRender>()
+                .Named<IRender>(tempId)
                 .InstancePerLifetimeScope();
-            builder.RegisterType<TAlgorithm>().As<IAlgorithm>()
-                .WithParameter(ResolvedParameter.ForNamed<IRender>(nameof(TRender)))
+            builder.RegisterType<TAlgorithm>()
+                .As<IAlgorithm>()
+                .WithParameter(ResolvedParameter.ForNamed<IRender>(tempId))
                 .InstancePerLifetimeScope();
         }
         

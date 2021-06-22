@@ -22,21 +22,21 @@
 }
 
 .path {
-    animation-name: pathAnimation;
-    /*background-color: #1269db;*/
-    animation-duration: 0.75s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    /*background-color: yellow;*/
+    /*animation-name: pathAnimation;*/
+    /*!*background-color: #1269db;*!*/
+    /*animation-duration: 0.75s;*/
+    /*animation-iteration-count: 1;*/
+    /*animation-fill-mode: forwards;*/
+    /*!*background-color: yellow;*!*/
 }
 
 .visited{
-    animation-name: visitedAnimation;
-    /*background-color: #1269db;*/
-    animation-duration: 0.75s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    /*background-color: #9323ff;*/
+    /*animation-name: visitedAnimation;*/
+    /*!*background-color: #1269db;*!*/
+    /*animation-duration: 0.75s;*/
+    /*animation-iteration-count: 1;*/
+    /*animation-fill-mode: forwards;*/
+    /*!*background-color: #9323ff;*!*/
 }
 
 

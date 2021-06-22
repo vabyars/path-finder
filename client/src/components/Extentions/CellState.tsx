@@ -1,1 +1,0 @@
-export type CellState = 'wall' | 'visited' | 'path' | 'empty' | 'start' | 'end'

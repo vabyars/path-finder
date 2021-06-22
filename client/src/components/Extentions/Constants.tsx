@@ -1,1 +1,0 @@
-export const UNCLICKABLE_CELL_TYPES = ['start', 'end']

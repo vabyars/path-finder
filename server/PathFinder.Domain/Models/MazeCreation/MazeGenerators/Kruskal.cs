@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using PathFinder.Domain.Models.GridFolder;
+using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Domain.Models.MazeCreation.MazeGenerators
 {
@@ -17,7 +18,7 @@ namespace PathFinder.Domain.Models.MazeCreation.MazeGenerators
         
         private const int WallValue = -1;
         
-        public int[,] Create(int resultWidth, int resultHeight)
+        public GridWithStartAndEnd Create(int resultWidth, int resultHeight)
         {
             width = resultWidth;
             height = resultHeight;
@@ -32,10 +33,17 @@ namespace PathFinder.Domain.Models.MazeCreation.MazeGenerators
                 if (grid.InBounds(neighbor) && ValuesNotEqual(wall, neighbor))
                 {
                     ChangeNeighborValue(wall, neighbor);
-                    mazeGrid[wall.X, wall.Y] = grid[wall.X, wall.Y];
+                    mazeGrid[wall.X, wall.Y] = 1;
                 }
             }
-            return mazeGrid;
+            mazeGrid[0, 0] = 1;
+            mazeGrid[1, 0] = 1;
+            return new GridWithStartAndEnd
+            {
+                Maze = mazeGrid,
+                Start = new Point(0, 0),
+                End = new Point(1, 0)
+            };
         }
         
         private int[,] GetGridWithWallsEverywhere()

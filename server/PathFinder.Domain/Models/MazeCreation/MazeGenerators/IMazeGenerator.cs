@@ -1,8 +1,10 @@
-﻿namespace PathFinder.Domain.Models.MazeCreation.MazeGenerators
+﻿using PathFinder.Domain.Services.MazeService;
+
+namespace PathFinder.Domain.Models.MazeCreation.MazeGenerators
 {
     public interface IMazeGenerator
     {
         string Name { get; }
-        int[,] Create(int resultWidth, int resultHeight);
+        GridWithStartAndEnd Create(int resultWidth, int resultHeight);
     }
 }
