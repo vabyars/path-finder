@@ -3,7 +3,7 @@ import {Button, Input, Modal} from '@skbkontur/react-ui'
 import './Header.css'
 import Select from 'react-select';
 import {CellData, HeaderProps, SelectData} from "../Extentions/Interfaces";
-import {parseCellsDataToNumbers} from "../Extentions/Functions";
+import {getCellIndex, parseCellsDataToNumbers} from "../Extentions/Functions";
 
 
 function parseArrayToSelectData(data: any[]) {
@@ -42,7 +42,6 @@ function Header(props: HeaderProps) {
           if (currentAlgorithm)
             props.executeAlgorithm(currentAlgorithm.label)
         }}> Start</Button>
-        <Button className="flex-elem" onClick={() => console.log(algorithms)}> Pause</Button>
         <Button className="flex-elem" onClick={props.clearField}> Clear field</Button>
         <Button className="flex-elem" onClick={props.clearPath}> Clear path</Button>
 
@@ -54,21 +53,28 @@ function Header(props: HeaderProps) {
           setMaze(value)
           fetch(`/maze/${value.label}`)
               .then((res) => res.json()
-                  .then((data: number[][]) => {
-                    console.log(data)
+                  .then((data) => {
+                    let maze = data.maze
                     let field: CellData[][] = []
-                    for (let i = 0; i < data.length; i++) {
-                      for (let j = 0; j < data[i].length; j++) {
+                    for (let i = 0; i < maze.length; i++) {
+                      for (let j = 0; j < maze[i].length; j++) {
                         if (!field[i])
                           field[i] = []
                         field[i][j] = {
-                          value: data[i][j],
-                          state: data[i][j] === -1 ? 'wall' : 'empty',
-                          mainColor: data[i][j] === -1 ? "black" : "white"
+                          value: maze[i][j],
+                          state: maze[i][j] === -1 ? 'wall' : 'empty',
+                          mainColor: maze[i][j] === -1 ? "black" : "white"
                         }
                       }
                     }
-                    props.setPrebuildField(field)
+                    let start = getCellIndex(data.start)
+                    let end = getCellIndex(data.end)
+
+                    field[start.x][start.y] = {state: "start", mainColor: "red", value: 1}
+                    field[end.x][end.y] = {state: "end", mainColor: "#19c43c", value: 1}
+                    props.setPrebuildField({field: field,
+                      start: start,
+                      end: end})
                   })
                   .catch((e) => console.log(e)))
               .catch((e) => console.log(e))
@@ -100,10 +106,9 @@ function MyModal(props: any) {
 
         </Modal.Body>
         <Modal.Footer>
-          {!isSaved ? <Button use="pay" size="medium" onClick={() => {
+          {!isSaved && <Button use="pay" size="medium" onClick={() => {
             let prom: Promise<any> = props.saveMaze(name)
             prom.then((res) => {
-                  console.log(res)
                   if (res.ok)
                     setIsSaved(true)
                   else {
@@ -114,8 +119,7 @@ function MyModal(props: any) {
 
                 }
             ).catch((e) => console.log(e))
-          }}>Save</Button>
-          : <Button use="pay" size="medium" onClick={props.onClose}>Exit</Button>}
+          }}>Save</Button>}
         </Modal.Footer>
       </Modal>
   );

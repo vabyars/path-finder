@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import './App.css';
 import Grid from './components/Grid/Grid'
 import Header from './components/Header/Header'
-import {CellData, Field, CellIndex} from './components/Extentions/Interfaces'
+import {CellData, Field} from './components/Extentions/Interfaces'
 import {UNCLICKABLE_CELL_TYPES} from "./components/Extentions/Constants";
-import {parseCellsDataToNumbers} from "./components/Extentions/Functions";
+import {getCellIndex, parseCellsDataToNumbers} from "./components/Extentions/Functions";
 
 
 function App() {
@@ -18,25 +18,23 @@ function App() {
 
 
   function executeAlgorithm(name: string) {
-    let a =  parseCellsDataToNumbers(field.field)
-    console.log(a)
+    let body =  JSON.stringify({
+      name: name,
+      start: `${field.start.x},${field.start.y}`,
+      goal: `${field.end.x},${field.end.y}`,
+      "allowDiagonal": true,
+      "metricName": 0,
+      grid: parseCellsDataToNumbers(field.field)
+    })
     fetch("/algorithm/execute", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name: name,
-        start: `${field.start.x},${field.start.y}`,
-        goal: `${field.end.x},${field.end.y}`,
-        "allowDiagonal": true,
-        "metricName": 0,
-        grid: a
-      })
+      body: body
     })
         .then((res) => res.json()
             .then((data) => {
-              console.log(data)
               setField(getFieldWithoutExecuteVisualize(field))
               let visitedPromises = getVisitedPrintPromises(data.renderedStates, field, setField)
               Promise.all(visitedPromises).then((res) => {
@@ -52,21 +50,36 @@ function App() {
         <Header initField={initField}
                 clearField={() => setField(getEmptyField(fieldSize.rows, fieldSize.columns))}
                 executeAlgorithm={executeAlgorithm} clearPath={() => setField(getFieldWithoutExecuteVisualize(field))}
-                setPrebuildField={(newField: CellData[][]) => setField({...field, field: newField})}
-                saveMaze={(name: string) => saveMaze(field.field, name)}/>
+                setPrebuildField={(newField: Field) => setField(newField)}
+                saveMaze={(name: string) => saveMaze(field, name)
+                }/>
 
         <Grid rows={fieldSize.rows} columns={fieldSize.columns} field={field.field}
               func={(x: number, y: number, data: CellData) => setField(getUpdatedField(x, y, data, field))}
+              printStartAndEnd={() => {
+                let newField = field.field.slice()
+
+                for (let i = 0; i < field.field.length; i++) {
+                  for (let j = 0; j < field.field[i].length; j++) {
+                    if ((field.field[i][j].state ==='start' || field.field[i][j].state ==='end')
+                        && ((i === field.start.x || i === field.end.x) && (j === field.start.y || j === field.end.y)))
+                      newField[i][j] = {state: "empty", mainColor: "white", value: 1 }
+                  }
+                }
+                newField[field.start.x][field.start.y] = {state: "start", mainColor: "red", value: 1}
+                newField[field.end.x][field.end.y] = {state: "end", mainColor: "#19c43c", value: 1}
+                setField({...field, field: newField})
+              }}
         />
       </div>
   );
 }
 
 
+
+
 function printPath(pathData: string[], field: Field, setField: (f: Field) => void, color: string) {
   let indexes = getCellsIndexes(pathData.splice(1, pathData.length - 2))
-  console.log(indexes)
-  console.log(color)
   let newField = field.field.slice()
   for (let i = 0; i < indexes.length; i++) {
     let index = indexes[i]
@@ -81,6 +94,7 @@ function printPath(pathData: string[], field: Field, setField: (f: Field) => voi
 
 function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Field) => void) {
   let visitedPromises = []
+  let delay = 10
   for(let i = 0; i < states.length - 1; i++){
     let pointData = states[i]
     let indexes = getCellIndex(pointData.renderedPoint)
@@ -94,7 +108,15 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
         mainColor: pointData.color }
       resolve(setField({
         ...field, field: newField
-      }))}, 60 * i)))
+      }))}, delay * i)))
+
+    visitedPromises.push( new Promise((resolve, reject) => setTimeout(() =>{
+      newField[indexes.x][indexes.y] = {...newField[indexes.x][indexes.y],
+        state: 'visited',
+        mainColor: pointData.secondColor }
+      resolve(setField({
+        ...field, field: newField
+      }))}, delay * 1.25 * i)))
   }
   return visitedPromises
 }
@@ -114,7 +136,7 @@ function getFieldWithoutExecuteVisualize(field: Field) {
   }
 }
 
-function saveMaze(field: CellData[][], name: string) {
+function saveMaze(field: Field, name: string) {
   return  fetch('/maze', {
     method: 'PUT', // Method itself
     headers: {
@@ -122,7 +144,9 @@ function saveMaze(field: CellData[][], name: string) {
     },
     body: JSON.stringify({
       name: name,
-      grid: parseCellsDataToNumbers(field)
+      grid: parseCellsDataToNumbers(field.field),
+      start: `${field.start.x},${field.start.y}`,
+      end: `${field.end.x},${field.end.y}`,
     })
   })
 }
@@ -155,10 +179,6 @@ function getCellsIndexes(data: string[]) {
   return data.map((str) => getCellIndex(str))
 }
 
-function getCellIndex(str: string) {
-  let indexes = str.split(', ')
-  return {x: parseInt(indexes[0]), y: parseInt(indexes[1])}
-}
 
 
 
