@@ -14,7 +14,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
 {
     public class JpsDiagonal : AbstractAlgorithm
     {
-        private readonly IPriorityQueueProvider<Point> queueProvider;
+        private readonly IPriorityQueueProvider<Point, IPriorityQueue<Point>> queueProvider;
         private Dictionary<Point, double> distanceToStart = new();
         private Dictionary<Point, Point> parentMap = new();
         private readonly Dictionary<Point, JumpPointInformation> jumpPointInformation = new();
@@ -26,7 +26,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         private HashSet<Point> closed = new();
         public override string Name => "JPS";
 
-        public JpsDiagonal(IRender render, IPriorityQueueProvider<Point> queueProvider) : base(render)
+        public JpsDiagonal(IRender render, IPriorityQueueProvider<Point, IPriorityQueue<Point>> queueProvider) : base(render)
         {
             this.queueProvider = queueProvider;
         }

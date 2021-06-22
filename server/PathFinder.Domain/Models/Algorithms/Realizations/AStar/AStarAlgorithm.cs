@@ -17,7 +17,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         public override string Name => "A*";
 
         private IPriorityQueue<Point> queue;
-        private readonly IPriorityQueueProvider<Point> queueProvider;
+        private readonly IPriorityQueueProvider<Point, IPriorityQueue<Point>> queueProvider;
 
         private Dictionary<Point, Point> cameFrom = new();
         private Dictionary<Point, double> cost = new();
@@ -25,7 +25,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         private Point start;
         private Point goal;
 
-        public AStarAlgorithm(IRender render, IPriorityQueueProvider<Point> queueProvider) : base(render)
+        public AStarAlgorithm(IRender render, IPriorityQueueProvider<Point, IPriorityQueue<Point>> queueProvider) : base(render)
         {
             this.queueProvider = queueProvider;
         }
