@@ -7,7 +7,7 @@ using PathFinder.Domain.Models.Parameters;
 
 namespace PathFinder.Domain.Models.Algorithms.AlgorithmsController
 {
-    public class AlgorithmsHandler
+    public class AlgorithmsHandler : IAlgorithmsHandler
     {
         private readonly IEnumerable<IAlgorithm> algorithms;
         private readonly IAlgorithmsExecutor algorithmsExecutor;

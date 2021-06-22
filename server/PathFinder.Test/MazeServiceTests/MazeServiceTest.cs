@@ -2,9 +2,9 @@
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Entities;
-using PathFinder.DataAccess1.Implementations;
+using PathFinder.DataAccess;
+using PathFinder.DataAccess.Entities;
+using PathFinder.DataAccess.Implementations;
 using PathFinder.Domain.Models.MazeCreation;
 using PathFinder.Domain.Services.MazeService;
 

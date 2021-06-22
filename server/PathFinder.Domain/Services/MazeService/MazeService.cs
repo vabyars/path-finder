@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using System.Threading.Tasks;
-using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Entities;
+using PathFinder.DataAccess;
+using PathFinder.DataAccess.Entities;
 using PathFinder.Domain.Models.MazeCreation;
 
 namespace PathFinder.Domain.Services.MazeService

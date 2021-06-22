@@ -68,7 +68,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
                     {
                         cost[neighbor] = newCost;
                         cameFrom[neighbor] = current;
-                        queue.UpdateOrAdd(neighbor, newCost + parameters.Metric.Call(neighbor, goal));
+                        queue.UpdateOrAdd(neighbor, newCost + parameters.Metric.Calculate(neighbor, goal));
                         yield return new CandidateToPrepareState
                         {
                             Candidate = neighbor

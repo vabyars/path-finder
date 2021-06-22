@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using AutoMapper;
-using PathFinder.DataAccess1.Entities;
+using PathFinder.DataAccess.Entities;
 using System.Threading.Tasks;
 
 namespace PathFinder.Domain.Services.MazeService

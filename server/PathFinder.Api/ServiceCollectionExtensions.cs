@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PathFinder.Api.Models;
-using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Implementations;
+using PathFinder.DataAccess;
+using PathFinder.DataAccess.Implementations;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor;
 using PathFinder.Domain.Models.GridFolder;
@@ -29,7 +29,7 @@ namespace PathFinder.Api
             services.AddScoped<IMazeGenerator, Kruskal>();
 
             services.AddScoped<SettingsProvider>();
-            services.AddScoped<AlgorithmsHandler>();
+            services.AddScoped<IAlgorithmsHandler, AlgorithmsHandler>();
             services.AddScoped<IAlgorithmsExecutor, AlgorithmsExecutor>();
 
             services.AddScoped<IMazeCreationFactory, MazeCreationFactory>();

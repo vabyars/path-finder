@@ -1,7 +1,6 @@
 using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -33,13 +32,8 @@ namespace PathFinder.Api
             services.RegisterDependencies();
             services.RegisterDatabase(Configuration.GetConnectionString("DefaultConnection"));
             
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new DataAccessMappingProfile());
-            });
+            services.AddAutoMapper(typeof(DataAccessMappingProfile));
 
-            services.AddSingleton(mappingConfig.CreateMapper());
-            
             services.AddSwaggerGen(c =>
             {
                 c.CustomSchemaIds(type => type.ToString());

@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <RootNamespace>PathFinder.DataAccess1</RootNamespace>
+        <RootNamespace>PathFinder.DataAccess</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

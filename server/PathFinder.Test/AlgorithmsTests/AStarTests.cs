@@ -1,15 +1,11 @@
 ﻿using System.Drawing;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
 using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
 using PathFinder.Domain.Models.Metrics;
-using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
-using PathFinder.Domain.Models.States.ResultPath;
 using PathFinder.Infrastructure.PriorityQueue;
 using PathFinder.Infrastructure.PriorityQueue.Realizations;
-using PathFinder.Test.AlgorithmsTests.TestGrids;
 
 namespace PathFinder.Test.AlgorithmsTests
 {

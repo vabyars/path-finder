@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.CandidateToPrepare;

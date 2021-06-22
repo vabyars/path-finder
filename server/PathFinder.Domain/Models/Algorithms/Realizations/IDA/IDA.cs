@@ -7,6 +7,7 @@ using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
+using PathFinder.Domain.Models.States.ResultPath;
 using PathFinder.Infrastructure.PriorityQueue.Realizations;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
@@ -22,10 +23,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
 
         public override string Name => "IDA*";
 
-        public IDA(IRender render) : base(render)
-        {
-            
-        }
+        public IDA(IRender render) : base(render) { }
 
         public override IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
@@ -37,17 +35,17 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
             this.grid = grid;
             var path = GetPath().ToList();
             path.Reverse();
-            yield break;
-            /*yield return new IDAState
+            Console.WriteLine("PATH");
+            //yield break;
+            yield return new ResultPathState
             {
-                ResultPath = path,
-                Name = "result"
-            };*/
+                Path = path,
+            };
         }
 
         private IEnumerable<Point> GetPath()
         {
-            var bound = metric.Call(start, goal);
+            var bound = metric.Calculate(start, goal);
             var path = new Stack<Point>();
             path.Push(start);
             do
@@ -64,7 +62,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
         private double Recursive(Stack<Point> path, double distance, double bound)
         {
             var node = path.Peek();
-            var estimate = distance + metric.Call(node, goal);
+            var estimate = distance + metric.Calculate(node, goal);
             if (estimate > bound)
                 return estimate;
             if (node == goal)
@@ -75,7 +73,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
             
             foreach (var neighbor in neighbors)
             {
-                var priority = distance + grid.GetCost(neighbor, node) + metric.Call(neighbor, goal);
+                var priority = distance + grid.GetCost(neighbor, node) + metric.Calculate(neighbor, goal);
                 queue.Add(neighbor, priority);
             }
 

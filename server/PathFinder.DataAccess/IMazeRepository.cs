@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using PathFinder.DataAccess1.Entities;
+using PathFinder.DataAccess.Entities;
 using System.Threading.Tasks;
 
-namespace PathFinder.DataAccess1
+namespace PathFinder.DataAccess
 {
     public interface IMazeRepository
     {

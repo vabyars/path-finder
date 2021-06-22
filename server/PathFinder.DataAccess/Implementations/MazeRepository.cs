@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PathFinder.DataAccess1.Entities;
+using PathFinder.DataAccess.Entities;
 
-namespace PathFinder.DataAccess1.Implementations
+namespace PathFinder.DataAccess.Implementations
 {
     public class MazeRepository: IMazeRepository
     {
