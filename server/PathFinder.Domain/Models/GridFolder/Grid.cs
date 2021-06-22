@@ -96,7 +96,6 @@ namespace PathFinder.Domain.Models.GridFolder
 
             if (!allowDiagonal)
                 yield break;
-            
             foreach (var cell in GetPointsWithOffset(point, DiagonalDirections))
                 yield return cell;
         }
@@ -104,8 +103,11 @@ namespace PathFinder.Domain.Models.GridFolder
         private IEnumerable<Point> GetPointsWithOffset(Point point, IEnumerable<Point> offsets)
         {
             return offsets
-                .Select(cell => new Point(point.X + cell.X, point.Y + cell.Y))
-                .Where(next => InBounds(next) && IsPassable(next));
+                .Select(offset => new {offset, next = new Point(offset.X + point.X, offset.Y + point.Y)})
+                .Where(t =>
+                    (IsPassable(point.X + t.offset.X, point.Y) || IsPassable(point.X, t.offset.Y + point.Y)) &&
+                    IsPassable(t.next) && InBounds(t.next))
+                .Select(t => t.next);
         }
     }
 }
