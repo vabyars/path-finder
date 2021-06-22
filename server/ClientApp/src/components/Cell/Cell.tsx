@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import {CeilProps} from "../Extentions/Interfaces";
+import {CellProps} from "../Extentions/Interfaces";
 import './Cell.css'
 
 
 
 
-function Cell(props: CeilProps){
+function Cell(props: CellProps){
     
     return (
         <div 

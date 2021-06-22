@@ -10,7 +10,7 @@
     width: 15vh;
 }
 .algorithm{
-    width: 20vh;
+    width: 12vh;
     
 }
 .mazes{
@@ -23,17 +23,8 @@
     text-align: center;
 }
 
-.modal-body-content{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.metrics{
+    width: 18vh;
 }
 
-.content-item {
-    margin-bottom: 1vh;
-}
 
-.subtitle{
-    font-size: smaller;
-    color: red;
-}
