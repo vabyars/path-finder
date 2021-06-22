@@ -2,6 +2,7 @@
 using System.Drawing;
 using AutoMapper;
 using PathFinder.DataAccess1.Entities;
+using System.Threading.Tasks;
 
 namespace PathFinder.Domain.Services.MazeService
 {
@@ -10,6 +11,9 @@ namespace PathFinder.Domain.Services.MazeService
         IEnumerable<string> GetAvailableNames();
         void Add(string name, GridWithStartAndEnd grid);
         GridWithStartAndEnd Get(string name);
+        Task AddAsync(string name, GridWithStartAndEnd grid);
+        Task<GridWithStartAndEnd> GetAsync(string name);
+        Task<IEnumerable<string>> GetAvailableNamesAsync();
     }
     
     public class GridWithStartAndEnd
@@ -26,5 +30,6 @@ namespace PathFinder.Domain.Services.MazeService
             CreateMap<Grid, GridWithStartAndEnd>()
                 .ReverseMap();
         }
+
     }
 }

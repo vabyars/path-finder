@@ -3,7 +3,7 @@ using PathFinder.DataAccess1.Entities;
 
 namespace PathFinder.DataAccess1.Implementations.Database
 {
-    public class MazeContext : DbContext
+    public sealed class MazeContext : DbContext
     {
         public DbSet<Grid> Grids { get; set; }
         

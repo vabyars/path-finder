@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PathFinder.DataAccess1.Entities;
 
 namespace PathFinder.DataAccess1.Implementations.Database
@@ -25,5 +27,21 @@ namespace PathFinder.DataAccess1.Implementations.Database
         }
 
         public Grid Get(string name) => context.Grids.FirstOrDefault(x => x.Name == name);
+        
+        public async Task AddAsync(Grid grid)
+        {
+            await context.Grids.AddAsync(grid);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Grid> GetAsync(string name)
+        {
+            return await context.Grids.FirstOrDefaultAsync(x => x.Name == name);
+        }
+        
+        public async Task<IEnumerable<string>> GetMazesNamesAsync()
+        {
+            return await context.Grids.Select(x => x.Name).ToListAsync();
+        }
     }
 }
