@@ -7,8 +7,6 @@ using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
-using PathFinder.Domain.Models.States.CandidateToPrepare;
-using PathFinder.Domain.Models.States.PreparedPoint;
 using PathFinder.Domain.Models.States.ResultPath;
 using PathFinder.Infrastructure.PriorityQueue;
 
@@ -19,6 +17,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         private readonly IPriorityQueueProvider<Point> queueProvider;
         private Dictionary<Point, double> distanceToStart = new();
         private Dictionary<Point, Point> parentMap = new();
+        private readonly Dictionary<Point, JumpPointInformation> jumpPointInformation = new();
         private Point goal;
         private HashSet<Point> goalNeighbours = new();
         private Point start;
@@ -64,12 +63,10 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
                     yield return new ResultPathState { Path = Backtrace(current) };
                     yield break;
                 }
-
-                yield return new CurrentPointState {PreparedPoint = current };
-
+                
                 foreach (var jumpPoint in IdentifySuccessors(current, grid))
                 {
-                    yield return new CandidateToPrepareState { Candidate = jumpPoint };
+                    yield return new InformativeState() { CurrentPoint = jumpPoint, JumpPointInformation = jumpPointInformation[jumpPoint]};
                 }
             }
         }
@@ -209,25 +206,44 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
             if (!grid.IsPassable(point))
                 return null;
             if (goalNeighbours.Contains(point))
+            {
+                jumpPointInformation[point] = JumpPointInformation.Goal;
                 return point;
+            }
+
             var (x, y) = (point.X, point.Y);
             var (dx, dy) = GetDelta(point, parentPoint);
             if (dx != 0 && dy != 0)
             {
-                if (IsWalkableDiagonal(grid, x, y, dx, dy) || HasHorizontalOrVerticalJumpPoints(grid, point, dx, dy))
+                if (IsWalkableDiagonal(grid, x, y, dx, dy))
+                {
+                    jumpPointInformation[point] = JumpPointInformation.Diagonal;
                     return point;
+                }
+
+                if (HasHorizontalOrVerticalJumpPoints(grid, point, dx, dy))
+                {
+                    jumpPointInformation[point] = JumpPointInformation.HorizontalOrVerticalJumpPoints;
+                    return point;
+                }
             }
             else
             {
                 if (dx != 0)
                 {
                     if (IsWalkableHorizontal(grid, x, y, dx))
+                    {
+                        jumpPointInformation[point] = JumpPointInformation.Horizontal;
                         return point;
+                    }
                 }
                 else
                 {
                     if (IsWalkableVertical(grid, x, y, dy))
+                    {
+                        jumpPointInformation[point] = JumpPointInformation.Vertical;
                         return point;
+                    }
                 }
             }
 
@@ -284,5 +300,14 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         private bool HasHorizontalOrVerticalJumpPoints(IGrid grid, Point point, int dx, int dy) =>
             Jump(new Point(point.X + dx, point.Y), point, grid).HasValue ||
             Jump(new Point(point.X, point.Y + dy), point, grid).HasValue;
+    }
+
+    public enum JumpPointInformation
+    {
+        Goal,
+        Vertical,
+        Horizontal,
+        Diagonal,
+        HorizontalOrVerticalJumpPoints
     }
 }

@@ -11,7 +11,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         public AlgorithmReport(IReadOnlyCollection<RenderedState> states)
         {
             RenderedStates = states.SkipLast(1).ToList();
-            Result = states.TakeLast(1).First();
+            Result = states.TakeLast(1).FirstOrDefault();
         }
     }
 }

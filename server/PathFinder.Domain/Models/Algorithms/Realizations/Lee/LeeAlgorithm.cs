@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
+using PathFinder.Domain.Models.States.CandidateToPrepare;
+using PathFinder.Domain.Models.States.PreparedPoint;
+using PathFinder.Domain.Models.States.ResultPath;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.Lee
 {
@@ -26,13 +30,17 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.Lee
                 var current = queue.Dequeue();
                 if (current.Point == parameters.End)
                 {
-                    /*yield return new LeeState
+                    yield return new ResultPathState
                     {
-                        ResultPath = GetResultPath(current).ToList(),
-                        Cost = current.CostFromStart
-                    };*/
+                        Path = GetResultPath(current)
+                    };
                     yield break;
                 }
+                
+                yield return new CurrentPointState
+                {
+                    PreparedPoint = current.Point
+                };
 
                 foreach (var neighbor in grid.GetNeighbors(current.Point, parameters.AllowDiagonal))
                 {
@@ -40,11 +48,10 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.Lee
                         continue;
                     visited.Add(neighbor);
                     queue.Enqueue(new LeeNode(neighbor, current.CostFromStart+ 1, current));
-                    /*yield return new LeeState
+                    yield return new CandidateToPrepareState
                     {
-                        Point = neighbor,
-                        Cost = current.CostFromStart + 1
-                    };*/
+                        Candidate = neighbor
+                    };
                 }
             }
         }

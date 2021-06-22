@@ -25,7 +25,7 @@ namespace PathFinder.Api
             builder.RegisterAlgorithmWithRender<JpsDiagonal, JpsRender>();
             builder.RegisterAlgorithmWithRender<AStarAlgorithm, AStarRender>();
 
-            builder.RegisterScoped<LeeAlgorithm, IAlgorithm>();
+            builder.RegisterScoped<LeeAlgorithm, LeeRender>();
             builder.RegisterScoped<IDA, IAlgorithm>();
         }
 

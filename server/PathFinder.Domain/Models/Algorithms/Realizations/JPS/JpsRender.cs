@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
-using PathFinder.Domain.Models.States.CandidateToPrepare;
-using PathFinder.Domain.Models.States.PreparedPoint;
 using PathFinder.Domain.Models.States.ResultPath;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
@@ -14,18 +11,12 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
     public class JpsRender : IRender
     {
         private readonly List<RenderedState> states = new ();
-        private int pathLength;
-        private int pointsPrepared;
 
-        private int currentPointRedValue = 118;
-        private int candidatePointBlueValue = 10;
-        
         public RenderedState RenderState(IState state)
         {
             var renderedState = state switch
             {
-                CurrentPointState s => RenderState(s),
-                CandidateToPrepareState s => RenderState(s),
+                InformativeState s => RenderedState(s),
                 ResultPathState s => RenderState(s),
                 _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
             };
@@ -35,7 +26,6 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         
         private RenderedState RenderState(ResultPathState state)
         {
-            pathLength = state.Path.Count();
             return new RenderedPathState
             {
                 Color = Color.Pink.ToHex(), 
@@ -43,28 +33,25 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
             };
         }
 
-        private RenderedState RenderState(CurrentPointState state)
+        private RenderedState RenderedState(InformativeState state)
         {
-            pointsPrepared++;
-            currentPointRedValue = Math.Min(currentPointRedValue + 10, 255);
-            return new RenderedPreparedPointState
+            return new RenderedInformativeState
             {
-                RenderedPoint = state.PreparedPoint,
-                Color = Color.FromArgb(currentPointRedValue, 0, 255).ToHex(),
-                SecondColor = Color.Blue.ToHex()
+                Color = GetColorFromInformation(state).ToHex(),
+                RenderedPoint = state.CurrentPoint
             };
         }
-        
-        private RenderedState RenderState(CandidateToPrepareState state)
-        {
-            candidatePointBlueValue = Math.Min(candidatePointBlueValue + 5, 255);
-            return new RenderedCandidateState
+
+        private Color GetColorFromInformation(InformativeState state) =>
+            state.JumpPointInformation switch
             {
-                RenderedPoint = state.Candidate,
-                Color = Color.FromArgb(0, 255, candidatePointBlueValue).ToHex(),
-                SecondColor = Color.Chocolate.ToHex()
+                JumpPointInformation.Vertical => Color.Lime,
+                JumpPointInformation.Horizontal => Color.Blue,
+                JumpPointInformation.Diagonal => Color.Yellow,
+                JumpPointInformation.HorizontalOrVerticalJumpPoints => Color.Coral,
+                JumpPointInformation.Goal => Color.Cornsilk,
+                _ => throw new ArgumentException($"Can't render this {state.JumpPointInformation}")
             };
-        }
 
         public IAlgorithmReport GetReport()
             => new AlgorithmReport(states);
