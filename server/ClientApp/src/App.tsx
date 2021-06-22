@@ -65,6 +65,8 @@ function App() {
 
 function printPath(pathData: string[], field: Field, setField: (f: Field) => void, color: string) {
   let indexes = getCellsIndexes(pathData.splice(1, pathData.length - 2))
+  console.log(indexes)
+  console.log(color)
   let newField = field.field.slice()
   for (let i = 0; i < indexes.length; i++) {
     let index = indexes[i]
@@ -72,7 +74,7 @@ function printPath(pathData: string[], field: Field, setField: (f: Field) => voi
       newField[index.x][index.y] = {...newField[index.x][index.y], state: 'path', mainColor: color}
       setField({
         ...field, field: newField
-      })}, 1 * i)
+      })}, 50 * i)
   }
 
 }
@@ -112,31 +114,17 @@ function getFieldWithoutExecuteVisualize(field: Field) {
   }
 }
 
-
 function saveMaze(field: CellData[][], name: string) {
-  fetch('/maze', {
+  return  fetch('/maze', {
     method: 'PUT', // Method itself
     headers: {
-      'Content-type': 'application/json; charset=UTF-8' // Indicates the content
+      'Content-type': 'application/json' // Indicates the content
     },
     body: JSON.stringify({
       name: name,
       grid: parseCellsDataToNumbers(field)
-    }) // We send data in JSON format
-  }).catch((e) => console.log(e))
-
-
-
-  // fetch("/maze", {
-  //   method: "PUT",
-  //   headers: {
-  //     'Content-Type': 'application/json-patch+json',
-  //   },
-  //   body: JSON.stringify({
-  //     name: name,
-  //     grid: parseCellsDataToNumbers(field)
-  //   })
-  // })
+    })
+  })
 }
 
 function getUpdatedField(x: number, y: number, data: CellData, field: Field) {

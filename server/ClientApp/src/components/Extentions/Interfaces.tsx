@@ -38,7 +38,7 @@ export interface HeaderProps {
   executeAlgorithm: (name: string) => void,
   clearPath: () => void,
   setPrebuildField: (field: CellData[][]) => void
-  saveMaze: (name: string) => void
+  saveMaze: (name: string) => Promise<any>
 }
 
 
