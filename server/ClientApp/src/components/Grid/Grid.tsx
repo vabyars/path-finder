@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import Cell from '../Ceil/Cell'
+import Cell from '../Cell/Cell'
 import {CellData, GridProps} from '../Extentions/Interfaces'
 import {CellState} from "../Extentions/CellState";
 import {UNCLICKABLE_CELL_TYPES} from "../Extentions/Constants";
