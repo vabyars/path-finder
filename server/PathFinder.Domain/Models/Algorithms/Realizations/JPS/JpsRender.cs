@@ -11,7 +11,7 @@ using PathFinder.Domain.Models.States.ResultPath;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
 {
-    public class JpsRender : AbstractRender
+    public class JpsRender : IRender
     {
         private readonly List<RenderedState> states = new ();
         private int pathLength;
@@ -20,14 +20,20 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         private int currentPointRedValue = 118;
         private int candidatePointBlueValue = 10;
         
-        public override RenderedState RenderState(IState state)
+        public RenderedState RenderState(IState state)
         {
-            var renderedState = base.RenderState(state);
+            var renderedState = state switch
+            {
+                CurrentPointState s => RenderState(s),
+                CandidateToPrepareState s => RenderState(s),
+                ResultPathState s => RenderState(s),
+                _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
+            };
             states.Add(renderedState);
             return renderedState;
         }
         
-        protected override RenderedState RenderState(ResultPathState state)
+        private RenderedState RenderState(ResultPathState state)
         {
             pathLength = state.Path.Count();
             return new RenderedPathState
@@ -37,7 +43,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
             };
         }
 
-        protected override RenderedState RenderState(CurrentPointState state)
+        private RenderedState RenderState(CurrentPointState state)
         {
             pointsPrepared++;
             currentPointRedValue = Math.Min(currentPointRedValue + 10, 255);
@@ -49,7 +55,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
             };
         }
         
-        protected override RenderedState RenderState(CandidateToPrepareState state)
+        private RenderedState RenderState(CandidateToPrepareState state)
         {
             candidatePointBlueValue = Math.Min(candidatePointBlueValue + 5, 255);
             return new RenderedCandidateState
@@ -60,7 +66,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
             };
         }
 
-        public override IAlgorithmReport GetReport()
+        public IAlgorithmReport GetReport()
             => new AlgorithmReport(states);
     }
 }
