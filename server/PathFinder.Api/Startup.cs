@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using PathFinder.DataAccess1;
+using PathFinder.DataAccess1.Implementations;
 using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Api
@@ -34,6 +36,16 @@ namespace PathFinder.Api
             services.RegisterDependencies();
             services.RegisterDatabase(GetHerokuConnectionString());
             
+            
+            if (IsLocal())
+            {
+                services.AddScoped<IMazeRepository, MazeRepository>();
+            }
+            else
+            {
+                services.RegisterDatabase(GetHerokuConnectionString());
+            }
+            
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new DataAccessMappingProfile());
@@ -53,7 +65,7 @@ namespace PathFinder.Api
             
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "../ClientApp/build";
+                configuration.RootPath = "/ClientApp/build";
             });
             
             #region Autofac injection
@@ -66,6 +78,8 @@ namespace PathFinder.Api
 
             #endregion
         }
+        
+        private bool IsLocal() => Environment.GetEnvironmentVariable("PROGRAM_ENVIRONMENT") == "local";
 
         private string GetHerokuConnectionString()
         {
@@ -105,13 +119,11 @@ namespace PathFinder.Api
             
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "../ClientApp";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                     spa.UseReactDevelopmentServer("start");
             });
         }
-
-       
     }
 }
