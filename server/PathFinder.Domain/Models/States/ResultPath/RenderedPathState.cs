@@ -5,6 +5,6 @@ namespace PathFinder.Domain.Models.States.ResultPath
 {
     public class RenderedPathState : RenderedState
     {
-        public IEnumerable<Point> Path { get; set; }
+        public IEnumerable<Point> Path { get; set; } = new List<Point>();
     }
 }

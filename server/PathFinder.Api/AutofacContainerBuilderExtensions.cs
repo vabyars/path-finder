@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel.Design;
 using Autofac;
-using Autofac.Builder;
 using Autofac.Core;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.Realizations.AStar;

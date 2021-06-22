@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PathFinder.DataAccess1.Entities;
 
 namespace PathFinder.DataAccess1.Implementations.Database
@@ -14,26 +16,32 @@ namespace PathFinder.DataAccess1.Implementations.Database
             this.context = context;
         }
 
-        public IEnumerable<string> GetMazesNames()
-        {
-            return context.Grids.Select(x => x.Name);
-        }
+        public IEnumerable<string> GetMazesNames() => context.Grids.Select(x => x.Name);
 
-        public void Add(string name, int[,] grid)
+        public void Add(Grid grid)
         {
-            if (context.Grids.Any(x => x.Name == name))
-                throw new ArgumentException($"maze with name {name} already exists");
-            context.Grids.Add(new Grid
-            {
-                Name = name,
-                Maze = grid
-            });
+            if (context.Grids.Any(x => x.Name == grid.Name))
+                throw new ArgumentException($"maze with name {grid.Name} already exists");
+            context.Grids.Add(grid);
             context.SaveChanges();
         }
 
-        public int[,] Get(string name)
+        public Grid Get(string name) => context.Grids.FirstOrDefault(x => x.Name == name);
+        
+        public async Task AddAsync(Grid grid)
         {
-            return context.Grids.FirstOrDefault(x => x.Name == name)?.Maze;
+            await context.Grids.AddAsync(grid);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Grid> GetAsync(string name)
+        {
+            return await context.Grids.FirstOrDefaultAsync(x => x.Name == name);
+        }
+        
+        public async Task<IEnumerable<string>> GetMazesNamesAsync()
+        {
+            return await context.Grids.Select(x => x.Name).ToListAsync();
         }
     }
 }

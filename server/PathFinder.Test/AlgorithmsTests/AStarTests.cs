@@ -15,7 +15,7 @@ namespace PathFinder.Test.AlgorithmsTests
         [Test]
         public void AStarTest()
         {
-            var pq = new Mock<IPriorityQueueProvider<Point>>();
+            var pq = new Mock<IPriorityQueueProvider<Point, IPriorityQueue<Point>>>();
             pq.Setup(x => x.Create())
                 .Returns(() => new HeapPriorityQueue<Point>());
             new GridsTestController() 

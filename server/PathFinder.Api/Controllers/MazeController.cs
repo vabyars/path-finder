@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PathFinder.Api.Models;
 using PathFinder.Domain.Services.MazeService;
+using PathFinder.Infrastructure;
 
 namespace PathFinder.Api.Controllers
 {
@@ -15,14 +18,14 @@ namespace PathFinder.Api.Controllers
         {
             this.mazeService = mazeService;
         }
-        
+
         [HttpGet]
         [Route("{name}")]
-        public ActionResult<int[,]> GetMaze(string name)
+        public async Task<ActionResult<GridWithStartAndEnd>> GetMaze(string name)
         {
             try
             {
-                var maze = mazeService.Get(name);
+                var maze = await mazeService.GetAsync(name);
                 return Ok(maze);
             }
             catch (ArgumentException e)
@@ -32,18 +35,24 @@ namespace PathFinder.Api.Controllers
         }
 
         [HttpPut]
-        public ActionResult<string> AddMaze(AddMazeRequest mazeRequest)
+        public async Task<ActionResult<string>> AddMaze(AddMazeRequest mazeRequest)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest();
-                mazeService.Add(mazeRequest.Name, mazeRequest.Grid);
+
+                await mazeService.AddAsync(mazeRequest.Name, new GridWithStartAndEnd
+                {
+                    Maze = mazeRequest.Grid,
+                    Start = PointParser.Parse(mazeRequest.Start),
+                    End = PointParser.Parse(mazeRequest.End)
+                });
                 return Ok();
             }
             catch (ArgumentException e)
-            {
-                return BadRequest(e.Message);
+            {// done to synchronize with asp errors
+                return BadRequest(JsonConvert.SerializeObject(new { Errors = new { Names = e.Message } }));
             }
         }
     }

@@ -8,9 +8,8 @@ namespace PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor
         public IAlgorithmReport Execute(IAlgorithm algorithm, IGrid grid, IParameters parameters)
         {
             var render = algorithm.Render; // TODO подумать над другим способом получения рендера
-            var ex = algorithm.Run(grid, parameters);
 
-            foreach (var state in ex)
+            foreach (var state in algorithm.Run(grid, parameters))
                 render.RenderState(state);
 
             return render.GetReport();

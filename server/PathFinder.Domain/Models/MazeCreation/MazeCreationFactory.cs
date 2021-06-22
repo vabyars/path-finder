@@ -2,6 +2,7 @@
 using System.Linq;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.MazeCreation.MazeGenerators;
+using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Domain.Models.MazeCreation
 {
@@ -19,7 +20,7 @@ namespace PathFinder.Domain.Models.MazeCreation
         public IEnumerable<string> GetAvailableNames()
             => generators.Select(x => x.Name);
 
-        public int[,] Create(string name)
+        public GridWithStartAndEnd Create(string name)
         {
             var generator = generators.FirstOrDefault(x => x.Name == name);
             return generator?.Create(parameters.Width, parameters.Height);

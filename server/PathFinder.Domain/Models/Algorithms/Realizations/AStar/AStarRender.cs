@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.CandidateToPrepare;
 using PathFinder.Domain.Models.States.PreparedPoint;
 using PathFinder.Domain.Models.States.ResultPath;
+using PathFinder.Infrastructure;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
 {
-    public class AStarRender : AbstractRender
+    public class AStarRender : IRender
     {
         private readonly List<RenderedState> states = new ();
         private static readonly string DefaultCurrentPointColor = Color.Blue.ToHex();
@@ -16,54 +18,60 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         private int index;
         private static readonly List<Color> ColorsToNeighbors = new()
         {
-            Color.Aquamarine, Color.Azure, Color.Beige, Color.Bisque, Color.Black, Color.Blue, Color.Brown,
+            Color.FromArgb(74, 28, 53),
+            Color.FromArgb(99, 40 ,73),
+            Color.FromArgb(122, 51, 90),
+            Color.FromArgb(148, 64, 110),
+            //Color.Purple, Color.Fuchsia, Color.Green, Color.Lime, Color.Black, Color.Violet, Color.Brown,
             Color.Chartreuse,
         };
         
-        public override RenderedState RenderState(IState state)
+        public RenderedState RenderState(IState state)
         {
-            var renderedState = base.RenderState(state);
+            var renderedState = state switch
+            {
+                CurrentPointState s => RenderState(s),
+                CandidateToPrepareState s => RenderState(s),
+                ResultPathState s => RenderState(s),
+                _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
+            };
             states.Add(renderedState);
             return renderedState;
         }
 
-        public override IAlgorithmReport GetReport()
+        public IAlgorithmReport GetReport()
             => new AlgorithmReport(states);
 
-        protected override RenderedState RenderState(ResultPathState state)
+        private RenderedState RenderState(ResultPathState state)
         {
             return new RenderedPathState
             {
-                Color = Color.Blue.ToHex(),
+                Color = Color.Yellow.ToHex(),
                 Path = state.Path
             };
         }
 
-        protected override RenderedState RenderState(CurrentPointState state)
+        private RenderedState RenderState(CurrentPointState state)
         {
             index = 0;
             return new RenderedPreparedPointState
             {
                 Color = DefaultCurrentPointColor,
-                SecondColor = Color.Yellow.ToHex(),
+                SecondColor = Color.Red.ToHex(),
                 RenderedPoint = state.PreparedPoint
             };
         }
 
-        protected override RenderedState RenderState(CandidateToPrepareState state)
+        private RenderedState RenderState(CandidateToPrepareState state)
         {
+            var color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count];
+            Console.WriteLine($"{color}         {index}");
             return new RenderedCandidateState
             {
-                Color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count].ToHex(),
+                Color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count].ToHex(),//color.ToHex(),
                 RenderedPoint = state.Candidate,
                 SecondColor = Color.Blue.ToHex()
             };
         }
-    }
-    
-    public static class ColorExtensions
-    {
-        public static string ToHex(this Color c) 
-            => "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
     }
 }
