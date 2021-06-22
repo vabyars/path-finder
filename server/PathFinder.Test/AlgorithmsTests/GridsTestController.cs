@@ -13,6 +13,11 @@ namespace PathFinder.Test.AlgorithmsTests
 {
     public class GridsTestController
     {
+        private readonly List<TestGrid> gridsWithoutWay = new()
+        {
+            new GridWithNoWay()
+        };
+            
         private readonly List<TestGrid> testGrids = new ()
         {
             new SimpleTestGrid(),
@@ -23,7 +28,7 @@ namespace PathFinder.Test.AlgorithmsTests
             new TestGridToCheckShortestPath2(),
         };
         
-        public void Run(IAlgorithm algorithm,
+        public void TestOnUsualGrids(IAlgorithm algorithm,
             bool findsMinPath, bool worksOnlyWithDiagonal, Metric metric)
         {
             foreach (var testGrid in testGrids)
@@ -51,20 +56,32 @@ namespace PathFinder.Test.AlgorithmsTests
                 }
             }   
         }
-
+        
         private void AssertResultPath(IEnumerable<Point> resultPath, TestGrid testGrid, bool findsMinPath,
             Func<int> minPathLength, Func<IEnumerable<Point>> minPath, bool onlyOneShortestPath)
         {
-            var mapName = $"Exception throw on {testGrid.GetType().Name}";
+            var exception = $"Exception throw on {testGrid.GetType().Name}";
             var enumerable = resultPath as Point[] ?? resultPath.ToArray();
             if (findsMinPath)
             {
-                Assert.AreEqual(minPathLength(), enumerable.Length, mapName);
+                Assert.AreEqual(minPathLength(), enumerable.Length, exception);
                 if (onlyOneShortestPath)
-                    CollectionAssert.AreEqual(minPath(), enumerable, mapName);
+                    CollectionAssert.AreEqual(minPath(), enumerable, exception);
             }
-            Assert.AreEqual(testGrid.Start, enumerable.First(), mapName);
-            Assert.AreEqual(testGrid.Goal, enumerable.Last(), mapName);
+            Assert.AreEqual(testGrid.Start, enumerable.First(), exception);
+            Assert.AreEqual(testGrid.Goal, enumerable.Last(), exception);
+        }
+
+        public void TestOnGridsWithoutWay(IAlgorithm algorithm)
+        {
+            foreach (var last in gridsWithoutWay
+                .Select(grid => algorithm.Run(grid.Grid,
+                    new Parameters(grid.Start, grid.Goal, false, Metric.Euclidean)))
+                .Select(result => result.LastOrDefault() as ResultPathState))
+            {
+                Assert.True(last != null);
+                Assert.IsEmpty(last.Path);
+            }
         }
     }
 }

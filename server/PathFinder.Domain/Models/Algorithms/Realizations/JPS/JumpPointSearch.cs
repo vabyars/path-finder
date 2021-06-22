@@ -72,6 +72,8 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
                     yield return new CandidateToPrepareState { Candidate = jumpPoint };
                 }
             }
+
+            yield return new ResultPathState();
         }
 
         private IEnumerable<Point> IdentifySuccessors(Point point, IGrid grid)

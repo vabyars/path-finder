@@ -11,14 +11,27 @@ namespace PathFinder.Test.AlgorithmsTests
 {
     public class JpsTests
     {
-        [Test]
-        public void JpsTest()
+        private JpsDiagonal algorithm;
+
+        [SetUp]
+        public void SetUp()
         {
             var pq = new Mock<IPriorityQueueProvider<Point, IPriorityQueue<Point>>>();
             pq.Setup(x => x.Create())
                 .Returns(() => new HeapPriorityQueue<Point>());
-            new GridsTestController()
-                .Run(new JpsDiagonal(new Mock<IRender>().Object, pq.Object), true, true, Metric.Euclidean);
+            algorithm = new JpsDiagonal(new Mock<IRender>().Object, pq.Object);
+        }
+        
+        [Test]
+        public void JpsTest()
+        {
+            new GridsTestController().TestOnUsualGrids(algorithm, true, true, Metric.Euclidean);
+        }
+
+        [Test]
+        public void TestOnGridsWithoutWay()
+        {
+            new GridsTestController().TestOnGridsWithoutWay(algorithm);
         }
     }
 }

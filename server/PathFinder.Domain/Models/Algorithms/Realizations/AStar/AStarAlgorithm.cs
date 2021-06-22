@@ -51,10 +51,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
                 var (current, _) = queue.ExtractMin();
                 if (current == goal)
                 {
-                    yield return new ResultPathState()
-                    {
-                        Path = GetResultPath(),
-                    };
+                    yield return new ResultPathState{ Path = GetResultPath() };
                     yield break;
                 }
 
@@ -79,6 +76,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
                     }
                 }
             }
+            yield return new ResultPathState();
         }
 
         private IEnumerable<Point> GetResultPath()

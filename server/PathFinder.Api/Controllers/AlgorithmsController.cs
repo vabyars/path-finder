@@ -4,6 +4,7 @@ using PathFinder.Api.Models;
 using PathFinder.Domain.Models.Algorithms;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
 using PathFinder.Domain.Models.GridFolder;
+using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Parameters;
 using PathFinder.Infrastructure;
 
@@ -26,7 +27,6 @@ namespace PathFinder.Api.Controllers
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
-            var metric = req.Metric;
             try
             {
                 var algorithmResult = algorithmsHandler.ExecuteAlgorithm(req.Name, 
@@ -34,7 +34,7 @@ namespace PathFinder.Api.Controllers
                     new Parameters(start,
                         goal,
                         req.AllowDiagonal,
-                        metric));
+                        req.Metric));
                 return Ok(algorithmResult);
             }
             catch (ArgumentException e)

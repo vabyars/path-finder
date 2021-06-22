@@ -9,10 +9,10 @@ namespace PathFinder.Domain.Models.Metrics
 {
     public enum Metric
     {
-        [Description("euclidean")]
-        Euclidean,
         [Description("manhattan")]
-        Manhattan
+        Manhattan,
+        [Description("euclidean")]
+        Euclidean
     }
 
     public static class MetricExtensions
