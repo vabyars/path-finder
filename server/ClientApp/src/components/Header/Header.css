@@ -8,8 +8,6 @@
 .flex-elem{
     margin: 2vh;
     width: 15vh;
-
-    
 }
 .algorithm{
     width: 20vh;
@@ -23,4 +21,19 @@
     
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: center;
+}
+
+.modal-body-content{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.content-item {
+    margin-bottom: 1vh;
+}
+
+.subtitle{
+    font-size: smaller;
+    color: red;
 }

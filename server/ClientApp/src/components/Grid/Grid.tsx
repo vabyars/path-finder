@@ -13,7 +13,7 @@ function Grid(props: GridProps) {
     const height = props.rows * 22;
     let rowsArr: any = [];
 
-    function a(cellData: CellData) {
+    function setStartOrEndEnable(cellData: CellData) {
         if (cellData.state === 'start') {
             setIsStartSelect(true)
         }
@@ -35,7 +35,7 @@ function Grid(props: GridProps) {
                     onMouseDown={() => {
                         setIsMouseDown(true)
                         if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) {
-                            a(props.field[i][j])
+                            setStartOrEndEnable(props.field[i][j])
                             return
                         }
 
@@ -43,12 +43,20 @@ function Grid(props: GridProps) {
                     }}
                     onMouseLeave={() => {
                         if ((isEndSelect && props.field[i][j].state === 'end')
-                            || (isStartSelect && props.field[i][j].state === 'start'))
-                            props.func(i, j, {state: 'empty', value: 1})
+                            || (isStartSelect && props.field[i][j].state === 'start')){
+                          // props.printStartAndEnd()
+                          props.func(i, j, {state: 'empty', value: 1, mainColor: "white"})
+
+                        }
+
+
                     }
                     }
                     onMouseOver={() => {
-                        if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) return
+                        if (UNCLICKABLE_CELL_TYPES.includes(props.field[i][j].state)) {
+                          // props.printStartAndEnd()
+                          return
+                        }
                         if (isMouseDown)
                             props.func(i, j, getNewCellDataOnClick(props.field[i][j], isStartSelect, isEndSelect))
                     }}
@@ -61,12 +69,16 @@ function Grid(props: GridProps) {
         <div className="grid"
              style={{width: width, height: height}}
              onMouseUp={() => {
+               props.printStartAndEnd()
                  setIsMouseDown(false)
                  setIsEndSelect(false)
                  setIsStartSelect(false)
              }}
              onMouseLeave={(e) => {
-                 setIsMouseDown(false)
+               props.printStartAndEnd()
+               setIsMouseDown(false)
+               setIsEndSelect(false)
+               setIsStartSelect(false)
              }}
         >
             {rowsArr}

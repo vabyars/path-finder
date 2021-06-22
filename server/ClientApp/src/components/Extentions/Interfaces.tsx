@@ -11,6 +11,7 @@ export interface GridProps {
   columns: number
   field: CellData[][]
   func: any
+  printStartAndEnd: any
 }
 
 export interface CellIndex {
@@ -37,8 +38,8 @@ export interface HeaderProps {
   clearField: () => void,
   executeAlgorithm: (name: string) => void,
   clearPath: () => void,
-  setPrebuildField: (field: CellData[][]) => void
-  saveMaze: (name: string) => void
+  setPrebuildField: (field: Field) => void
+  saveMaze: (name: string) => Promise<any>
 }
 
 
