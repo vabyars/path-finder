@@ -6,11 +6,11 @@
 
 .wall {
     background-color: black;
-    /*animation-name: wallAnimation;*/
-    /*!*background-color: #1269db;*!*/
-    /*animation-duration: 0.5s;*/
-    /*animation-iteration-count: 10;*/
-    /*animation-fill-mode: forwards;*/
+    animation-name: cellAnimation;
+    /*background-color: #1269db;*/
+    animation-duration: 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
 
 .start {
@@ -22,43 +22,35 @@
 }
 
 .path {
-    /*animation-name: pathAnimation;*/
-    /*!*background-color: #1269db;*!*/
-    /*animation-duration: 0.75s;*/
-    /*animation-iteration-count: 1;*/
-    /*animation-fill-mode: forwards;*/
-    /*!*background-color: yellow;*!*/
+    animation-name: cellAnimation;
+    /*background-color: #1269db;*/
+    animation-duration: 0.75s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
 
 .visited{
-    /*animation-name: visitedAnimation;*/
-    /*!*background-color: #1269db;*!*/
-    /*animation-duration: 0.75s;*/
-    /*animation-iteration-count: 1;*/
-    /*animation-fill-mode: forwards;*/
-    /*!*background-color: #9323ff;*!*/
+    animation-name: cellAnimation;
+    /*background-color: #1269db;*/
+    animation-duration: 0.75s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    /*background-color: #9323ff;*/
 }
 
 
-@keyframes wallAnimation {
+@keyframes cellAnimation {
     0% {
         transform: scale(0.3);
-        background-color: gray;
         border-radius: 100%;
-    }
-
-    50% {
-        background-color: darkslategrey;
     }
 
     75% {
         transform: scale(1.2);
-        background-color: black;
     }
 
     100% {
         transform: scale(1);
-        background-color: black;
     }
 }
 
