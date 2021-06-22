@@ -52,7 +52,7 @@ namespace PathFinder.Api.Controllers
             }
             catch (ArgumentException e)
             {// done to synchronize with asp errors
-                return BadRequest(JsonConvert.SerializeObject(new { Errors = new { Names = e.Message } }));
+                return BadRequest(JsonConvert.SerializeObject(new { errors = new { Name = new[] { e.Message } } }));
             }
         }
     }
