@@ -18,7 +18,11 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         private int index;
         private static readonly List<Color> ColorsToNeighbors = new()
         {
-            Color.Aquamarine, Color.Azure, Color.Beige, Color.Bisque, Color.Black, Color.Blue, Color.Brown,
+            Color.FromArgb(74, 28, 53),
+            Color.FromArgb(99, 40 ,73),
+            Color.FromArgb(122, 51, 90),
+            Color.FromArgb(148, 64, 110),
+            //Color.Purple, Color.Fuchsia, Color.Green, Color.Lime, Color.Black, Color.Violet, Color.Brown,
             Color.Chartreuse,
         };
         
@@ -42,7 +46,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         {
             return new RenderedPathState
             {
-                Color = Color.Blue.ToHex(),
+                Color = Color.Yellow.ToHex(),
                 Path = state.Path
             };
         }
@@ -53,16 +57,18 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
             return new RenderedPreparedPointState
             {
                 Color = DefaultCurrentPointColor,
-                SecondColor = Color.Yellow.ToHex(),
+                SecondColor = Color.Red.ToHex(),
                 RenderedPoint = state.PreparedPoint
             };
         }
 
         private RenderedState RenderState(CandidateToPrepareState state)
         {
+            var color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count];
+            Console.WriteLine($"{color}         {index}");
             return new RenderedCandidateState
             {
-                Color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count].ToHex(),
+                Color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count].ToHex(),//color.ToHex(),
                 RenderedPoint = state.Candidate,
                 SecondColor = Color.Blue.ToHex()
             };

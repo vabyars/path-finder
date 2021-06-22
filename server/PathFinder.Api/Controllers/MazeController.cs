@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PathFinder.Api.Models;
 using PathFinder.Domain.Services.MazeService;
 using PathFinder.Infrastructure;
@@ -17,7 +18,7 @@ namespace PathFinder.Api.Controllers
         {
             this.mazeService = mazeService;
         }
-        
+
         [HttpGet]
         [Route("{name}")]
         public async Task<ActionResult<GridWithStartAndEnd>> GetMaze(string name)
@@ -40,21 +41,19 @@ namespace PathFinder.Api.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest();
-                
+
                 await mazeService.AddAsync(mazeRequest.Name, new GridWithStartAndEnd
-                    { 
-                        Maze = mazeRequest.Grid, 
-                        Start = PointParser.Parse(mazeRequest.Start), 
-                        End = PointParser.Parse(mazeRequest.End)
-                    });
+                {
+                    Maze = mazeRequest.Grid,
+                    Start = PointParser.Parse(mazeRequest.Start),
+                    End = PointParser.Parse(mazeRequest.End)
+                });
                 return Ok();
             }
             catch (ArgumentException e)
-            {
-                return BadRequest(e.Message);
+            {// done to synchronize with asp errors
+                return BadRequest(JsonConvert.SerializeObject(new { Errors = new { Names = e.Message } }));
             }
         }
-
-
     }
 }
