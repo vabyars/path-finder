@@ -7,6 +7,16 @@ import {UNCLICKABLE_CELL_TYPES} from "./components/Extentions/Constants";
 import {getCellIndex, parseCellsDataToNumbers} from "./components/Extentions/Functions";
 
 
+const timeouts: any = []
+
+function clearAllTimeout() {
+  while (timeouts.length > 0){
+    let t = timeouts.shift()
+    clearTimeout(t)
+  }
+}
+
+
 function App() {
   const [fieldSize, setFieldSize] = useState<{ rows: number, columns: number }>({rows: 0, columns: 0})
   const [field, setField] = useState<Field>({start:{x:0 ,y: 0}, end: {x:0 ,y: 0}, field: [] })
@@ -17,15 +27,17 @@ function App() {
   }
 
 
-  function executeAlgorithm(name: string) {
+  function executeAlgorithm(name: string, metricName: string, allowDiagonal: boolean) {
+    clearAllTimeout()
     let body =  JSON.stringify({
       name: name,
       start: `${field.start.x},${field.start.y}`,
       goal: `${field.end.x},${field.end.y}`,
-      "allowDiagonal": true,
-      "metricName": 0,
+      "allowDiagonal": allowDiagonal,
+      "metricName": metricName,
       grid: parseCellsDataToNumbers(field.field)
     })
+    console.log(body)
     fetch("/algorithm/execute", {
       method: "POST",
       headers: {
@@ -37,9 +49,7 @@ function App() {
             .then((data) => {
               setField(getFieldWithoutExecuteVisualize(field))
               let visitedPromises = getVisitedPrintPromises(data.renderedStates, field, setField)
-              Promise.all(visitedPromises).then((res) => {
-                printPath(data.result.path, field, setField, data.result.color)
-              })
+              printPath(data.result.path, field, setField, data.result.color, visitedPromises)
             }))
         .catch((e) => console.log(e))
   }
@@ -48,8 +58,14 @@ function App() {
   return (
       <div className="App">
         <Header initField={initField}
-                clearField={() => setField(getEmptyField(fieldSize.rows, fieldSize.columns))}
-                executeAlgorithm={executeAlgorithm} clearPath={() => setField(getFieldWithoutExecuteVisualize(field))}
+                clearField={() => {
+                  clearAllTimeout()
+                  setField(getEmptyField(fieldSize.rows, fieldSize.columns))
+                }}
+                executeAlgorithm={executeAlgorithm} clearPath={() =>{
+                  clearAllTimeout()
+                  setField(getFieldWithoutExecuteVisualize(field))}
+                  }
                 setPrebuildField={(newField: Field) => setField(newField)}
                 saveMaze={(name: string) => saveMaze(field, name)
                 }/>
@@ -78,22 +94,20 @@ function App() {
 
 
 
-function printPath(pathData: string[], field: Field, setField: (f: Field) => void, color: string) {
+function printPath(pathData: string[], field: Field, setField: (f: Field) => void, color: string, delay: number) {
   let indexes = getCellsIndexes(pathData.splice(1, pathData.length - 2))
   let newField = field.field.slice()
   for (let i = 0; i < indexes.length; i++) {
     let index = indexes[i]
-    setTimeout(() =>{
+    timeouts.push(setTimeout(() => {
       newField[index.x][index.y] = {...newField[index.x][index.y], state: 'path', mainColor: color}
       setField({
         ...field, field: newField
-      })}, 50 * i)
+      })}, delay +  50 * i))
   }
-
 }
 
 function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Field) => void) {
-  let visitedPromises = []
   let delay = 10
   for(let i = 0; i < states.length - 1; i++){
     let pointData = states[i]
@@ -102,23 +116,23 @@ function getVisitedPrintPromises(states: any[], field: Field, setField: (f: Fiel
     if (UNCLICKABLE_CELL_TYPES.includes(newField[indexes.x][indexes.y].state))
       continue
 
-    visitedPromises.push( new Promise((resolve, reject) => setTimeout(() =>{
+    timeouts.push(setTimeout(() =>{
       newField[indexes.x][indexes.y] = {...newField[indexes.x][indexes.y],
         state: 'visited',
         mainColor: pointData.color }
-      resolve(setField({
+      setField({
         ...field, field: newField
-      }))}, delay * i)))
+      })}, delay * i))
 
-    visitedPromises.push( new Promise((resolve, reject) => setTimeout(() =>{
+    timeouts.push(setTimeout(() =>{
       newField[indexes.x][indexes.y] = {...newField[indexes.x][indexes.y],
         state: 'visited',
         mainColor: pointData.secondColor }
-      resolve(setField({
+      setField({
         ...field, field: newField
-      }))}, delay * 1.25 * i)))
+      })}, delay * 1.25 * i))
   }
-  return visitedPromises
+  return delay * 1.25 * (states.length - 1)
 }
 
 
