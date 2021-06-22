@@ -19,8 +19,8 @@ namespace PathFinder.Api
     {
         public static void RegisterDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IPriorityQueue<Point>, HeapPriorityQueue<Point>>();
-            services.AddScoped<IPriorityQueueProvider<Point>, PriorityQueueProvider<Point>>();
+            services.AddScoped<IPriorityQueueProvider<Point, IPriorityQueue<Point>>,
+                PriorityQueueProvider<Point, HeapPriorityQueue<Point>>>();
             
             services.AddSingleton<IMazeRepository, MazeRepository>();
             //services.AddScoped<IMazeRepository, DatabaseRepository>();

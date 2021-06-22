@@ -12,9 +12,9 @@ namespace PathFinder.Test.AlgorithmsTests
     public class JpsTests
     {
         [Test]
-        public void JpsTest() // не проходят потому что надо написать стейты в самом алгосе
+        public void JpsTest()
         {
-            var pq = new Mock<IPriorityQueueProvider<Point>>();
+            var pq = new Mock<IPriorityQueueProvider<Point, IPriorityQueue<Point>>>();
             pq.Setup(x => x.Create())
                 .Returns(() => new HeapPriorityQueue<Point>());
             new GridsTestController()
