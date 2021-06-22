@@ -37,9 +37,9 @@ namespace PathFinder.Api.Controllers
                         metric));
                 return Ok(algorithmResult);
             }
-            catch (Exception)
+            catch (ArgumentException e)
             {
-                return BadRequest($"algorithm {req.Name} was not found");
+                return BadRequest(e.Message);
             }
         }
     }

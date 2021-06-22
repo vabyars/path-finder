@@ -8,7 +8,7 @@ namespace PathFinder.DataAccess1.Entities
     public class Grid
     {
         [Key] public string Name { get; set; }
-        public int[,] Maze { get; set; }
+        public int[,] Maze { get; init; }
         public Point Start { get; set; }
         public Point End { get; set; }
     }

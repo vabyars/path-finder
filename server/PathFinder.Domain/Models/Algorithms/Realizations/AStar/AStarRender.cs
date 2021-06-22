@@ -6,6 +6,7 @@ using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.CandidateToPrepare;
 using PathFinder.Domain.Models.States.PreparedPoint;
 using PathFinder.Domain.Models.States.ResultPath;
+using PathFinder.Infrastructure;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
 {
@@ -66,11 +67,5 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
                 SecondColor = Color.Blue.ToHex()
             };
         }
-    }
-    
-    public static class ColorExtensions
-    {
-        public static string ToHex(this Color c) 
-            => "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
     }
 }
