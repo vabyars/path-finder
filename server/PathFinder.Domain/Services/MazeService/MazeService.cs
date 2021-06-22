@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using PathFinder.DataAccess1;
+using PathFinder.DataAccess1.Entities;
 using PathFinder.Domain.Models.MazeCreation;
 
 namespace PathFinder.Domain.Services.MazeService
@@ -10,18 +12,22 @@ namespace PathFinder.Domain.Services.MazeService
     {
         private readonly IMazeRepository repository;
         private readonly IMazeCreationFactory mazeCreationFactory;
+        private readonly IMapper mapper;
 
-        public MazeService(IMazeRepository repository, IMazeCreationFactory mazeCreationFactory)
+        public MazeService(IMazeRepository repository, IMazeCreationFactory mazeCreationFactory, IMapper mapper)
         {
             this.repository = repository;
             this.mazeCreationFactory = mazeCreationFactory;
+            this.mapper = mapper;
         }
 
-        public void Add(string name, int[,] grid)
+        public void Add(string name, GridWithStartAndEnd grid)
         {
             if (MazeExists(name))
                 throw new ArgumentException($"maze with name \"{name}\" has already exists");
-            repository.Add(name, grid);
+            var newGrid = mapper.Map<Grid>(grid);
+            newGrid.Name = name;
+            repository.Add(newGrid);
         }
 
         private bool MazeExists(string name)
@@ -31,10 +37,10 @@ namespace PathFinder.Domain.Services.MazeService
             return existsInRepository || existsInFactory;
         }
 
-        public int[,] Get(string name)
+        public GridWithStartAndEnd Get(string name)
         {
             if (repository.TryGetValue(name, out var maze))
-                return maze;
+                return mapper.Map<GridWithStartAndEnd>(maze);
             var generatedMaze = mazeCreationFactory.Create(name);
             if (generatedMaze != null)
                 return generatedMaze;

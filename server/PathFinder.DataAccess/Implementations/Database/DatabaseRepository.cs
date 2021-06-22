@@ -14,26 +14,16 @@ namespace PathFinder.DataAccess1.Implementations.Database
             this.context = context;
         }
 
-        public IEnumerable<string> GetMazesNames()
-        {
-            return context.Grids.Select(x => x.Name);
-        }
+        public IEnumerable<string> GetMazesNames() => context.Grids.Select(x => x.Name);
 
-        public void Add(string name, int[,] grid)
+        public void Add(Grid grid)
         {
-            if (context.Grids.Any(x => x.Name == name))
-                throw new ArgumentException($"maze with name {name} already exists");
-            context.Grids.Add(new Grid
-            {
-                Name = name,
-                Maze = grid
-            });
+            if (context.Grids.Any(x => x.Name == grid.Name))
+                throw new ArgumentException($"maze with name {grid.Name} already exists");
+            context.Grids.Add(grid);
             context.SaveChanges();
         }
 
-        public int[,] Get(string name)
-        {
-            return context.Grids.FirstOrDefault(x => x.Name == name)?.Maze;
-        }
+        public Grid Get(string name) => context.Grids.FirstOrDefault(x => x.Name == name);
     }
 }

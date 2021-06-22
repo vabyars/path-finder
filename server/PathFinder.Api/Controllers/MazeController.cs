@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using PathFinder.Api.Models;
 using PathFinder.Domain.Services.MazeService;
+using PathFinder.Infrastructure;
 
 namespace PathFinder.Api.Controllers
 {
@@ -18,7 +20,7 @@ namespace PathFinder.Api.Controllers
         
         [HttpGet]
         [Route("{name}")]
-        public ActionResult<int[,]> GetMaze(string name)
+        public ActionResult<GridWithStartAndEnd> GetMaze(string name)
         {
             try
             {
@@ -38,7 +40,12 @@ namespace PathFinder.Api.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest();
-                mazeService.Add(mazeRequest.Name, mazeRequest.Grid);
+                mazeService.Add(mazeRequest.Name, new GridWithStartAndEnd
+                    { 
+                        Maze = mazeRequest.Grid, 
+                        Start = PointParser.Parse(mazeRequest.Start), 
+                        End = PointParser.Parse(mazeRequest.End)
+                    });
                 return Ok();
             }
             catch (ArgumentException e)
@@ -46,5 +53,7 @@ namespace PathFinder.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+
     }
 }

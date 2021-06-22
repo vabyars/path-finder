@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using PathFinder.DataAccess1.Entities;
 
 namespace PathFinder.DataAccess1.Implementations
 {
     public class MazeRepository: IMazeRepository
     {
-        private readonly Dictionary<string, int[,]> grids = new();
-        
-        public void Add(string name, int[,] grid)
-        {
-            grids.Add(name, grid);
-        }
+        private readonly List<Grid> grids = new ();
+        public void Add(Grid grid) => grids.Add(grid);
 
-        public int[,] Get(string name)
-        {
-            return grids.TryGetValue(name, out var res) ? res : null;
-        }
+        public Grid Get(string name) => grids.FirstOrDefault(x => x.Name == name);
 
-        public IEnumerable<string> GetMazesNames() => grids.Keys;
+        public IEnumerable<string> GetMazesNames() => grids.Select(x => x.Name);
     }
 }

@@ -16,12 +16,22 @@ namespace PathFinder.DataAccess1.Implementations.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var intValueConverter = new IntTwoDimensionsArrayToStringValueConverter();
+            var pointConverter = new PointToStringConverter();
 
             modelBuilder
                 .Entity<Grid>()
                 .Property(e => e.Maze)
                 .HasConversion(intValueConverter);
 
+            modelBuilder
+                .Entity<Grid>()
+                .Property(x => x.Start)
+                .HasConversion(pointConverter);
+            
+            modelBuilder
+                .Entity<Grid>()
+                .Property(x => x.End)
+                .HasConversion(pointConverter);
         }
     }
 }

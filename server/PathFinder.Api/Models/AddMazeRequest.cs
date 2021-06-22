@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace PathFinder.Api.Models
 {
@@ -10,5 +11,11 @@ namespace PathFinder.Api.Models
         
         [Required]
         public int[,] Grid { get; set; }
+        
+        [Required]
+        public string Start { get; set; }
+        
+        [Required]
+        public string End { get; set; }
     }
 }

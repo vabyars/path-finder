@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Domain.Models.MazeCreation
 {
     public interface IMazeCreationFactory
     {
         IEnumerable<string> GetAvailableNames();
-        int[,] Create(string name);
+        GridWithStartAndEnd Create(string name);
     }
 }

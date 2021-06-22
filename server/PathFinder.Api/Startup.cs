@@ -1,6 +1,7 @@
 using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Api
 {
@@ -30,6 +32,13 @@ namespace PathFinder.Api
             services.RegisterConfigurations(Configuration);
             services.RegisterDependencies();
             services.RegisterDatabase(Configuration.GetConnectionString("DefaultConnection"));
+            
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new DataAccessMappingProfile());
+            });
+
+            services.AddSingleton(mappingConfig.CreateMapper());
             
             services.AddSwaggerGen(c =>
             {
