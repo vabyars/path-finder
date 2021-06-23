@@ -37,7 +37,6 @@ function App() {
       "metricName": metricName,
       grid: parseCellsDataToNumbers(field.field)
     })
-    console.log(body)
     fetch("/algorithm/execute", {
       method: "POST",
       headers: {
