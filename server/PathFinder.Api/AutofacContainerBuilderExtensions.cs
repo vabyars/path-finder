@@ -25,7 +25,7 @@ namespace PathFinder.Api
             builder.RegisterAlgorithmWithRender<JpsDiagonal, JpsRender>();
             builder.RegisterAlgorithmWithRender<AStarAlgorithm, AStarRender>();
 
-            builder.RegisterAlgorithmWithRender<LeeAlgorithm, LeeRender>();
+            builder.RegisterScoped<LeeAlgorithm, IAlgorithm>();
             builder.RegisterScoped<IDA, IAlgorithm>();
         }
 
@@ -34,9 +34,11 @@ namespace PathFinder.Api
             where TRender : IRender
         {
             var tempId = Guid.NewGuid().ToString();
+            
             builder.RegisterType<TRender>()
                 .Named<IRender>(tempId)
                 .InstancePerLifetimeScope();
+            
             builder.RegisterType<TAlgorithm>()
                 .As<IAlgorithm>()
                 .WithParameter(ResolvedParameter.ForNamed<IRender>(tempId))

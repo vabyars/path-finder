@@ -19,7 +19,7 @@ export interface CellIndex {
   y: number
 }
 
-export interface CeilProps {
+export interface CellProps {
   className: string
   onMouseDown: any
   onMouseOver: any
@@ -36,7 +36,7 @@ export interface Field {
 export interface HeaderProps {
   initField:(rows: number, columns: number) =>  void,
   clearField: () => void,
-  executeAlgorithm: (name: string) => void,
+  executeAlgorithm: (name: string, metricName: string, allowDiagonal: boolean) => void,
   clearPath: () => void,
   setPrebuildField: (field: Field) => void
   saveMaze: (name: string) => Promise<any>

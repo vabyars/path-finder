@@ -22,11 +22,11 @@ namespace PathFinder.Test.AlgorithmsTests.TestGrids
 
         public override Point Start { get; } = new(0, 11);
         public override Point Goal { get; } = new(5, 20);
-        public bool OnlyOneShortestPath { get; set; } = false;
-        public int MinPathLength { get; set; } = 45;
+        public bool OnlyOneShortestPath { get; } = false;
+        public int MinPathLength { get; } = 45;
         public IEnumerable<Point> MinPath { get; set; }
-        public bool OnlyOneShortestDiagonalPath { get; set; } = false;
-        public int MinPathLengthWithDiagonal { get; set; } = 35;
+        public bool OnlyOneShortestDiagonalPath { get; } = false;
+        public int MinPathLengthWithDiagonal { get; } = 35;
         public IEnumerable<Point> MinPathWithDiagonal { get; set; }
     }
 }

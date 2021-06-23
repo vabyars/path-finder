@@ -2,7 +2,7 @@
 using System.Linq;
 using PathFinder.Domain.Models.States;
 
-namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
+namespace PathFinder.Domain.Models.Algorithms
 {
     public class AlgorithmReport : IAlgorithmReport
     {

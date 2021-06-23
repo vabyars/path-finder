@@ -13,9 +13,9 @@ namespace PathFinder.Api.Controllers
     [Route("algorithm")]
     public class AlgorithmsController : Controller
     {
-        private readonly AlgorithmsHandler algorithmsHandler;
+        private readonly IAlgorithmsHandler algorithmsHandler;
 
-        public AlgorithmsController(AlgorithmsHandler algorithmsHandler)
+        public AlgorithmsController(IAlgorithmsHandler algorithmsHandler)
         {
             this.algorithmsHandler = algorithmsHandler;
         }
@@ -26,7 +26,6 @@ namespace PathFinder.Api.Controllers
         {
             var start = PointParser.Parse(req.Start);
             var goal = PointParser.Parse(req.Goal);
-            var metric = req.Metric;
             try
             {
                 var algorithmResult = algorithmsHandler.ExecuteAlgorithm(req.Name, 
@@ -34,7 +33,7 @@ namespace PathFinder.Api.Controllers
                     new Parameters(start,
                         goal,
                         req.AllowDiagonal,
-                        metric));
+                        req.Metric));
                 return Ok(algorithmResult);
             }
             catch (ArgumentException e)

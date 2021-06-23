@@ -15,7 +15,7 @@ namespace PathFinder.Api.Models
         private readonly IEnumerable<string> metricsNames;
         private readonly IMazeService mazeService;
 
-        public SettingsProvider(IMazeService mazeService, AlgorithmsHandler algorithmsHandler, GridConfigurationParameters mazeParameters)
+        public SettingsProvider(IMazeService mazeService, IAlgorithmsHandler algorithmsHandler, GridConfigurationParameters mazeParameters)
         {
             width = mazeParameters.Width;
             height = mazeParameters.Height;

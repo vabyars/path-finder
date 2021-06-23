@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.MazeCreation.MazeGenerators;
 using PathFinder.Domain.Services.MazeService;

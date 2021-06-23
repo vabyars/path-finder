@@ -2,11 +2,13 @@
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Entities;
-using PathFinder.DataAccess1.Implementations;
+using PathFinder.DataAccess;
+using PathFinder.DataAccess.Implementations;
+using PathFinder.Domain;
+using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.MazeCreation;
 using PathFinder.Domain.Services.MazeService;
+using Grid = PathFinder.DataAccess.Entities.Grid;
 
 namespace PathFinder.Test.MazeServiceTests
 {
@@ -14,10 +16,10 @@ namespace PathFinder.Test.MazeServiceTests
     public class MazeServiceTest
     {
         private readonly IMapper mapper = new Mapper(new MapperConfiguration(x => x.AddProfile<DataAccessMappingProfile>()));
-        private GridWithStartAndEnd defaultGrid = new() {Maze = new int[,] { }};
+        private readonly GridWithStartAndEnd defaultGrid = new() {Maze = new int[,] { }};
         
         [Test]
-        public void Test_CannotAddToRepositoryTwice()
+        public void Add_ToRepositoryTwice_ThrowsException()
         {
             var creationFactory = new Mock<IMazeCreationFactory>();
             creationFactory.Setup(x => x.GetAvailableNames())
@@ -30,7 +32,7 @@ namespace PathFinder.Test.MazeServiceTests
         }
 
         [Test]
-        public void Test_CannotAddToRepositoryWhenExistsInCreationFactory()
+        public void Add_ToRepositoryWhenExistsInFactory_ThrowsException()
         {
             var creationFactory = new Mock<IMazeCreationFactory>();
             creationFactory.Setup(x => x.GetAvailableNames())
@@ -42,7 +44,7 @@ namespace PathFinder.Test.MazeServiceTests
         }
 
         [Test]
-        public void Test_GetAvailableNames()
+        public void Get_AvailableNames_Names()
         {
             var creationFactory = new Mock<IMazeCreationFactory>();
             creationFactory.Setup(x => x.GetAvailableNames())
@@ -58,7 +60,7 @@ namespace PathFinder.Test.MazeServiceTests
         }
 
         [Test]
-        public void Test_GetMazeWhenNotExists()
+        public void Get_MazeWhichNotExists_ThrowsException()
         {
             var creationFactory = new Mock<IMazeCreationFactory>();
             creationFactory.Setup(x => x.Create(It.IsAny<string>()))
@@ -73,7 +75,7 @@ namespace PathFinder.Test.MazeServiceTests
         }
 
         [Test]
-        public void Test_GetMazeFromFactory()
+        public void Get_MazeFromFactory()
         {
             var creationFactory = new Mock<IMazeCreationFactory>();
             creationFactory.Setup(x => x.Create("test"))
@@ -88,7 +90,7 @@ namespace PathFinder.Test.MazeServiceTests
         }
 
         [Test]
-        public void Test_GetMazeFromRepository()
+        public void Get_MazeFromRepository()
         {
             var creationFactory = new Mock<IMazeCreationFactory>();
             creationFactory.Setup(x => x.Create(It.IsAny<string>()))
@@ -103,7 +105,7 @@ namespace PathFinder.Test.MazeServiceTests
         }
 
         [Test]
-        public void Test_WhenMazeExistsInRepositoryAndInFactoryReturnsRepositoryVariant()
+        public void Get_MazeWhichExistsInRepositoryAndInFactory_RepositoryVariant()
         {
             var creationFactory = new Mock<IMazeCreationFactory>();
             creationFactory.Setup(x => x.Create("test"))

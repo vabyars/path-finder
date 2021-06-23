@@ -17,12 +17,18 @@ namespace PathFinder.Infrastructure.PriorityQueue
         public static bool UpdateOrAdd<TKey>(this IPriorityQueue<TKey> queue, TKey node, double newValue)
         {
             var nodeInQueue = queue.TryGetValue(node, out var oldPrice);
-            if (nodeInQueue && !(oldPrice > newValue)) 
-                return false;
-            if (nodeInQueue)
-                queue.Update(node, newValue);
-            else
-                queue.Add(node, newValue);
+            switch (nodeInQueue)
+            {
+                case true when !(oldPrice > newValue):
+                    return false;
+                case true:
+                    queue.Update(node, newValue);
+                    break;
+                default:
+                    queue.Add(node, newValue);
+                    break;
+            }
+
             return true;
         }
     }

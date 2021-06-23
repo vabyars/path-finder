@@ -12,7 +12,7 @@ namespace PathFinder.Test.AlgorithmsTests
         public void LeeTest()
         {
             new GridsTestController()
-                .Run(new LeeAlgorithm(new Mock<IRender>().Object), true, false, Metric.Euclidean);
+                .TestOnUsualGrids(new LeeAlgorithm(new Mock<IRender>().Object), true, false, Metric.Euclidean);
         }
     }
 }

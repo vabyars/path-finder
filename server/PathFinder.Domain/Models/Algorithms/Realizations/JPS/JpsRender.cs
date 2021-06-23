@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
+using PathFinder.Domain.Models.States.CandidateToPrepare;
+using PathFinder.Domain.Models.States.PreparedPoint;
 using PathFinder.Domain.Models.States.ResultPath;
 using PathFinder.Infrastructure;
 
@@ -17,7 +20,8 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         {
             var renderedState = state switch
             {
-                InformativeState s => RenderedState(s),
+                CurrentPointState s => RenderState(s),
+                CandidateToPrepareState s => RenderState(s),
                 ResultPathState s => RenderState(s),
                 _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
             };

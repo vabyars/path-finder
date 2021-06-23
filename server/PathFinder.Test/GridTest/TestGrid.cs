@@ -106,7 +106,7 @@ namespace PathFinder.Test.GridTest
         }
         
         [Test]
-        public void TestGetNeighborsWithNoWayBetweenWalls() // TODO fails. Need fix
+        public void TestGetNeighborsWithNoWayBetweenWalls()
         {
             // --8
             // -8x
@@ -120,6 +120,6 @@ namespace PathFinder.Test.GridTest
                 grid.GetNeighbors(new Point(1, 2), true));
         }
         
-        private Grid GetDefault3X3Grid() => new Grid(new[,] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}});
+        private Grid GetDefault3X3Grid() => new (new[,] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}});
     }
 }

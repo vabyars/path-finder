@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PathFinder.Api.Models;
+using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Services.MazeService;
 using PathFinder.Infrastructure;
 

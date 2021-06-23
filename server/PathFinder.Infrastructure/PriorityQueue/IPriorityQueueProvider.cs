@@ -1,7 +1,7 @@
 ﻿namespace PathFinder.Infrastructure.PriorityQueue
 {
-    /*public interface IPriorityQueueProvider<T>
+    public interface IPriorityQueueProvider<T, out TQueue> where TQueue : IPriorityQueue<T>
     {
-        IPriorityQueue<T> Create();
-    }*/
+        public TQueue Create();
+    }
 }

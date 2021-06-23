@@ -69,6 +69,8 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
                     yield return new InformativeState() { CurrentPoint = jumpPoint, JumpPointInformation = jumpPointInformation[jumpPoint]};
                 }
             }
+
+            yield return new ResultPathState();
         }
 
         private IEnumerable<Point> IdentifySuccessors(Point point, IGrid grid)
@@ -84,11 +86,11 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
 
                 var distance = distanceToStart.ContainsKey(point)
                     ? distanceToStart[point]
-                    : 0 + metric.Call(jumpPoint, point);
+                    : metric.Calculate(jumpPoint, point);
 
                 if (priorityQueue.TryGetValue(jumpPoint, out _) && !(distance < distanceToStart[jumpPoint])) continue;
                 distanceToStart[jumpPoint] = distance;
-                var distanceToStartAndEstimateToEnd = distanceToStart[jumpPoint] + metric.Call(jumpPoint, goal);
+                var distanceToStartAndEstimateToEnd = distanceToStart[jumpPoint] + metric.Calculate(jumpPoint, goal);
                 parentMap[jumpPoint] = point;
                 jumpPoints.Add(jumpPoint);
                 if (!priorityQueue.TryGetValue(jumpPoint, out _))

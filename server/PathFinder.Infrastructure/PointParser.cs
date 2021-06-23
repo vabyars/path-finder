@@ -6,8 +6,8 @@ namespace PathFinder.Infrastructure
     {
         public static Point Parse(string msg)
         {
-            var splitted = msg.Split(',');
-            return new Point(int.Parse(splitted[0]), int.Parse(splitted[1]));
+            var splited = msg.Split(',');
+            return new Point(int.Parse(splited[0]), int.Parse(splited[1]));
         }
     }
 }

@@ -51,10 +51,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
                 var (current, _) = queue.ExtractMin();
                 if (current == goal)
                 {
-                    yield return new ResultPathState()
-                    {
-                        Path = GetResultPath(),
-                    };
+                    yield return new ResultPathState{ Path = GetResultPath() };
                     yield break;
                 }
 
@@ -71,7 +68,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
                     {
                         cost[neighbor] = newCost;
                         cameFrom[neighbor] = current;
-                        queue.UpdateOrAdd(neighbor, newCost + parameters.Metric.Call(neighbor, goal));
+                        queue.UpdateOrAdd(neighbor, newCost + parameters.Metric.Calculate(neighbor, goal));
                         yield return new CandidateToPrepareState
                         {
                             Candidate = neighbor
@@ -79,6 +76,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
                     }
                 }
             }
+            yield return new ResultPathState();
         }
 
         private IEnumerable<Point> GetResultPath()

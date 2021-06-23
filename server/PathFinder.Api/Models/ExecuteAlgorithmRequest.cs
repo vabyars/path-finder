@@ -8,5 +8,5 @@ namespace PathFinder.Api.Models
         string Goal, 
         bool AllowDiagonal,
         int[,] Grid,
-        Metric Metric = Metric.Euclidean) { }
+        Metric Metric = Metric.Manhattan) { }
 }

@@ -6,11 +6,11 @@
 
 .wall {
     background-color: black;
-    animation-name: cellAnimation;
-    /*background-color: #1269db;*/
-    animation-duration: 0.5s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    /*animation-name: cellAnimation;*/
+    /*!*background-color: #1269db;*!*/
+    /*animation-duration: 0.2s;*/
+    /*animation-iteration-count: 1;*/
+    /*animation-fill-mode: forwards;*/
 }
 
 .start {

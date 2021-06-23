@@ -3,7 +3,7 @@ using System.Drawing;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 
-namespace PathFinder.DataAccess1.Entities
+namespace PathFinder.DataAccess.Entities
 {
     public class Grid
     {

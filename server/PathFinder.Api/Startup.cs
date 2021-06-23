@@ -9,8 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Implementations;
 using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Api
@@ -23,7 +21,6 @@ namespace PathFinder.Api
         }
 
         public IConfiguration Configuration { get; }
-        private bool IsDevelopment { get; set; }
         public IContainer ApplicationContainer { get; private set; }
         private const string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -97,8 +94,6 @@ namespace PathFinder.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            IsDevelopment = env.IsDevelopment();
-            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -119,7 +114,7 @@ namespace PathFinder.Api
             
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "../ClientApp";
 
                 if (env.IsDevelopment())
                     spa.UseReactDevelopmentServer("start");

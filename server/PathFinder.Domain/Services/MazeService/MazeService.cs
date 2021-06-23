@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using System.Threading.Tasks;
-using PathFinder.DataAccess1;
-using PathFinder.DataAccess1.Entities;
+using PathFinder.DataAccess;
+using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.MazeCreation;
+using Grid = PathFinder.DataAccess.Entities.Grid;
 
 namespace PathFinder.Domain.Services.MazeService
 {

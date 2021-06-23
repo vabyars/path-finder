@@ -12,14 +12,27 @@ namespace PathFinder.Test.AlgorithmsTests
     [TestFixture]
     public class AStarTests
     {
-        [Test]
-        public void AStarTest()
+        private AStarAlgorithm algorithm;
+
+        [SetUp]
+        public void SetUp()
         {
             var pq = new Mock<IPriorityQueueProvider<Point, IPriorityQueue<Point>>>();
             pq.Setup(x => x.Create())
                 .Returns(() => new HeapPriorityQueue<Point>());
-            new GridsTestController() 
-                .Run(new AStarAlgorithm(new Mock<IRender>().Object, pq.Object), true, false, Metric.Euclidean);
+            algorithm = new AStarAlgorithm(new Mock<IRender>().Object, pq.Object);
+        }
+        
+        [Test]
+        public void TestOnUsualGrids()
+        {
+            new GridsTestController().TestOnUsualGrids(algorithm, true, false, Metric.Euclidean);
+        }
+
+        [Test]
+        public void TestOnGridWithoutWay()
+        {
+            new GridsTestController().TestOnGridsWithoutWay(algorithm);
         }
     }
 }
