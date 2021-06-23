@@ -24,7 +24,7 @@ namespace PathFinder.Test.AlgorithmsTests
         }
         
         [Test]
-        public void AStarTest()
+        public void TestOnUsualGrids()
         {
             new GridsTestController().TestOnUsualGrids(algorithm, true, false, Metric.Euclidean);
         }

@@ -9,15 +9,13 @@ namespace PathFinder.Test.InfrastructureTest
         [Test]
         public void Heap()
         {
-            Func<HeapPriorityQueue<int>> getInstance = () => new HeapPriorityQueue<int>();
-            new PriorityQueueTest().Run(getInstance);
+            new PriorityQueueTest().Run(() => new HeapPriorityQueue<int>());
         }
         
         [Test]
         public void Dictionary()
         {
-            Func<DictionaryPriorityQueue<int>> getInstance = () => new DictionaryPriorityQueue<int>();
-            new PriorityQueueTest().Run(getInstance);
+            new PriorityQueueTest().Run(() => new DictionaryPriorityQueue<int>());
         }
     }
 }

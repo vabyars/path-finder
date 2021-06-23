@@ -23,7 +23,7 @@ namespace PathFinder.Test.AlgorithmsTests
         }
         
         [Test]
-        public void JpsTest()
+        public void TestOnUsualGrids()
         {
             new GridsTestController().TestOnUsualGrids(algorithm, true, true, Metric.Euclidean);
         }

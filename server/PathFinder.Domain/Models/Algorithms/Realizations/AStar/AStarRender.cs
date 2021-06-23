@@ -65,7 +65,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.AStar
         {
             return new RenderedCandidateState
             {
-                Color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count].ToHex(),//color.ToHex(),
+                Color = ColorsToNeighbors[index++ % ColorsToNeighbors.Count].ToHex(),
                 RenderedPoint = state.Candidate,
                 SecondColor = Color.Aqua.ToHex()
             };

@@ -1,4 +1,5 @@
-﻿using PathFinder.Domain.Services.MazeService;
+﻿using PathFinder.Domain.Models.GridFolder;
+using PathFinder.Domain.Services.MazeService;
 
 namespace PathFinder.Domain.Models.MazeCreation.MazeGenerators
 {
