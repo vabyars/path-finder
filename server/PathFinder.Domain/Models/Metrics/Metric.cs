@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
 
 namespace PathFinder.Domain.Models.Metrics
 {
     public enum Metric
     {
-        [Description("Euclidean")]
         Euclidean,
-        [Description("Manhattan")]
         Manhattan
     }
 
@@ -26,11 +21,7 @@ namespace PathFinder.Domain.Models.Metrics
         private static readonly string[] Names;
         static MetricExtensions()
         {
-            Names = typeof(Metric).GetMembers()
-                .Select(x => x.GetCustomAttribute<DescriptionAttribute>())
-                .Where(x => x != null)
-                .Select(x => x.Description)
-                .ToArray();
+            Names = Enum.GetNames(typeof(Metric));
         }
         
         public static double Call(this Metric metric, Point from, Point to)
