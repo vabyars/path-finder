@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 
-ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_ENVIRONMENT=Release
 ENV PROGRAM_ENVIRONMENT=Deploy
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
@@ -40,7 +40,7 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+COPY "ClientApp/build" "ClientApp/build"
 ENV ASPNETCORE_URLS=http://*:$PORT
 ENV DATABASE_URL=$DATABASE_URL
-COPY "ClientApp/build" "ClientApp/build"
 ENTRYPOINT ["dotnet", "PathFinder.Api.dll"]

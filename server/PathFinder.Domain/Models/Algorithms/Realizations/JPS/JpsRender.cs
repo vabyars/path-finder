@@ -20,8 +20,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         {
             var renderedState = state switch
             {
-                CurrentPointState s => RenderState(s),
-                CandidateToPrepareState s => RenderState(s),
+                InformativeState s => RenderedState(s),
                 ResultPathState s => RenderState(s),
                 _ => throw new ArgumentOutOfRangeException(nameof(state), state, null)
             };
@@ -40,9 +39,11 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
 
         private RenderedState RenderedState(InformativeState state)
         {
+            var color = GetColorFromInformation(state).ToHex();
             return new RenderedInformativeState
             {
-                Color = GetColorFromInformation(state).ToHex(),
+                Color = color,
+                SecondColor = color,
                 RenderedPoint = state.CurrentPoint
             };
         }

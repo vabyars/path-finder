@@ -8,12 +8,14 @@ namespace PathFinder.Api
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args)
+                .Build()
+                .Run();
         }
 
         public static IWebHostBuilder CreateHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls($"http://*:{HostPort}")
+                .UseUrls(HostPort)
                 .UseStartup<Startup>();
         
         private static bool IsLocal =>
@@ -21,7 +23,7 @@ namespace PathFinder.Api
         
         public static string HostPort =>
             IsLocal
-                ? "5000"
-                : Environment.GetEnvironmentVariable("PORT");
+                ? "http://localhost:5000"
+                : "http://*:" + Environment.GetEnvironmentVariable("PORT");
     }
 }

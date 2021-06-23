@@ -6,6 +6,8 @@ namespace PathFinder.Domain.Models.States
     {
         public string Color { get; set; }
         
+        public string SecondColor { get; set; }
+        
         public Point RenderedPoint { get; set; }
     }
 }
