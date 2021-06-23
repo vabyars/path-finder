@@ -25,7 +25,6 @@ function Header(props: HeaderProps) {
 
   async function loadMazesAndAlgorithms() {
     let data = await (await fetch("/settings")).json()
-    console.log(data)
     let parsedAlgorithms = parseArrayToSelectData(data.algorithms)
     let parsedMazes = parseArrayToSelectData(data.mazes)
     let parsedMetrics = parseArrayToSelectData(data.metrics)
