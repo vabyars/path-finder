@@ -14,8 +14,6 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
     public class JpsRender : IRender
     {
         private readonly List<RenderedState> states = new ();
-        private int pathLength;
-        private int pointsPrepared;
 
         private int currentPointRedValue = 118;
         private int candidatePointBlueValue = 10;
@@ -35,7 +33,6 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
         
         private RenderedState RenderState(ResultPathState state)
         {
-            pathLength = state.Path.Count();
             return new RenderedPathState
             {
                 Color = Color.Pink.ToHex(), 
@@ -45,7 +42,6 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
 
         private RenderedState RenderState(CurrentPointState state)
         {
-            pointsPrepared++;
             currentPointRedValue = Math.Min(currentPointRedValue + 10, 255);
             return new RenderedPreparedPointState
             {
