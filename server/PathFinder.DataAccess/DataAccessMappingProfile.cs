@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using PathFinder.Domain.Models.GridFolder;
-using PathFinder.Domain.Services.MazeService;
 using Grid = PathFinder.DataAccess.Entities.Grid;
 
-namespace PathFinder.Domain
+namespace PathFinder.DataAccess
 {
     public class DataAccessMappingProfile : Profile
     {

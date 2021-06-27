@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace PathFinder.Infrastructure
+namespace PathFinder.Domain
 {
     public static class ColorExtensions
     {

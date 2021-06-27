@@ -7,7 +7,6 @@ using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.CandidateToPrepare;
 using PathFinder.Domain.Models.States.PreparedPoint;
 using PathFinder.Domain.Models.States.ResultPath;
-using PathFinder.Infrastructure;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.JPS
 {

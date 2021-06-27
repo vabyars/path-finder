@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using PathFinder.Domain;
 
 namespace PathFinder.Infrastructure.PriorityQueue.Realizations
 {

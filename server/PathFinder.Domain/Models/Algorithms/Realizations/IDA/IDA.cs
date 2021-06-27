@@ -8,12 +8,12 @@ using PathFinder.Domain.Models.Parameters;
 using PathFinder.Domain.Models.Renders;
 using PathFinder.Domain.Models.States;
 using PathFinder.Domain.Models.States.ResultPath;
-using PathFinder.Infrastructure.PriorityQueue.Realizations;
 
 namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
 {
     public class IDA : AbstractAlgorithm
     {
+        private readonly IPriorityQueueProvider<Point, IPriorityQueue<Point>> queueProvider;
         private Dictionary<Point, Point> parentMap = new();
         private Metric metric;
         private IParameters parameters;
@@ -23,7 +23,10 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
 
         public override string Name => "IDA*";
 
-        public IDA(IRender render) : base(render) { }
+        public IDA(IRender render, IPriorityQueueProvider<Point, IPriorityQueue<Point>> queueProvider) : base(render)
+        {
+            this.queueProvider = queueProvider;
+        }
 
         public override IEnumerable<IState> Run(IGrid grid, IParameters parameters)
         {
@@ -69,7 +72,7 @@ namespace PathFinder.Domain.Models.Algorithms.Realizations.IDA
                 return 0.0;
             var min = double.MaxValue;
             var neighbors = grid.GetNeighbors(node, parameters.AllowDiagonal);
-            var queue = new HeapPriorityQueue<Point>();
+            var queue = queueProvider.Create();
             
             foreach (var neighbor in neighbors)
             {

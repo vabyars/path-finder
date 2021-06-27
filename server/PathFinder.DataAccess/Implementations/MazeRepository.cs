@@ -1,24 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PathFinder.DataAccess.Entities;
+using PathFinder.Domain;
+using PathFinder.Domain.Models.GridFolder;
 
 namespace PathFinder.DataAccess.Implementations
 {
     public class MazeRepository: IMazeRepository
     {
+        private readonly Dictionary<string, GridWithStartAndEnd> grids = new();
+        public void Add(string name, GridWithStartAndEnd grid) => grids.Add(name, grid);
 
-        private readonly List<Grid> grids = new ();
-        public void Add(Grid grid) => grids.Add(grid);
+        public GridWithStartAndEnd Get(string name) => grids[name];
 
-        public Grid Get(string name) => grids.FirstOrDefault(x => x.Name == name);
-
-        public IEnumerable<string> GetMazesNames() => grids.Select(x => x.Name);
+        public IEnumerable<string> GetMazesNames() => grids.Keys;
         
-        public async Task AddAsync(Grid grid) => await Task.Run(() => grids.Add(grid));
+        public async Task AddAsync(string name, GridWithStartAndEnd grid) => await Task.Run(() => Add(name, grid));
 
-        public async Task<Grid> GetAsync(string name) => await Task.Run(() => grids.FirstOrDefault(x => x.Name == name));
+        public async Task<GridWithStartAndEnd> GetAsync(string name) => await Task.Run(() => Get(name));
 
-        public async Task<IEnumerable<string>> GetMazesNamesAsync() => await Task.Run(() => grids.Select(x => x.Name));
+        public async Task<IEnumerable<string>> GetMazesNamesAsync() => await Task.Run(GetMazesNames);
     }
 }

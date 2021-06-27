@@ -6,6 +6,7 @@ using PathFinder.Api.Models;
 using PathFinder.DataAccess;
 using PathFinder.DataAccess.Implementations;
 using PathFinder.DataAccess.Implementations.Database;
+using PathFinder.Domain;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsController;
 using PathFinder.Domain.Models.Algorithms.AlgorithmsExecutor;
 using PathFinder.Domain.Models.GridFolder;
@@ -24,8 +25,8 @@ namespace PathFinder.Api
             services.AddScoped<IPriorityQueueProvider<Point, IPriorityQueue<Point>>,
                 PriorityQueueProvider<Point, HeapPriorityQueue<Point>>>();
             
-            //services.AddSingleton<IMazeRepository, MazeRepository>();
-            services.AddScoped<IMazeRepository, DatabaseRepository>();
+            services.AddSingleton<IMazeRepository, MazeRepository>();
+            //services.AddScoped<IMazeRepository, DatabaseRepository>();
             services.AddScoped<IMazeService, MazeService>();
 
             services.AddScoped<IMazeGenerator, Kruskal>();
@@ -63,8 +64,8 @@ namespace PathFinder.Api
 
         public static void RegisterDatabase(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<MazeContext>(opt =>
-                opt.UseSqlServer(connectionString));
+            /*services.AddDbContext<MazeContext>(opt =>
+                opt.UseSqlServer(connectionString));*/
         }
     }
 }

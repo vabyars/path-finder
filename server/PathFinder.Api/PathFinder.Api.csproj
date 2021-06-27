@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
       <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="5.0.0-preview.8.20414.8" />
       <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.6" />
@@ -16,5 +17,6 @@
     <ItemGroup>
       <ProjectReference Include="..\PathFinder.DataAccess\PathFinder.DataAccess.csproj" />
       <ProjectReference Include="..\PathFinder.Domain\PathFinder.Domain.csproj" />
+      <ProjectReference Include="..\PathFinder.Infrastructure\PathFinder.Infrastructure.csproj" />
     </ItemGroup>
 </Project>

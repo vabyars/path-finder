@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using System.Threading.Tasks;
-using PathFinder.DataAccess;
 using PathFinder.Domain.Models.GridFolder;
 using PathFinder.Domain.Models.MazeCreation;
-using Grid = PathFinder.DataAccess.Entities.Grid;
 
 namespace PathFinder.Domain.Services.MazeService
 {
@@ -14,22 +11,18 @@ namespace PathFinder.Domain.Services.MazeService
     {
         private readonly IMazeRepository repository;
         private readonly IMazeCreationFactory mazeCreationFactory;
-        private readonly IMapper mapper;
 
-        public MazeService(IMazeRepository repository, IMazeCreationFactory mazeCreationFactory, IMapper mapper)
+        public MazeService(IMazeRepository repository, IMazeCreationFactory mazeCreationFactory)
         {
             this.repository = repository;
             this.mazeCreationFactory = mazeCreationFactory;
-            this.mapper = mapper;
         }
 
         public void Add(string name, GridWithStartAndEnd grid)
         {
             if (MazeExists(name))
                 throw new ArgumentException($"maze with name \"{name}\" has already exists");
-            var newGrid = mapper.Map<Grid>(grid);
-            newGrid.Name = name;
-            repository.Add(newGrid);
+            repository.Add(name, grid);
         }
 
         private bool MazeExists(string name)
@@ -42,7 +35,7 @@ namespace PathFinder.Domain.Services.MazeService
         public GridWithStartAndEnd Get(string name)
         {
             if (repository.TryGetValue(name, out var maze))
-                return mapper.Map<GridWithStartAndEnd>(maze);
+                return maze;
             var generatedMaze = mazeCreationFactory.Create(name);
             if (generatedMaze != null)
                 return generatedMaze;
@@ -59,9 +52,7 @@ namespace PathFinder.Domain.Services.MazeService
         {
             if (await MazeExistsAsync(name))
                 throw new ArgumentException($"maze with name \"{name}\" has already exists");
-            var newGrid = mapper.Map<Grid>(grid);
-            newGrid.Name = name;
-            await repository.AddAsync(newGrid);
+            await repository.AddAsync(name, grid);
         }
         
         private async Task<bool> MazeExistsAsync(string name)
@@ -73,9 +64,9 @@ namespace PathFinder.Domain.Services.MazeService
         
         public async Task<GridWithStartAndEnd> GetAsync(string name)
         {
-            Grid maze = null;
+            GridWithStartAndEnd maze = null;
             if (await repository.TryGetValueAsync(name, value => maze = value))
-                return mapper.Map<GridWithStartAndEnd>(maze);
+                return maze;
             var generatedMaze = mazeCreationFactory.Create(name);
             if (generatedMaze != null)
                 return generatedMaze;

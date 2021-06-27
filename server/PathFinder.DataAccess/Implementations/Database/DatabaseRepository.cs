@@ -1,42 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using PathFinder.DataAccess.Entities;
+using PathFinder.Domain;
+using PathFinder.Domain.Models.GridFolder;
 
 namespace PathFinder.DataAccess.Implementations.Database
 {
     public class DatabaseRepository : IMazeRepository
     {
         private readonly MazeContext context;
+        private readonly IMapper mapper;
 
-        public DatabaseRepository(MazeContext context)
+        public DatabaseRepository(MazeContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         public IEnumerable<string> GetMazesNames() => context.Grids.Select(x => x.Name);
 
-        public void Add(Grid grid)
+        public void Add(string name, GridWithStartAndEnd grid)
         {
-            if (context.Grids.Any(x => x.Name == grid.Name))
-                throw new ArgumentException($"maze with name {grid.Name} already exists");
-            context.Grids.Add(grid);
+            var newGrid = mapper.Map<Entities.Grid>(grid);
+            context.Grids.Add(newGrid);
             context.SaveChanges();
         }
 
-        public Grid Get(string name) => context.Grids.FirstOrDefault(x => x.Name == name);
-        
-        public async Task AddAsync(Grid grid)
+        public GridWithStartAndEnd Get(string name)
         {
-            await context.Grids.AddAsync(grid);
+            var grid =  context.Grids.FirstOrDefault(x => x.Name == name);
+            return mapper.Map<GridWithStartAndEnd>(grid);
+        }
+
+        public async Task AddAsync(string name, GridWithStartAndEnd grid)
+        {
+            var newGrid = mapper.Map<Entities.Grid>(grid);
+            await context.Grids.AddAsync(newGrid);
             await context.SaveChangesAsync();
         }
 
-        public async Task<Grid> GetAsync(string name)
+        public async Task<GridWithStartAndEnd> GetAsync(string name)
         {
-            return await context.Grids.FirstOrDefaultAsync(x => x.Name == name);
+            var grid = await context.Grids.FirstOrDefaultAsync(x => x.Name == name);
+            return mapper.Map<GridWithStartAndEnd>(grid);
         }
         
         public async Task<IEnumerable<string>> GetMazesNamesAsync()

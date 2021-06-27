@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Moq;
 using NUnit.Framework;
+using PathFinder.Domain;
 using PathFinder.Domain.Models.Algorithms.Realizations.AStar;
 using PathFinder.Domain.Models.Metrics;
 using PathFinder.Domain.Models.Renders;

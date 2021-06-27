@@ -14,7 +14,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\PathFinder.DataAccess\PathFinder.DataAccess.csproj" />
       <ProjectReference Include="..\PathFinder.Domain\PathFinder.Domain.csproj" />
+      <ProjectReference Include="..\PathFinder.Infrastructure\PathFinder.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
