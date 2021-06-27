@@ -24,6 +24,7 @@ namespace PathFinder.DataAccess.Implementations.Database
         public void Add(string name, GridWithStartAndEnd grid)
         {
             var newGrid = mapper.Map<Entities.Grid>(grid);
+            newGrid.Name = name;
             context.Grids.Add(newGrid);
             context.SaveChanges();
         }
@@ -37,6 +38,7 @@ namespace PathFinder.DataAccess.Implementations.Database
         public async Task AddAsync(string name, GridWithStartAndEnd grid)
         {
             var newGrid = mapper.Map<Entities.Grid>(grid);
+            newGrid.Name = name;
             await context.Grids.AddAsync(newGrid);
             await context.SaveChangesAsync();
         }

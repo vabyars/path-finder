@@ -25,8 +25,8 @@ namespace PathFinder.Api
             services.AddScoped<IPriorityQueueProvider<Point, IPriorityQueue<Point>>,
                 PriorityQueueProvider<Point, HeapPriorityQueue<Point>>>();
             
-            services.AddSingleton<IMazeRepository, MazeRepository>();
-            //services.AddScoped<IMazeRepository, DatabaseRepository>();
+            //services.AddSingleton<IMazeRepository, MazeRepository>();
+            services.AddSingleton<IMazeRepository, DatabaseRepository>();
             services.AddScoped<IMazeService, MazeService>();
 
             services.AddScoped<IMazeGenerator, Kruskal>();
@@ -64,8 +64,8 @@ namespace PathFinder.Api
 
         public static void RegisterDatabase(this IServiceCollection services, string connectionString)
         {
-            /*services.AddDbContext<MazeContext>(opt =>
-                opt.UseSqlServer(connectionString));*/
+            services.AddDbContext<MazeContext>(opt =>
+                opt.UseSqlServer(connectionString));
         }
     }
 }

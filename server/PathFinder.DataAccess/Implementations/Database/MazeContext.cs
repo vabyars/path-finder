@@ -10,6 +10,7 @@ namespace PathFinder.DataAccess.Implementations.Database
         public MazeContext(DbContextOptions<MazeContext> options)
             : base(options)
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();   // создаем базу данных при первом обращении
         }
         
